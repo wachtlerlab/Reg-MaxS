@@ -6,32 +6,27 @@ from RegMaxSCore.swcFuncs import transSWC
 homeFolder = os.path.expanduser('~')
 
 # ----------------------------------------------------------------------------------------------------------------------
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
-# expNames = [
-#  'VGlut-F-700500.CNG',
-#  'VGlut-F-700567.CNG',
-#  'VGlut-F-500471.CNG',
-#  'Cha-F-000353.CNG',
-#  'VGlut-F-600253.CNG',
-#  'VGlut-F-400434.CNG',
-#  'VGlut-F-600379.CNG',
-#  'VGlut-F-700558.CNG',
-#  'VGlut-F-500183.CNG',
-#  'VGlut-F-300628.CNG',
-#  'VGlut-F-500085.CNG',
-#  'VGlut-F-500031.CNG',
-#  'VGlut-F-500852.CNG',
-#  'VGlut-F-600366.CNG'
-#             ]
-#
-# # refInd = 12
-# # resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
-#
-# # refInd = 2
-# # resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB3/'
-#
-# refInd = 6
-# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB4/'
+dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
+expNames = [
+ 'VGlut-F-500085_registered',
+ 'VGlut-F-700500.CNG',
+ 'VGlut-F-700567.CNG',
+ 'VGlut-F-500471.CNG',
+ 'Cha-F-000353.CNG',
+ 'VGlut-F-600253.CNG',
+ 'VGlut-F-400434.CNG',
+ 'VGlut-F-600379.CNG',
+ 'VGlut-F-700558.CNG',
+ 'VGlut-F-500183.CNG',
+ 'VGlut-F-300628.CNG',
+ 'VGlut-F-500085.CNG',
+ 'VGlut-F-500031.CNG',
+ 'VGlut-F-500852.CNG',
+ 'VGlut-F-600366.CNG'
+            ]
+
+refInd = 0
+resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -87,6 +82,7 @@ homeFolder = os.path.expanduser('~')
 
 # dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangLLC/'
 # expNames = [
+#             'Gad1-F-000062_Standardized',
 #             'Gad1-F-000062.CNG',
 #             'Cha-F-000012.CNG',
 #             'Cha-F-300331.CNG',
@@ -120,23 +116,23 @@ homeFolder = os.path.expanduser('~')
 
 # ----------------------------------------------------------------------------------------------------------------------
 #
-dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/DL-Int-1_NE/'
-
-expNames = [
-
-                'HB130523-3',
-                'HB130605-1',
-                'HB130605-2',
-                # 'HB140701-1',
-                'HB140813-3',
-                'HB140917-1',
-                'HB140930-1',
-                'HB141030-1',
-              ]
-
-# refInd = 1
-refInd = 3
-resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/DL-Int-1_NE/'
+# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/DL-Int-1_NE/'
+#
+# expNames = [
+#
+#                 'HB130523-3',
+#                 'HB130605-1',
+#                 'HB130605-2',
+#                 # 'HB140701-1',
+#                 'HB140813-3',
+#                 'HB140917-1',
+#                 'HB140930-1',
+#                 'HB141030-1',
+#               ]
+#
+# # refInd = 1
+# refInd = 3
+# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/DL-Int-1_NE/'
 
 
 # ----------------------------------------------------------------------------------------------------------------------

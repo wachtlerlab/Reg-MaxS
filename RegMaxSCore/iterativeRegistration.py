@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from swcFuncs import transSWC, transSWC_rotAboutPoint
+from swcFuncs import transSWC, transSWC_rotAboutPoint, getPCADetails
 from SWCTransforms import SWCTranslate, objFun
 import shutil
 import json
@@ -128,39 +128,20 @@ class IterativeRegistration(object):
         return tempDones, presBestSol, presBestVal, presBestDone, presBestTrans
 
 
-    def createInitGuess(self, SWC2Align, outFiles, tempOPath, tempOutFiles, ipParFile, gridSize,
-                        typ='X_rev'):
+    def pca_based(self, SWC2Align, outFiles, tempOPath, tempOutFiles, ipParFile, gridSize):
 
-        if typ in ['pca_rev', 'XYZ_rev']:
-            perm = [[1, -1], [2, -2], [3, -3]]
-            allPossList = list(product(*perm))
-
-        elif typ == 'X_rev':
-            perm = [[1, -1], [2], [3]]
-            allPossList = list(product(*perm))
-
-        elif typ == 'Y_rev':
-            perm = [[1], [2, -2], [3]]
-            allPossList = list(product(*perm))
-
-        else:
-            raise(ValueError('Invalid value type: ' + str(typ)))
+        allPossList = [[1, 2, 3], [-1, 2, 3], [1, -2, 3], [1, 2, -3]]
 
         refPts = np.loadtxt(self.refSWC)[:, 2:5]
         refMean = refPts.mean(axis=0)
         SWC2AlignPts = np.loadtxt(SWC2Align)[:, 2:5]
         SWC2AlignMean = SWC2AlignPts.mean(axis=0)
 
-
-
-
-        refEvecs = np.eye(3)
-        STAEvecs = np.eye(3)
-
+        refEvecs, refNStds = getPCADetails(self.refSWC)
+        STAEvecs, STANSTds = getPCADetails(SWC2Align)
 
         initTransform = np.eye(4)
         initTransform[:3, 3] = -SWC2AlignMean
-
 
         funcVals = []
         tempFiles = []
@@ -226,7 +207,7 @@ class IterativeRegistration(object):
             trans = SWCTranslate(self.refSWC, SWCPoss, gridSize)
             funcVals.append(objFun(([0, 0, 0], trans)))
 
-        print(zip(allPossList, funcVals))
+        # print(zip(allPossList, funcVals))
         minimum = min(funcVals)
         minimizers = [y for x, y in enumerate(allPossList) if funcVals[x] == minimum]
         minimizerInds = [x for x, y in enumerate(allPossList) if funcVals[x] == minimum]
@@ -249,7 +230,7 @@ class IterativeRegistration(object):
         return bestTransform
 
 
-    def performReg(self, SWC2Align, expName, resDir, partsDir=None, initGuessType='XYZ_rev'):
+    def performReg(self, SWC2Align, expName, resDir, partsDir=None, initGuessType='just_centroids'):
 
         ipParFile = os.path.join(resDir, 'tmp.json')
         vals = ['trans', 'rot', 'scale']
@@ -286,15 +267,7 @@ class IterativeRegistration(object):
             totalTranslation = SWC2AlignMean
 
         else:
-            totalTransform = self.createInitGuess(SWC2Align, [SWC2AlignLocal, SWC2AlignLocalBS],
-                                                tempOutPath, tempOutFiles, ipParFile, self.gridSizes[-1], initGuessType)
-
-            swcData = np.loadtxt(SWC2AlignLocal)[:, 2:5]
-            SWC2AlignLocalMean = swcData.mean(axis=0)
-            temp = np.eye(4)
-            temp[:3, 3] = -SWC2AlignLocalMean
-            totalTransform = np.dot(temp, totalTransform)
-            totalTranslation = SWC2AlignLocalMean
+            raise(ValueError('Unknown value for arguement \'initGuessType\''))
 
 
         SWC2AlignT = SWC2AlignLocal

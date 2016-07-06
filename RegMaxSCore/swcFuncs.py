@@ -115,3 +115,91 @@ def transSWC_rotAboutPoint(fName, A, b, destFle, point):
 
     np.savetxt(destFle, data, header=headr, fmt=formatStr)
 #***********************************************************************************************************************
+
+def getPCADetails(swcFileName, center=True, data=None):
+    '''
+    Returns the principal components and standard deviations along the principal components.
+    Ref: http://arxiv.org/pdf/1404.1100.pdf
+    :param swcFileName: sting, input SWC file name
+    :param center: Boolean,  if True, data is centered before calculating PCA
+    :param data: numpy ndarray of shape [<>, 3]
+    :return: PC, STDs
+    PC: numpy.ndarray with the prinicial components of the data in its columns
+    STDs: 3 member float iterable containing the standard variances of the data along the prinicipal components.
+    '''
+
+    if data is None:
+        data = np.loadtxt(swcFileName)[:, 2:5]
+    if center:
+        mu = np.mean(data, axis=0)
+        data = data - mu
+    U, S, V = np.linalg.svd(data.T)
+    dataProj = np.dot(U, data.T).T
+    newStds = np.std(dataProj, axis=0)
+    return U.T, newStds
+#***********************************************************************************************************************
+
+# **********************************************************************************************************************
+
+def digitizeSWCXYZ(swcXYZ, gridUnitSizes):
+
+    digSWCXYZ = np.empty_like(swcXYZ, dtype=np.intp)
+    for ind in range(3):
+        digSWCXYZ[:, ind] = np.array(np.around((swcXYZ[:, ind]) / gridUnitSizes[ind]), np.int)
+
+    return digSWCXYZ
+
+# **********************************************************************************************************************
+
+def resampleSWC(swcFile, resampleLength, mask=None, swcData=None):
+    '''
+    Resample the SWC points to place points at every resamplelength along the central line of every segment. Radii are interpolated.
+    :param swcData: nx4 swc point data
+    :param resampleLength: length at with resampling is done.
+    :return: totlLen, ndarray of shape (#pts, 4) with each row containing XYZR values
+    '''
+
+    if swcData is  None:
+        swcData = np.loadtxt(swcFile)
+    inds = swcData[:, 0].tolist()
+
+    if mask is None:
+        mask = [True] * swcData.shape[0]
+    else:
+        assert len(mask) == swcData.shape[0], 'Supplied mask is invalid for ' + swcFile
+    resampledSWCData = []
+
+    getSegLen = lambda a, b: np.linalg.norm(a - b)
+
+    totalLen = 0
+    for pt in swcData:
+
+        if pt[6] < 0:
+            if mask[inds.index(int(pt[0]))]:
+                resampledSWCData.append(pt[2:6])
+
+        if (pt[6] > 0) and (int(pt[6]) in inds):
+            if mask[inds.index(int(pt[0]))]:
+                resampledSWCData.append(pt[2:6])
+
+
+                parentPt = swcData[inds.index(pt[6]), :]
+                segLen = getSegLen(pt[2:5], parentPt[2:5])
+                totalLen += segLen
+
+                if segLen > resampleLength:
+
+                    temp = parentPt[2:5] - pt[2:5]
+                    distTemp = np.linalg.norm(temp)
+                    unitDirection = temp / distTemp
+                    radGrad = (pt[5] - parentPt[5]) / distTemp
+
+                    for newPtsInd in range(1, int(np.floor(segLen / resampleLength)) + 1):
+
+                        temp = (pt[2:5] + newPtsInd * resampleLength * unitDirection).tolist()
+                        temp.append(pt[5] + newPtsInd * radGrad * resampleLength)
+                        resampledSWCData.append(temp)
+
+    return totalLen, np.array(resampledSWCData)
+
+# **********************************************************************************************************************

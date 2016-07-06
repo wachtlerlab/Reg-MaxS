@@ -483,13 +483,7 @@ scaleBounds = [[0.75, 1 / 0.75], [0.75, 1 / 0.75], [0.75, 1 / 0.75]]
 # scaleBounds = [[1, 1], [1, 1], [1, 1]]
 minScaleStepSize = 1.005
 nCPU = 7
-initGuessType = 'just_centroids'
-# initGuessType = 'XYZ_rev'
-# initGuessType = 'X_rev'
-# initGuessType = 'Y_rev'
-# initGuessType = 'nothing'
-# initGuessType = 'pca_rev'
-# initGuessType = 'pca_full'
+
 # usePartsDir = False
 usePartsDir = True
 
@@ -512,4 +506,4 @@ for expInd, expName in enumerate(expNames):
             partsDir = os.path.join(dirPath, expName)
         else:
             partsDir = None
-        iterReg.performReg(SWC2Align, expName, resDir, partsDir, initGuessType)
+        iterReg.performReg(SWC2Align, expName, resDir, partsDir)

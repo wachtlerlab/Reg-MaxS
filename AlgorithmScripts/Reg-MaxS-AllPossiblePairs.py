@@ -360,7 +360,7 @@ rotMinRes = np.deg2rad(1).round(4)
 scaleBounds = [[0.75, 1 / 0.75], [0.75, 1 / 0.75], [0.75, 1 / 0.75]]
 minScaleStepSize = 1.005
 nCPU = 7
-initGuessType = 'just_centroids'
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -379,6 +379,6 @@ for refInd, expName in enumerate(expNames):
             print('Doing ' + expName)
 
             SWC2Align = os.path.join(dirPath, expName + '.swc')
-            iterReg.performReg(SWC2Align, expName + '-' + expNames[refInd], resDir, initGuessType=initGuessType)
+            iterReg.performReg(SWC2Align, expName + '-' + expNames[refInd], resDir)
         else:
             shutil.copyfile(refSWC, os.path.join(resDir, expNames[refInd] + '-' + expNames[refInd] + '.swc'))

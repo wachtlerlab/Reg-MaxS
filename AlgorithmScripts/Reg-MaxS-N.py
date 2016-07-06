@@ -60,22 +60,22 @@ homeFolder = os.path.expanduser('~')
 
 # ----------------------------------------------------------------------------------------------------------------------
 #
-dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/DL-Int-1_NE/'
-
-expNames = [
-
-                'HB130523-3',
-                'HB130605-1',
-                'HB130605-2',
-                # 'HB140701-1',
-                'HB140813-3',
-                'HB140917-1',
-                'HB140930-1',
-                'HB141030-1',
-              ]
-
-refInd = 3
-resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/DL-Int-1_NE/'
+# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/DL-Int-1_NE/'
+#
+# expNames = [
+#
+#                 'HB130523-3',
+#                 'HB130605-1',
+#                 'HB130605-2',
+#                 # 'HB140701-1',
+#                 'HB140813-3',
+#                 'HB140917-1',
+#                 'HB140930-1',
+#                 'HB141030-1',
+#               ]
+#
+# refInd = 3
+# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/DL-Int-1_NE/'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -403,31 +403,33 @@ resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/DL-Int-1_NE/'
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
-# expNames = [
-#  'VGlut-F-700500.CNG',
-#  'VGlut-F-700567.CNG',
-#  'VGlut-F-500471.CNG',
-#  'Cha-F-000353.CNG',
-#  'VGlut-F-600253.CNG',
-#  'VGlut-F-400434.CNG',
-#  'VGlut-F-600379.CNG',
-#  'VGlut-F-700558.CNG',
-#  'VGlut-F-500183.CNG',
-#  'VGlut-F-300628.CNG',
-#  'VGlut-F-500085.CNG',
-#  'VGlut-F-500031.CNG',
-#  'VGlut-F-500852.CNG',
-#  'VGlut-F-600366.CNG'
-#             ]
-#
-# refInd = 6
-# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
+dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
+expNames = [
+'VGlut-F-500085_registered',
+ 'VGlut-F-700500.CNG',
+ 'VGlut-F-700567.CNG',
+ 'VGlut-F-500471.CNG',
+ 'Cha-F-000353.CNG',
+ 'VGlut-F-600253.CNG',
+ 'VGlut-F-400434.CNG',
+ 'VGlut-F-600379.CNG',
+ 'VGlut-F-700558.CNG',
+ 'VGlut-F-500183.CNG',
+ 'VGlut-F-300628.CNG',
+ 'VGlut-F-500085.CNG',
+ 'VGlut-F-500031.CNG',
+ 'VGlut-F-500852.CNG',
+ 'VGlut-F-600366.CNG'
+            ]
+
+refInd = 0
+resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 # dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangLLC/'
 # expNames = [
+#             'Gad1-F-000062_Standardized',
 #             'Gad1-F-000062.CNG',
 #             'Cha-F-000012.CNG',
 #             'Cha-F-300331.CNG',
@@ -449,12 +451,9 @@ rotBounds = [[-np.pi / 6, np.pi / 6], [-np.pi / 6, np.pi / 6], [-np.pi / 6, np.p
 rotMinRes = np.deg2rad(1).round(4)
 scaleBounds = [[0.75, 1 / 0.75], [0.75, 1 / 0.75], [0.75, 1 / 0.75]]
 minScaleStepSize = 1.005
-nCPU = 3
+nCPU = 6
 nIter = 100
-initGuessType = 'just_centroids'
-# initGuessType = 'XYZ_rev'
-# initGuessType = 'X_rev'
-# initGuessType = 'pca_rev'
+
 usePartsDir = True
 # usePartsDir = False
 # ----------------------------------------------------------------------------------------------------------------------
@@ -507,7 +506,7 @@ for iterInd in range(nIter):
         if iterInd > 0:
             initGuessTypeT = 'nothing'
         else:
-            initGuessTypeT = initGuessType
+            initGuessTypeT = 'just_centroids'
 
 
         initVals = [calcOverlap(refSWC, SWC2Align, g) for g in gridSizes]

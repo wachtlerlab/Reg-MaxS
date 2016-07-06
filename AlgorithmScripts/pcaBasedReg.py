@@ -355,59 +355,60 @@ homeFolder = os.path.expanduser('~')
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOPSInt/'
-expNames = [
-            'Trh-F-000047.CNG',
-            'Trh-M-000143.CNG',
-            'Trh-F-000092.CNG',
-            'Trh-F-700009.CNG',
-            'Trh-M-000013.CNG',
-            'Trh-M-000146.CNG',
-            'Trh-M-100009.CNG',
-            'Trh-F-000019.CNG',
-            'Trh-M-000081.CNG',
-            'Trh-M-900003.CNG',
-            'Trh-F-200035.CNG',
-            'Trh-F-200015.CNG',
-            'Trh-M-000040.CNG',
-            'Trh-M-600023.CNG',
-            'Trh-M-100048.CNG',
-            'Trh-M-700019.CNG',
-            'Trh-F-100009.CNG',
-            'Trh-M-400000.CNG',
-            'Trh-M-000067.CNG',
-            'Trh-M-000114.CNG',
-            'Trh-M-100018.CNG',
-            'Trh-M-000141.CNG',
-            'Trh-M-900019.CNG',
-            'Trh-M-800002.CNG'
-]
-refInd = 14
-resDir = homeFolder + '/DataAndResults/morphology/RefPCA/chiangOPSInt/'
+# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOPSInt/'
+# expNames = [
+#             'Trh-F-000047.CNG',
+#             'Trh-M-000143.CNG',
+#             'Trh-F-000092.CNG',
+#             'Trh-F-700009.CNG',
+#             'Trh-M-000013.CNG',
+#             'Trh-M-000146.CNG',
+#             'Trh-M-100009.CNG',
+#             'Trh-F-000019.CNG',
+#             'Trh-M-000081.CNG',
+#             'Trh-M-900003.CNG',
+#             'Trh-F-200035.CNG',
+#             'Trh-F-200015.CNG',
+#             'Trh-M-000040.CNG',
+#             'Trh-M-600023.CNG',
+#             'Trh-M-100048.CNG',
+#             'Trh-M-700019.CNG',
+#             'Trh-F-100009.CNG',
+#             'Trh-M-400000.CNG',
+#             'Trh-M-000067.CNG',
+#             'Trh-M-000114.CNG',
+#             'Trh-M-100018.CNG',
+#             'Trh-M-000141.CNG',
+#             'Trh-M-900019.CNG',
+#             'Trh-M-800002.CNG'
+# ]
+# refInd = 14
+# resDir = homeFolder + '/DataAndResults/morphology/RefPCA/chiangOPSInt/'
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
-# expNames = [
-#  'VGlut-F-700500.CNG',
-#  'VGlut-F-700567.CNG',
-#  'VGlut-F-500471.CNG',
-#  'Cha-F-000353.CNG',
-#  'VGlut-F-600253.CNG',
-#  'VGlut-F-400434.CNG',
-#  'VGlut-F-600379.CNG',
-#  'VGlut-F-700558.CNG',
-#  'VGlut-F-500183.CNG',
-#  'VGlut-F-300628.CNG',
-#  'VGlut-F-500085.CNG',
-#  'VGlut-F-500031.CNG',
-#  'VGlut-F-500852.CNG',
-#  'VGlut-F-600366.CNG'
-#             ]
-#
-# refInd = 6
-# resDir = homeFolder + '/DataAndResults/morphology/RefPCA/chiangOMB/'
+dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
+expNames = [
+ 'VGlut-F-500085_registered',
+ 'VGlut-F-700500.CNG',
+ 'VGlut-F-700567.CNG',
+ 'VGlut-F-500471.CNG',
+ 'Cha-F-000353.CNG',
+ 'VGlut-F-600253.CNG',
+ 'VGlut-F-400434.CNG',
+ 'VGlut-F-600379.CNG',
+ 'VGlut-F-700558.CNG',
+ 'VGlut-F-500183.CNG',
+ 'VGlut-F-300628.CNG',
+ 'VGlut-F-500085.CNG',
+ 'VGlut-F-500031.CNG',
+ 'VGlut-F-500852.CNG',
+ 'VGlut-F-600366.CNG'
+            ]
+
+refInd = 0
+resDir = homeFolder + '/DataAndResults/morphology/RefPCA/chiangOMB/'
 # ----------------------------------------------------------------------------------------------------------------------
 # dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangLALInt'
 #
@@ -419,6 +420,7 @@ resDir = homeFolder + '/DataAndResults/morphology/RefPCA/chiangOPSInt/'
 
 # dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangLLC/'
 # expNames = [
+#             'Gad1-F-000062_Standardized',
 #             'Gad1-F-000062.CNG',
 #             'Cha-F-000012.CNG',
 #             'Cha-F-300331.CNG',
@@ -483,8 +485,8 @@ for expInd, expName in enumerate(expNames):
     outSWCFile = os.path.join(resDir, expName + '.swc')
     outBSFile = os.path.join(resDir, expName + 'BS.swc')
 
-    totalTransform = iterReg.createInitGuess(SWC2Align, [outSWCFile, outBSFile], tempDir, tempOutFiles, ipParFile,
-                            gridSizes[-1], typ='pca_rev')
+    totalTransform = iterReg.pca_based(SWC2Align, [outSWCFile, outBSFile], tempDir, tempOutFiles, ipParFile,
+                            gridSizes[-1])
 
     partsDir = os.path.join(dirPath, expName)
 
