@@ -1,9 +1,10 @@
 import os
-from RegMaxSCore.plotDensities import DensityVizualizations, writeTIFF
+from GJEMS.viz.plotDensities import DensityVizualizations, writeTIFF
 import numpy as np
 from matplotlib import pyplot as plt
 homeFolder = os.path.expanduser('~')
 
+plt.ion()
 part = ''
 
 #-------------------------------------------------------------------------------------------------------------------
@@ -359,46 +360,44 @@ part = ''
 # refSWC = os.path.join(homeFolder, 'DataAndResults/morphology/Registered/chiangOPSInt/', expNames[0] + '.swc')
 # ----------------------------------------------------------------------------------------------------------------------
 
-dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
-expNames = [
- 'VGlut-F-700500.CNG',
- 'VGlut-F-700567.CNG',
- 'VGlut-F-500471.CNG',
- 'Cha-F-000353.CNG',
- 'VGlut-F-600253.CNG',
- 'VGlut-F-400434.CNG',
- 'VGlut-F-600379.CNG',
- 'VGlut-F-700558.CNG',
- 'VGlut-F-500183.CNG',
- 'VGlut-F-300628.CNG',
- 'VGlut-F-500085.CNG',
- 'VGlut-F-500031.CNG',
- 'VGlut-F-500852.CNG',
- 'VGlut-F-600366.CNG'
-            ]
-
-refInd = 10
-# ---------------------------------------------------------------------------------
-resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
-initTrans = np.diag([1, 1, 1])
-# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB_OneError/'
-# initTrans = np.diag([-1, 1, -1])
-# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB1/'
-# initTrans = np.diag([-1, 1, -1])
-# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB2/'
-# initTrans = np.diag([1, 1, -1])
-# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB3/'
-# initTrans = np.diag([1, 1, -1])
-# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB4/'
-# initTrans = np.diag([1, 1, -1])
-label = 'OMB'
-
-# basicScale = [2.99398499,  4.58172834,  3.79382382]
-basicScale = [1, 1, 1]
-gridUnitSize = 0.25 * np.array(basicScale)
-sigmas = [1.25] * 3
-resampleLen = 0.1
-
+# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
+# expNames = [
+#  'VGlut-F-700500.CNG',
+#  'VGlut-F-700567.CNG',
+#  'VGlut-F-500471.CNG',
+#  'Cha-F-000353.CNG',
+#  'VGlut-F-600253.CNG',
+#  'VGlut-F-400434.CNG',
+#  'VGlut-F-600379.CNG',
+#  'VGlut-F-700558.CNG',
+#  'VGlut-F-500183.CNG',
+#  'VGlut-F-300628.CNG',
+#  'VGlut-F-500085.CNG',
+#  'VGlut-F-500031.CNG',
+#  'VGlut-F-500852.CNG',
+#  'VGlut-F-600366.CNG'
+#             ]
+# # ---------------------------------------------------------------------------------
+# # resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
+# # initTrans = np.diag([1, 1, 1])
+# # # resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB_OneError/'
+# # # initTrans = np.diag([-1, 1, -1])
+# # # resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB1/'
+# # # initTrans = np.diag([-1, 1, -1])
+# # # resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB2/'
+# # # initTrans = np.diag([1, 1, -1])
+# # # resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB3/'
+# # # initTrans = np.diag([1, 1, -1])
+# # # resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOMB4/'
+# # # initTrans = np.diag([1, 1, -1])
+# # label = 'OMB'
+# #
+# # # basicScale = [2.99398499,  4.58172834,  3.79382382]
+# # basicScale = [1, 1, 1]
+# # gridUnitSize = 0.25 * np.array(basicScale)
+# # sigmas = [1] * 3
+# # resampleLen = 0.1
+#
 # # ---------------------------------------------------------------------------------
 #
 # resDir = homeFolder + '/DataAndResults/morphology/RefPCA/chiangOMB/'
@@ -410,21 +409,21 @@ resampleLen = 0.1
 # label = 'OMBRefPCA'
 # basicScale = [1, 1, 1]
 # gridUnitSize = [0.25] * 3
-# sigmas = [1.25] * 3
+# sigmas = [1, 1, 1]
 # resampleLen = 0.1
-
-#---------------------------------------------------------------------------------
-# resDir = homeFolder + '/DataAndResults/morphology/Registered/chiangOMB/'
-# label = 'OMB_Registered'
 #
-# basicScale = [1, 1, 1]
-# gridUnitSize = [0.25] * 3
-# sigmas = [0.75, 0.75, 0.75]
-# resampleLen = 0.1
-# initTrans = np.diag([1, 1, 1])
-# ---------------------------------------------------------------------------------
-
-refSWC = os.path.join(homeFolder, 'DataAndResults/morphology/Registered/chiangOMB/', expNames[refInd] + '.swc')
+# #---------------------------------------------------------------------------------
+# # resDir = homeFolder + '/DataAndResults/morphology/Registered/chiangOMB/'
+# # label = 'OMB_Registered'
+# #
+# # basicScale = [1, 1, 1]
+# # gridUnitSize = [0.25] * 3
+# # sigmas = [0.75, 0.75, 0.75]
+# # resampleLen = 0.1
+# # initTrans = np.diag([1, 1, 1])
+# # ---------------------------------------------------------------------------------
+#
+# refSWC = os.path.join(homeFolder, 'DataAndResults/morphology/Registered/chiangOMB/', expNames[0] + '.swc')
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -466,47 +465,47 @@ refSWC = os.path.join(homeFolder, 'DataAndResults/morphology/Registered/chiangOM
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangLLC/'
-# expNames = [
-#             # 'Gad1-F-000062_Standardized',
-#             'Gad1-F-000062.CNG',
-#             'Cha-F-000012.CNG',
-#             'Cha-F-300331.CNG',
-#             'Gad1-F-600000.CNG',
-#             'Cha-F-000018.CNG',
-#             'Cha-F-300051.CNG',
-#             'Cha-F-400051.CNG',
-#             'Cha-F-200000.CNG'
-#             ]
-# refInd = 0
-#
-# # # ---------------------------------------------------------------------------------
-# # resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangLLC/'
-# # # initTrans = np.diag([1, 1, -1])
-# # initTrans = np.diag([1, 1, 1])
-# # label = 'LLC'
-# # basicScale = [1, 1, 1]
-# # gridUnitSize = [0.25] * 3
-# # sigmas = [0.75] * 3
-# # resampleLen = 0.1
-# # # ---------------------------------------------------------------------------------
-# # resDir = homeFolder + '/DataAndResults/morphology/RefPCA/chiangLLC/'
-# # initTrans = np.diag([1, 1, 1])
-# # label = 'LLCRefPCA'
-# # basicScale = [1, 1, 1]
-# # gridUnitSize = [0.25] * 3
-# # sigmas = [0.75] * 3
-# # resampleLen = 0.1
-# # # ---------------------------------------------------------------------------------
+dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangLLC/'
+expNames = [
+            # 'Gad1-F-000062_Standardized',
+            'Gad1-F-000062.CNG',
+            'Cha-F-000012.CNG',
+            'Cha-F-300331.CNG',
+            'Gad1-F-600000.CNG',
+            'Cha-F-000018.CNG',
+            'Cha-F-300051.CNG',
+            'Cha-F-400051.CNG',
+            'Cha-F-200000.CNG'
+            ]
+refInd = 0
+
+# # ---------------------------------------------------------------------------------
+# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangLLC/'
+# # initTrans = np.diag([1, 1, -1])
+# initTrans = np.diag([1, 1, 1])
+# label = 'LLC'
+# basicScale = [1, 1, 1]
+# gridUnitSize = [0.25] * 3
+# sigmas = [1] * 3
+# resampleLen = 0.1
+# # ---------------------------------------------------------------------------------
+resDir = homeFolder + '/DataAndResults/morphology/RefPCA/chiangLLC/'
+initTrans = np.diag([1, 1, 1])
+label = 'LLCRefPCA'
+basicScale = [1, 1, 1]
+gridUnitSize = [0.25] * 3
+sigmas = [1] * 3
+resampleLen = 0.1
+# # ---------------------------------------------------------------------------------
 # resDir = homeFolder + '/DataAndResults/morphology/Registered/chiangLLC/'
 # initTrans = np.diag([1, 1, 1])
-# label = 'LLC_Registered'
+# label = 'LLCRef_registered'
 # basicScale = [1, 1, 1]
 # gridUnitSize = [0.25] * 3
 # sigmas = [0.75, 0.75, 0.75]
 # resampleLen = 0.1
-# # # ---------------------------------------------------------------------------------
-# refSWC = os.path.join(homeFolder, 'DataAndResults/morphology/Registered/chiangLLC/', expNames[refInd] + '.swc')
+# # ---------------------------------------------------------------------------------
+refSWC = os.path.join(homeFolder, 'DataAndResults/morphology/Registered/chiangLLC/', expNames[refInd] + '.swc')
 # ----------------------------------------------------------------------------------------------------------------------
 # dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/DL-Int-1_NE/'
 #
@@ -602,8 +601,8 @@ for expInd, expName in enumerate(expNames):
     # swcFiles.append(regPartIt(expName, resDir, '_part1', 0))
     # swcFiles.append(intermediateFIt('0', expName, resDir, 0))
     # swcFiles.append(origF(dirPath, expName, resDir))
-    # swcFiles.append(regF(dirPath, expName, resDir))
-    swcFiles.append(regFNorm(dirPath, expName, resDir))
+    swcFiles.append(regF(dirPath, expName, resDir))
+    # swcFiles.append(regFNorm(dirPath, expName, resDir))
     # swcFiles.append(regPart(expName, resDir, part))
     # swcFiles.append(regPartNorm(expName, resDir, part))
 
