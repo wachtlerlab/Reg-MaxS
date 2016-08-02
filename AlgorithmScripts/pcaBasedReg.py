@@ -357,13 +357,14 @@ homeFolder = os.path.expanduser('~')
 
 # dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOPSInt/'
 # expNames = [
+#             'Trh-F-000047_registered',
 #             'Trh-F-000047.CNG',
 #             'Trh-M-000143.CNG',
 #             'Trh-F-000092.CNG',
 #             'Trh-F-700009.CNG',
 #             'Trh-M-000013.CNG',
 #             'Trh-M-000146.CNG',
-#             'Trh-M-100009.CNG',
+#             # 'Trh-M-100009.CNG',
 #             'Trh-F-000019.CNG',
 #             'Trh-M-000081.CNG',
 #             'Trh-M-900003.CNG',
@@ -382,7 +383,7 @@ homeFolder = os.path.expanduser('~')
 #             'Trh-M-900019.CNG',
 #             'Trh-M-800002.CNG'
 # ]
-# refInd = 14
+# refInd = 0
 # resDir = homeFolder + '/DataAndResults/morphology/RefPCA/chiangOPSInt/'
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -440,7 +441,7 @@ transBounds = [[-30, 30], [-30, 30], [-30, 30]]
 transMinRes = 1
 rotBounds = [[-np.pi / 6, np.pi / 6], [-np.pi / 6, np.pi / 6], [-np.pi / 6, np.pi / 6]]
 rotMinRes = np.deg2rad(1).round(4)
-scaleBounds = [[0.75, 1 / 0.75], [0.75, 1 / 0.75], [0.75, 1 / 0.75]]
+scaleBounds = [[0.5, 1 / 0.5], [0.5, 1 / 0.5], [0.5, 1 / 0.5]]
 minScaleStepSize = 1.005
 nCPU = 6
 nIter = 100
@@ -460,7 +461,7 @@ refSWC = os.path.join(dirPath, expNames[refInd] + '.swc')
 
 
 iterReg = IterativeRegistration(refSWC, gridSizes, rotBounds, transBounds,
-                                scaleBounds, transMinRes, minScaleStepSize, rotMinRes, nCPU)
+                                transMinRes, minScaleStepSize, rotMinRes, nCPU)
 
 ipParFile = os.path.join(resDir, 'tmp.json')
 vals = ['rot', 'scale', 'trans']
@@ -486,7 +487,7 @@ for expInd, expName in enumerate(expNames):
     outBSFile = os.path.join(resDir, expName + 'BS.swc')
 
     totalTransform = iterReg.pca_based(SWC2Align, [outSWCFile, outBSFile], tempDir, tempOutFiles, ipParFile,
-                            gridSizes[-1])
+                            gridSizes[-1], scaleBounds)
 
     partsDir = os.path.join(dirPath, expName)
 
@@ -510,5 +511,6 @@ for expInd, expName in enumerate(expNames):
     os.remove(outBSFile)
 
 for g in vals:
-    [os.remove(x) for x in tempOutFiles[g]]
-os.remove(ipParFile)
+    [os.remove(x) for x in tempOutFiles[g] if os.path.exists(x)]
+if os.path.exists(ipParFile):
+    os.remove(ipParFile)

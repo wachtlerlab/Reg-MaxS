@@ -109,19 +109,29 @@ baseNames = [
             # 'HB130313-6',
             # 'HB130313-7',
             # 'HB130313-8',
-            'HSN-fluoro01.CNG',
-            # 'HSN-fluoro01.CNGNoiseStd1',
-            # 'HSN-fluoro01.CNGNoiseStd2',
-            # 'HSN-fluoro01.CNGNoiseStd3',
-            # 'HSN-fluoro01.CNGNoiseStd4',
-            # 'HSN-fluoro01.CNGNoiseStd5',
-            # 'HSN-fluoro01.CNGNoiseStd6',
-            # 'HSN-fluoro01.CNGNoiseStd7',
-            # 'HSN-fluoro01.CNGNoiseStd8',
-            # 'HSN-fluoro01.CNGNoiseStd9',
+            # 'HSN-fluoro01.CNG',
+            'HSN-fluoro01.CNGNoiseStd1',
+            'HSN-fluoro01.CNGNoiseStd2',
+            'HSN-fluoro01.CNGNoiseStd3',
+            'HSN-fluoro01.CNGNoiseStd4',
+            'HSN-fluoro01.CNGNoiseStd5',
+            'HSN-fluoro01.CNGNoiseStd6',
+            'HSN-fluoro01.CNGNoiseStd7',
+            'HSN-fluoro01.CNGNoiseStd8',
+            'HSN-fluoro01.CNGNoiseStd9',
+            'HSN-fluoro01.CNGNoiseStd10',
+            'HSN-fluoro01.CNGNoiseStd11',
+            'HSN-fluoro01.CNGNoiseStd12',
+            'HSN-fluoro01.CNGNoiseStd13',
+            'HSN-fluoro01.CNGNoiseStd14',
+            'HSN-fluoro01.CNGNoiseStd15',
+            'HSN-fluoro01.CNGNoiseStd16',
+            'HSN-fluoro01.CNGNoiseStd17',
+            'HSN-fluoro01.CNGNoiseStd18',
+            'HSN-fluoro01.CNGNoiseStd19',
             ]
 
-Ns = [30]
+Ns = [5]
 
 if len(Ns) == 1:
     Ns = [Ns[0], Ns[0] + 1]
@@ -479,22 +489,20 @@ transBounds = [[-30, 30], [-30, 30], [-30, 30]]
 transMinRes = 1
 rotBounds = [[-np.pi / 6, np.pi / 6], [-np.pi / 6, np.pi / 6], [-np.pi / 6, np.pi / 6]]
 rotMinRes = np.deg2rad(1).round(4)
-scaleBounds = [[0.75, 1 / 0.75], [0.75, 1 / 0.75], [0.75, 1 / 0.75]]
+scaleBounds = [[0.5, 1 / 0.5], [0.5, 1 / 0.5], [0.5, 1 / 0.5]]
 # scaleBounds = [[1, 1], [1, 1], [1, 1]]
 minScaleStepSize = 1.005
-nCPU = 7
+nCPU = 6
 
 # usePartsDir = False
 usePartsDir = True
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-
-
 refSWC = os.path.join(dirPath, expNames[refInd] + '.swc')
 
 iterReg = IterativeRegistration(refSWC, gridSizes, rotBounds, transBounds,
-                                scaleBounds, transMinRes, minScaleStepSize, rotMinRes, nCPU)
+                                transMinRes, minScaleStepSize, rotMinRes, nCPU)
 
 
 for expInd, expName in enumerate(expNames):
@@ -506,4 +514,5 @@ for expInd, expName in enumerate(expNames):
             partsDir = os.path.join(dirPath, expName)
         else:
             partsDir = None
-        iterReg.performReg(SWC2Align, expName, resDir, partsDir)
+        iterReg.performReg(SWC2Align, expName, resDir, scaleBounds, partsDir)
+

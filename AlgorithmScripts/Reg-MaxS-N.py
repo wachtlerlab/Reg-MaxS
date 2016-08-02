@@ -4,9 +4,19 @@ from RegMaxSCore.iterativeRegistration import IterativeRegistration, composeRefS
 import shutil
 import json
 import sys
+from RegMaxSCore.transforms import decompose_matrix
 
 homeFolder = os.path.expanduser('~')
 
+
+def getRemainderScale(scale, oldScale):
+
+    toReturn = []
+    for s, oldS in zip(scale, oldScale):
+
+        toReturn.append([min(oldS[0] / s, 1), max(oldS[1] / s, 1)])
+
+    return toReturn
 
 # ----------------------------------------------------------------------------------------------------------------------
 #
@@ -371,59 +381,60 @@ homeFolder = os.path.expanduser('~')
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOPSInt/'
-# expNames = [
-#             'Trh-F-000047.CNG',
-#             'Trh-M-000143.CNG',
-#             'Trh-F-000092.CNG',
-#             'Trh-F-700009.CNG',
-#             'Trh-M-000013.CNG',
-#             'Trh-M-000146.CNG',
-#             # 'Trh-M-100009.CNG',
-#             'Trh-F-000019.CNG',
-#             'Trh-M-000081.CNG',
-#             'Trh-M-900003.CNG',
-#             'Trh-F-200035.CNG',
-#             'Trh-F-200015.CNG',
-#             'Trh-M-000040.CNG',
-#             'Trh-M-600023.CNG',
-#             'Trh-M-100048.CNG',
-#             'Trh-M-700019.CNG',
-#             'Trh-F-100009.CNG',
-#             'Trh-M-400000.CNG',
-#             'Trh-M-000067.CNG',
-#             'Trh-M-000114.CNG',
-#             'Trh-M-100018.CNG',
-#             'Trh-M-000141.CNG',
-#             'Trh-M-900019.CNG',
-#             'Trh-M-800002.CNG'
-# ]
-# refInd = 14
-# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOPSInt/'
+dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOPSInt/'
+expNames = [
+            'Trh-F-000047_registered',
+            'Trh-F-000047.CNG',
+            'Trh-M-000143.CNG',
+            'Trh-F-000092.CNG',
+            'Trh-F-700009.CNG',
+            'Trh-M-000013.CNG',
+            'Trh-M-000146.CNG',
+            # 'Trh-M-100009.CNG',
+            'Trh-F-000019.CNG',
+            'Trh-M-000081.CNG',
+            'Trh-M-900003.CNG',
+            'Trh-F-200035.CNG',
+            'Trh-F-200015.CNG',
+            'Trh-M-000040.CNG',
+            'Trh-M-600023.CNG',
+            'Trh-M-100048.CNG',
+            'Trh-M-700019.CNG',
+            'Trh-F-100009.CNG',
+            'Trh-M-400000.CNG',
+            'Trh-M-000067.CNG',
+            'Trh-M-000114.CNG',
+            'Trh-M-100018.CNG',
+            'Trh-M-000141.CNG',
+            'Trh-M-900019.CNG',
+            'Trh-M-800002.CNG'
+]
+refInd = 0
+resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOPSInt/'
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
-expNames = [
-'VGlut-F-500085_registered',
- 'VGlut-F-700500.CNG',
- 'VGlut-F-700567.CNG',
- 'VGlut-F-500471.CNG',
- 'Cha-F-000353.CNG',
- 'VGlut-F-600253.CNG',
- 'VGlut-F-400434.CNG',
- 'VGlut-F-600379.CNG',
- 'VGlut-F-700558.CNG',
- 'VGlut-F-500183.CNG',
- 'VGlut-F-300628.CNG',
- 'VGlut-F-500085.CNG',
- 'VGlut-F-500031.CNG',
- 'VGlut-F-500852.CNG',
- 'VGlut-F-600366.CNG'
-            ]
-
-refInd = 0
-resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
+# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
+# expNames = [
+# 'VGlut-F-500085_registered',
+#  'VGlut-F-700500.CNG',
+#  'VGlut-F-700567.CNG',
+#  'VGlut-F-500471.CNG',
+#  'Cha-F-000353.CNG',
+#  'VGlut-F-600253.CNG',
+#  'VGlut-F-400434.CNG',
+#  'VGlut-F-600379.CNG',
+#  'VGlut-F-700558.CNG',
+#  'VGlut-F-500183.CNG',
+#  'VGlut-F-300628.CNG',
+#  'VGlut-F-500085.CNG',
+#  'VGlut-F-500031.CNG',
+#  'VGlut-F-500852.CNG',
+#  'VGlut-F-600366.CNG'
+#             ]
+#
+# refInd = 0
+# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -488,10 +499,12 @@ prevAlignedSWCs = [os.path.join(dirPath, expName + '.swc') for expName in expNam
 overallOverlaps = []
 bestInd = nIter
 
+nrnScaleBounds = {k: scaleBounds for k in expNames}
+
 for iterInd in range(nIter):
 
     iterReg = IterativeRegistration(refSWC, gridSizes, rotBounds, transBounds,
-                                scaleBounds, transMinRes, minScaleStepSize, rotMinRes, nCPU)
+                                transMinRes, minScaleStepSize, rotMinRes, nCPU)
 
     presAlignedSWCs = []
     dones = []
@@ -516,7 +529,9 @@ for iterInd in range(nIter):
         else:
             prevPartsDir = None
 
-        resSWC, resSol = iterReg.performReg(SWC2Align, expName + str(iterInd), partsDir=prevPartsDir,
+        resSWC, resSol = iterReg.performReg(SWC2Align, expName + str(iterInd),
+                                            scaleBounds=nrnScaleBounds[expName],
+                                            partsDir=prevPartsDir,
                                             resDir=resDir, initGuessType=initGuessTypeT)
 
         finalVals = [calcOverlap(refSWC, resSWC, gridSize) for gridSize in gridSizes]
@@ -550,9 +565,13 @@ for iterInd in range(nIter):
                 pars = json.load(fle)
                 totalTrans = np.array(pars['finalTransMat'])
                 done = np.allclose(np.eye(3), totalTrans[:3, :3], atol=1e-3)
+
+                scale, shear, angles, trans, persp = decompose_matrix(totalTrans)
+                nrnScaleBounds[expName] = getRemainderScale(scale, nrnScaleBounds[expName])
         dones.append(done)
         print('Finished ' + expName + ' : ' + str(done))
 
+        print('Remainder scale: ' + str(nrnScaleBounds[expName]))
         presAlignedSWCs.append(resSWC)
 
 

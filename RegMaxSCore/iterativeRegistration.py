@@ -24,7 +24,7 @@ def transPreference(x, y):
 class IterativeRegistration(object):
 
     def __init__(self, refSWC, gridSizes, rotBounds, transBounds,
-                 scaleBounds, transMinRes, scaleMinRes, rotMinRes, nCPU):
+                 transMinRes, scaleMinRes, rotMinRes, nCPU):
 
         super(IterativeRegistration, self).__init__()
 
@@ -32,7 +32,6 @@ class IterativeRegistration(object):
         self.gridSizes = gridSizes
         self.rotBounds = rotBounds
         self.transBounds = transBounds
-        self.scaleBounds = scaleBounds
         self.rotBounds = rotBounds
         self.transMinRes = transMinRes
         self.rotMinRes = rotMinRes
@@ -82,10 +81,10 @@ class IterativeRegistration(object):
 
         return bestSol, bestVal, done
 
-    def scaleOnce(self, SWC2Align, outFiles, ipParFile):
+    def scaleOnce(self, SWC2Align, outFiles, ipParFile, scaleBounds):
 
         pars = [self.refSWC, SWC2Align, outFiles,
-                self.gridSizes, self.scaleBounds, self.scaleMinRes, self.nCPU]
+                self.gridSizes, scaleBounds, self.scaleMinRes, self.nCPU]
 
         with open(ipParFile, 'w') as fle:
             json.dump(pars, fle)
@@ -102,7 +101,7 @@ class IterativeRegistration(object):
 
         return bestSol, bestVal, done
 
-    def compare(self, srts, SWC2Align, tempOutFiles, ipParFile):
+    def compare(self, srts, SWC2Align, tempOutFiles, ipParFile, scaleBounds):
 
         presBestVal = 1e6
         presBestTrans = 'trans'
@@ -113,7 +112,15 @@ class IterativeRegistration(object):
 
         for g in srts:
 
-            bestSol, bestVal, done = self.allFuncs[g](SWC2Align, tempOutFiles[g], ipParFile)
+            if g == 'scale':
+                bestSol, bestVal, done = self.scaleOnce(SWC2Align, tempOutFiles[g], ipParFile, scaleBounds)
+            elif g == 'rot':
+                bestSol, bestVal, done = self.rotOnce(SWC2Align, tempOutFiles[g], ipParFile)
+            elif g == 'trans':
+                bestSol, bestVal, done = self.transOnce(SWC2Align, tempOutFiles[g], ipParFile)
+            else:
+                raise('Invalid transformation type ' + g)
+
 
             tempDones[g] = done
 
@@ -128,9 +135,10 @@ class IterativeRegistration(object):
         return tempDones, presBestSol, presBestVal, presBestDone, presBestTrans
 
 
-    def pca_based(self, SWC2Align, outFiles, tempOPath, tempOutFiles, ipParFile, gridSize):
+    def pca_based(self, SWC2Align, outFiles, tempOPath, tempOutFiles, ipParFile, gridSize, scaleBounds):
 
-        allPossList = [[1, 2, 3], [-1, 2, 3], [1, -2, 3], [1, 2, -3]]
+        # allPossList = [[1, 2, 3], [-1, 2, 3], [1, -2, 3], [1, 2, -3]]
+        allPossList = [[1, 2, 3]]
 
         refPts = np.loadtxt(self.refSWC)[:, 2:5]
         refMean = refPts.mean(axis=0)
@@ -138,10 +146,11 @@ class IterativeRegistration(object):
         SWC2AlignMean = SWC2AlignPts.mean(axis=0)
 
         refEvecs, refNStds = getPCADetails(self.refSWC)
-        STAEvecs, STANSTds = getPCADetails(SWC2Align)
+        STAEvecs, STANStds = getPCADetails(SWC2Align)
 
-        initTransform = np.eye(4)
-        initTransform[:3, 3] = -SWC2AlignMean
+        scales = [x / y for x, y in zip(refNStds, STANStds)]
+        # print scales
+
 
         funcVals = []
         tempFiles = []
@@ -151,59 +160,39 @@ class IterativeRegistration(object):
 
             # print('Doing poss #' + str(possInd))
 
+            totalTransform = np.eye(4)
+            totalTransform[:3, 3] = -SWC2AlignMean
+
             poss = np.array(poss)
             # Testing the correspondence
             # refEvecs[:, i] = sign(STAEvecs[:, poss[i]]) * STAEvecs[:, poss[i]] for i in {0, 1, 2}
             possSTAEvecs = np.dot(STAEvecs[:, np.abs(poss) - 1], np.diag(np.sign(poss)))
 
-            # Solving transform * possSTAEvecs = refEvecs for transform
-            transform = np.linalg.solve(possSTAEvecs.T, refEvecs.T).T
+            # # Solving transform * possSTAEvecs = refEvecs for transform
+            # transform = np.linalg.solve(possSTAEvecs.T, refEvecs.T).T
 
             temp = np.eye(4)
-            temp[:3, :3] = transform
-            totalTransform = np.dot(temp, initTransform)
+            temp[:3, :3] = possSTAEvecs.T
+            totalTransform = np.dot(temp, totalTransform)
+
+            temp = np.eye(4)
+            temp[:3, :3] = np.diag(scales)
+            totalTransform = np.dot(temp, totalTransform)
+
+            temp = np.eye(4)
+            temp[:3, :3] = refEvecs
+            totalTransform = np.dot(temp, totalTransform)
+
             totalTranslation = refMean
+
+            totalTransform[:3, 3] += totalTranslation
+
+            totalTranss.append(totalTransform)
 
             SWCPoss = os.path.join(tempOPath, 'poss' + str(possInd) + '.swc')
 
-            transSWC(SWC2Align, totalTransform[:3, :3], totalTransform[:3, 3] + totalTranslation, SWCPoss)
+            transSWC(SWC2Align, totalTransform[:3, :3], totalTransform[:3, 3], SWCPoss)
 
-
-            iterationNo = 0
-            done = False
-            srts = ['rot', 'trans']
-
-            while not done:
-
-                tempDones, bestSol, bestVal, lDone, g = self.compare(srts, SWCPoss, tempOutFiles, ipParFile)
-
-                with open(tempOutFiles[g][1], 'r') as fle:
-                    pars = json.load(fle)
-                    presTrans = np.array(pars['transMat'])
-                    if g == 'trans':
-                        totalTranslation += presTrans[:3, 3]
-                    else:
-                        totalTransform = np.dot(presTrans, totalTransform)
-
-                shutil.copy(tempOutFiles[g][0], SWCPoss)
-                print(str(iterationNo) + g)
-                iterationNo += 1
-                done = lDone
-
-
-            bestSol, bestVal, sDone = self.scaleOnce(SWCPoss, tempOutFiles['scale'], ipParFile)
-            temp = np.eye(4)
-            temp[:3, :3] = np.diag(bestSol)
-            totalTransform = np.dot(temp, totalTransform)
-            totalTransform[:3, 3] += totalTranslation
-            print(str(iterationNo) + 's')
-            iterationNo += 1
-
-            shutil.copy(tempOutFiles['scale'][0], SWCPoss)
-            bestVals.append(bestVal)
-            totalTranss.append(totalTransform)
-            tempFiles.append(SWCPoss)
-            #
             trans = SWCTranslate(self.refSWC, SWCPoss, gridSize)
             funcVals.append(objFun(([0, 0, 0], trans)))
 
@@ -221,6 +210,8 @@ class IterativeRegistration(object):
         bestTransform = totalTranss[minimizerInds[bestSolInd]]
         transSWC(SWC2Align, bestTransform[:3, :3], bestTransform[:3, 3], outFiles[0])
 
+
+
         # for tFile in tempFiles:
         #     os.remove(tFile)
 
@@ -230,7 +221,7 @@ class IterativeRegistration(object):
         return bestTransform
 
 
-    def performReg(self, SWC2Align, expName, resDir, partsDir=None, initGuessType='just_centroids'):
+    def performReg(self, SWC2Align, expName, resDir, scaleBounds, partsDir=None, initGuessType='just_centroids'):
 
         ipParFile = os.path.join(resDir, 'tmp.json')
         vals = ['trans', 'rot', 'scale']
@@ -281,7 +272,7 @@ class IterativeRegistration(object):
 
             while not done:
 
-                tempDones, bestSol, bestVal, lDone, g = self.compare(srts, SWC2AlignT, tempOutFiles, ipParFile)
+                tempDones, bestSol, bestVal, lDone, g = self.compare(srts, SWC2AlignT, tempOutFiles, ipParFile, None)
 
                 outFile = os.path.join(tempOutPath, str(iterationNo) + g[0] + '.swc')
 
@@ -306,7 +297,7 @@ class IterativeRegistration(object):
                 SWC2AlignT = outFile
 
 
-            bestSol, bestVal, sDone = self.scaleOnce(SWC2AlignT, tempOutFiles['scale'], ipParFile)
+            bestSol, bestVal, sDone = self.scaleOnce(SWC2AlignT, tempOutFiles['scale'], ipParFile, scaleBounds)
 
             outFile = os.path.join(tempOutPath, str(iterationNo) + 's.swc')
 
@@ -326,7 +317,7 @@ class IterativeRegistration(object):
             SWC2AlignT = outFile
 
 
-            tempDones, bestSol, bestVal, lDone, g = self.compare(vals, SWC2AlignT, tempOutFiles, ipParFile)
+            tempDones, bestSol, bestVal, lDone, g = self.compare(vals, SWC2AlignT, tempOutFiles, ipParFile, scaleBounds)
             scaleDone = all(tempDones.values())
 
             if not scaleDone:
@@ -413,7 +404,7 @@ def composeRefSWC(alignedSWCs, newRefSWC, gridSize):
 
     for aswc in alignedSWCs:
         aPts = np.loadtxt(aswc)[:, 2:5]
-        aVox = np.array(aPts / gridSize, np.int32)
+        aVox = np.array(np.round(aPts / gridSize), np.int32)
         aVoxSet = set(map(tuple, aVox))
         indVoxs.append(aVoxSet)
 

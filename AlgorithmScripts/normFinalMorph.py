@@ -6,66 +6,67 @@ from RegMaxSCore.swcFuncs import transSWC
 homeFolder = os.path.expanduser('~')
 
 # ----------------------------------------------------------------------------------------------------------------------
-dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
-expNames = [
- 'VGlut-F-500085_registered',
- 'VGlut-F-700500.CNG',
- 'VGlut-F-700567.CNG',
- 'VGlut-F-500471.CNG',
- 'Cha-F-000353.CNG',
- 'VGlut-F-600253.CNG',
- 'VGlut-F-400434.CNG',
- 'VGlut-F-600379.CNG',
- 'VGlut-F-700558.CNG',
- 'VGlut-F-500183.CNG',
- 'VGlut-F-300628.CNG',
- 'VGlut-F-500085.CNG',
- 'VGlut-F-500031.CNG',
- 'VGlut-F-500852.CNG',
- 'VGlut-F-600366.CNG'
-            ]
-
-refInd = 0
-resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
+# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
+# expNames = [
+#  'VGlut-F-500085_registered',
+#  'VGlut-F-700500.CNG',
+#  'VGlut-F-700567.CNG',
+#  'VGlut-F-500471.CNG',
+#  'Cha-F-000353.CNG',
+#  'VGlut-F-600253.CNG',
+#  'VGlut-F-400434.CNG',
+#  'VGlut-F-600379.CNG',
+#  'VGlut-F-700558.CNG',
+#  'VGlut-F-500183.CNG',
+#  'VGlut-F-300628.CNG',
+#  'VGlut-F-500085.CNG',
+#  'VGlut-F-500031.CNG',
+#  'VGlut-F-500852.CNG',
+#  'VGlut-F-600366.CNG'
+#             ]
+#
+# refInd = 0
+# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOPSInt/'
-# expNames = [
-#             'Trh-F-000047.CNG',
-#             'Trh-M-000143.CNG',
-#             'Trh-F-000092.CNG',
-#             'Trh-F-700009.CNG',
-#             'Trh-M-000013.CNG',
-#             'Trh-M-000146.CNG',
-#             # 'Trh-M-100009.CNG',
-#             'Trh-F-000019.CNG',
-#             'Trh-M-000081.CNG',
-#             'Trh-M-900003.CNG',
-#             'Trh-F-200035.CNG',
-#             'Trh-F-200015.CNG',
-#             'Trh-M-000040.CNG',
-#             'Trh-M-600023.CNG',
-#             'Trh-M-100048.CNG',
-#             'Trh-M-700019.CNG',
-#             'Trh-F-100009.CNG',
-#             'Trh-M-400000.CNG',
-#             'Trh-M-000067.CNG',
-#             'Trh-M-000114.CNG',
-#             'Trh-M-100018.CNG',
-#             'Trh-M-000141.CNG',
-#             'Trh-M-900019.CNG',
-#             'Trh-M-800002.CNG'
-# ]
-# # refInd = 12
-# # resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOPSInt/'
-#
-# # refInd = 12
-# # resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOPSInt4_newXRev/'
-#
-# # refInd = 0
-# # resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOPSInt3_newXRev/'
-#
+dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOPSInt/'
+expNames = [
+            'Trh-F-000047_registered',
+            'Trh-F-000047.CNG',
+            'Trh-M-000143.CNG',
+            'Trh-F-000092.CNG',
+            'Trh-F-700009.CNG',
+            'Trh-M-000013.CNG',
+            'Trh-M-000146.CNG',
+            # 'Trh-M-100009.CNG',
+            'Trh-F-000019.CNG',
+            'Trh-M-000081.CNG',
+            'Trh-M-900003.CNG',
+            'Trh-F-200035.CNG',
+            'Trh-F-200015.CNG',
+            'Trh-M-000040.CNG',
+            'Trh-M-600023.CNG',
+            'Trh-M-100048.CNG',
+            'Trh-M-700019.CNG',
+            'Trh-F-100009.CNG',
+            'Trh-M-400000.CNG',
+            'Trh-M-000067.CNG',
+            'Trh-M-000114.CNG',
+            'Trh-M-100018.CNG',
+            'Trh-M-000141.CNG',
+            'Trh-M-900019.CNG',
+            'Trh-M-800002.CNG'
+]
+refInd = 0
+resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOPSInt/'
+
+# refInd = 12
+# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOPSInt4_newXRev/'
+
+# refInd = 0
+# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOPSInt3_newXRev/'
+
 # refInd = 17
 # resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOPSInt5_newXRev/'
 

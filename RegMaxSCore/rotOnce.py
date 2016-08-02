@@ -6,6 +6,9 @@ import sys
 from itertools import product
 from transforms import compose_matrix
 
+debugging = False
+# debugging = True
+
 
 assert len(sys.argv) == 2, 'Only one argument, the path of the swcfile expected, ' + str(len(sys.argv)) + 'found'
 
@@ -27,14 +30,17 @@ bestSol = [0, 0, 0]
 
 for gridInd, gridSize in enumerate(gridSizes):
 
-    # print('Gridsize:' + str(gridSize))
+    if debugging:
+        print('Gridsize:' + str(gridSize))
     stepSize = stepSizes[gridInd]
-    # print('Stepsize: ' + str(np.rad2deg(stepSize)))
+    if debugging:
+        print('Stepsize: ' + str(np.rad2deg(stepSize)))
     bounds = (np.array(bounds).T - np.array(bestSol)).T
     boundsRoundedUp = np.sign(bounds) * np.ceil(np.abs(bounds) / stepSize) * stepSize
     possiblePts1D = [np.round(bestSol[ind] + np.arange(x[0], x[1] + stepSize, stepSize), 3).tolist()
                      for ind, x in enumerate(boundsRoundedUp)]
-    # print(np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)]))
+    if debugging:
+        print(np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)]))
     possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[gridInd])
     funcVals = pool.map(objFun, argGen)
@@ -49,16 +55,20 @@ for gridInd, gridSize in enumerate(gridSizes):
         prevVals = [objFun((x, SWCDatas[gridInd - 1])) for x in minimzers]
         bestSol = minimzers[np.argmin(prevVals)]
     bounds = map(lambda x: [x - np.sqrt(2) * stepSize, x + np.sqrt(2) * stepSize], bestSol)
-    bestVal = objFun((bestSol, SWCDatas[gridInd]))
-    # print(np.rad2deg(bestSol), bestVal)
+
+    if debugging:
+        bestVal = objFun((bestSol, SWCDatas[gridInd]))
+        print(np.rad2deg(bestSol), bestVal)
 
 
-if minRes < (2 * gridSizes[-1] / maxDist):
+if minRes < stepSizes[-1]:
 
-    # print('Stepsize: ' + str(np.rad2deg(minRes)))
+    if debugging:
+        print('Stepsize: ' + str(np.rad2deg(minRes)))
     bounds = (np.array(bounds).T - np.array(bestSol)).T
     boundsRoundedUp = np.sign(bounds) * np.ceil(np.abs(bounds) / minRes) * minRes
-    # print(np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)]))
+    if debugging:
+        print(np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)]))
     possiblePts1D = [np.round(bestSol[ind] + np.arange(x[0], x[1] + minRes, minRes), 3).tolist()
                      for ind, x in enumerate(boundsRoundedUp)]
     possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
@@ -69,19 +79,36 @@ if minRes < (2 * gridSizes[-1] / maxDist):
     minimzers = [y for x, y in enumerate(possiblePts3D) if funcVals[x] == minimum]
     prevVals = [objFun((x, SWCDatas[-2])) for x in minimzers]
     bestSol = minimzers[np.argmin(prevVals)]
-    # print(np.rad2deg(bestSol), bestVal)
+    if debugging:
+        bestVal = objFun((bestSol, SWCDatas[-1]))
+        print(np.rad2deg(bestSol), bestVal)
 
 bestVal = objFun((bestSol, SWCDatas[-1]))
 nochange = objFun(([0, 0, 0], SWCDatas[-1]))
-# print(np.rad2deg(bestSol), bestVal, nochange)
+if debugging:
+    print(np.rad2deg(bestSol), bestVal, nochange)
 
-done = bestVal >= nochange
 
+done = False
+
+# all values are worse than doing nothing
 if bestVal > nochange:
+
+    done = True
     bestSol = [0, 0, 0]
     bestVal = nochange
 
-# done = bestVal == nochange
+# best solution and no change are equally worse
+elif bestVal == nochange:
+
+    # the solution is very close to zero or there is already exact overlap
+    if np.abs(bestSol).max() <= min(minRes, stepSizes[-1]) or bestVal == 0:
+
+        done = True
+        bestSol = [0, 0, 0]
+        bestVal = nochange
+
+
 
 SWCDatas[-1].writeSolution(outFiles[0], bestSol)
 matrix = compose_matrix(angles=bestSol).tolist()

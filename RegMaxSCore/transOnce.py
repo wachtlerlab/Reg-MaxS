@@ -41,7 +41,7 @@ for gridInd, gridSize in enumerate(gridSizes):
         prevVals = [objFun((x, SWCDatas[gridInd - 1])) for x in minimzers]
         bestSol = minimzers[np.argmin(prevVals)]
     bounds = map(lambda x: [x - gridSize, x + gridSize], bestSol)
-    bestVal = objFun((bestSol, SWCDatas[gridInd]))
+    # bestVal = objFun((bestSol, SWCDatas[gridInd]))
     # print(bestSol, bestVal)
 
 if minRes < gridSizes[-1]:
@@ -67,12 +67,26 @@ nochange = objFun(([0, 0, 0], SWCDatas[-1]))
 # bestVals = [objFun((bestSol, x)) for x in SWCDatas]
 # print(bestSol, bestVals, noChangeVals[-1])
 
-done = bestVal >= nochange
-if bestVal > nochange:
-    bestSol = [0, 0, 0]
-    bestVol = nochange
+done = False
 
-# done = bestVal == nochange
+# all values are worse than doing nothing
+if bestVal > nochange:
+
+    done = True
+    bestSol = [0, 0, 0]
+    bestVal = nochange
+
+# best solution and no change are equally worse
+elif bestVal == nochange:
+
+    # the solution is very close to zero or there is already an exact overlap
+    if np.abs(bestSol).max() <= min(minRes, gridSizes[-1]) or bestVal == 0:
+
+        done = True
+        bestSol = [0, 0, 0]
+        bestVal = nochange
+
+
 
 SWCDatas[-1].writeSolution(outFiles[0], bestSol)
 matrix = compose_matrix(translate=bestSol).tolist()
