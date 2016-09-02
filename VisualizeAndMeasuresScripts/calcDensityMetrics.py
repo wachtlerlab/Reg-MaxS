@@ -145,11 +145,15 @@ for testInd, testBound in enumerate(testBounds):
     refProjs = [newRefDenstiy.max(axis=2), newRefDenstiy.max(axis=1)]
     testProjs = [newTestDensity.max(axis=2), newTestDensity.max(axis=1)]
 
-    plt.imsave(refDensityNPZ[:-4] + '12_common.png', refProjs[0], dpi=300, format='png', cmap=plt.cm.jet, vmax=1, vmin=0)
-    plt.imsave(refDensityNPZ[:-4] + '13_common.png', refProjs[1], dpi=300, format='png', cmap=plt.cm.jet, vmax=1, vmin=0)
+    plt.imsave(refDensityNPZ[:-4] + '12_common.png', refProjs[0], dpi=300, format='png',
+               cmap=plt.cm.jet, vmax=1, vmin=0)
+    plt.imsave(refDensityNPZ[:-4] + '13_common.png', refProjs[1], dpi=300, format='png',
+               cmap=plt.cm.jet, vmax=1, vmin=0)
 
-    plt.imsave(testDensityNPZs[testInd][:-4] + '12_common.png', testProjs[0], dpi=300, format='png', cmap=plt.cm.jet, vmax=1, vmin=0)
-    plt.imsave(testDensityNPZs[testInd][:-4] + '13_common.png', testProjs[1], dpi=300, format='png', cmap=plt.cm.jet, vmax=1, vmin=0)
+    plt.imsave(testDensityNPZs[testInd][:-4] + '12_common.png', testProjs[0], dpi=300, format='png',
+               cmap=plt.cm.jet, vmax=1, vmin=0)
+    plt.imsave(testDensityNPZs[testInd][:-4] + '13_common.png', testProjs[1], dpi=300, format='png',
+               cmap=plt.cm.jet, vmax=1, vmin=0)
 
     fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(14, 11.2))
     ax[0, 0].imshow(refProjs[0], vmax=1, vmin=0, interpolation='None')

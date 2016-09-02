@@ -83,8 +83,8 @@ def transSWC(fName, A, b, destFle):
 def transSWC_rotAboutPoint(fName, A, b, destFle, point):
     '''
     Generate an SWC file at destFle with each point `x' of the morphology in fName transformed Affinely as A(x-mu)+b
-    where mu is the mean of all the points of the morphology.
-    Essentially, the morphology is centered at its centroid before being Affinely transformed.
+    where mu is a specified point.
+    Essentially, the morphology is centered at a specified point before being Affinely transformed.
     :param fName: string
     :param A: 2D numpy.ndarray of shape (3, 3)
     :param b: 3 member iterable
