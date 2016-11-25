@@ -3,139 +3,20 @@ import numpy as np
 import json
 from RegMaxSCore.swcFuncs import transSWC
 
-homeFolder = os.path.expanduser('~')
-
 # ----------------------------------------------------------------------------------------------------------------------
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOMB/'
-# expNames = [
-#  'VGlut-F-500085_registered',
-#  'VGlut-F-700500.CNG',
-#  'VGlut-F-700567.CNG',
-#  'VGlut-F-500471.CNG',
-#  'Cha-F-000353.CNG',
-#  'VGlut-F-600253.CNG',
-#  'VGlut-F-400434.CNG',
-#  'VGlut-F-600379.CNG',
-#  'VGlut-F-700558.CNG',
-#  'VGlut-F-500183.CNG',
-#  'VGlut-F-300628.CNG',
-#  'VGlut-F-500085.CNG',
-#  'VGlut-F-500031.CNG',
-#  'VGlut-F-500852.CNG',
-#  'VGlut-F-600366.CNG'
-#             ]
-#
-# refInd = 0
-# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOMB/'
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangOPSInt/'
+dirPath = 'TestFiles'
 expNames = [
-            'Trh-F-000047_registered',
-            'Trh-F-000047.CNG',
-            'Trh-M-000143.CNG',
-            'Trh-F-000092.CNG',
-            'Trh-F-700009.CNG',
-            'Trh-M-000013.CNG',
-            'Trh-M-000146.CNG',
-            # 'Trh-M-100009.CNG',
-            'Trh-F-000019.CNG',
-            'Trh-M-000081.CNG',
-            'Trh-M-900003.CNG',
-            'Trh-F-200035.CNG',
-            'Trh-F-200015.CNG',
-            'Trh-M-000040.CNG',
-            'Trh-M-600023.CNG',
-            'Trh-M-100048.CNG',
-            'Trh-M-700019.CNG',
-            'Trh-F-100009.CNG',
-            'Trh-M-400000.CNG',
-            'Trh-M-000067.CNG',
-            'Trh-M-000114.CNG',
-            'Trh-M-100018.CNG',
-            'Trh-M-000141.CNG',
-            'Trh-M-900019.CNG',
-            'Trh-M-800002.CNG'
-]
+            'Gad1-F-000062.CNG',
+            'Cha-F-000012.CNG',
+            'Cha-F-300331.CNG',
+            'Gad1-F-600000.CNG',
+            'Cha-F-000018.CNG',
+            'Cha-F-300051.CNG',
+            'Cha-F-400051.CNG',
+            'Cha-F-200000.CNG'
+            ]
 refInd = 0
-resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangOPSInt/'
-
-# refInd = 12
-# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOPSInt4_newXRev/'
-
-# refInd = 0
-# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOPSInt3_newXRev/'
-
-# refInd = 17
-# resDir = homeFolder + '/DataAndResults/morphology/Backups/directPixelBased/chiangOPSInt5_newXRev/'
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangLALInt'
-#
-# expNames = [x[:-4] for x in os.listdir(dirPath) if x.endswith('.swc')]
-# refInd = 0
-#
-# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangLALInt'
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/chiangLLC/'
-# expNames = [
-#             'Gad1-F-000062_Standardized',
-#             'Gad1-F-000062.CNG',
-#             'Cha-F-000012.CNG',
-#             'Cha-F-300331.CNG',
-#             'Gad1-F-600000.CNG',
-#             'Cha-F-000018.CNG',
-#             'Cha-F-300051.CNG',
-#             'Cha-F-400051.CNG',
-#             'Cha-F-200000.CNG'
-#             ]
-# refInd = 0
-# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/chiangLLC/'
-# ----------------------------------------------------------------------------------------------------------------------
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/DL-Int-1_Foragers/'
-#
-# expNames = [
-#                 'HB130313-4',
-#                 'HB130322-1',
-#                 'HB130326-2',
-#                 'HB130408-1',
-#                 'HB130425-1',
-#                 'HB130501-2',
-#                 'HB130705-1',
-#                 'HB140424-1',
-#               ]
-#
-# # refInd = 4
-# refInd = 7
-# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/DL-Int-1_Foragers/'
-
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-#
-# dirPath = homeFolder + '/DataAndResults/morphology/OriginalData/DL-Int-1_NE/'
-#
-# expNames = [
-#
-#                 'HB130523-3',
-#                 'HB130605-1',
-#                 'HB130605-2',
-#                 # 'HB140701-1',
-#                 'HB140813-3',
-#                 'HB140917-1',
-#                 'HB140930-1',
-#                 'HB141030-1',
-#               ]
-#
-# # refInd = 1
-# refInd = 3
-# resDir = homeFolder + '/DataAndResults/morphology/directPixelBased/DL-Int-1_NE/'
-
-
+resDir = os.path.join('Results', 'Reg-MaxS-N')
 # ----------------------------------------------------------------------------------------------------------------------
 
 refName = expNames[refInd]

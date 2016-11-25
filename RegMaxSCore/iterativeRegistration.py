@@ -20,6 +20,15 @@ def transPreference(x, y):
         return 1
 
 
+def getRemainderScale(scale, oldScale):
+
+    toReturn = []
+    for s, oldS in zip(scale, oldScale):
+
+        toReturn.append([min(oldS[0] / s, 1), max(oldS[1] / s, 1)])
+
+    return toReturn
+
 
 class IterativeRegistration(object):
 
@@ -135,9 +144,9 @@ class IterativeRegistration(object):
         return tempDones, presBestSol, presBestVal, presBestDone, presBestTrans
 
 
-    def pca_based(self, SWC2Align, outFiles, tempOPath, tempOutFiles, ipParFile, gridSize, scaleBounds):
+    def pca_based(self, SWC2Align, outFiles, tempOPath, gridSize):
 
-        # allPossList = [[1, 2, 3], [-1, 2, 3], [1, -2, 3], [1, 2, -3]]
+
         allPossList = [[1, 2, 3]]
 
         refPts = np.loadtxt(self.refSWC)[:, 2:5]
@@ -153,23 +162,15 @@ class IterativeRegistration(object):
 
 
         funcVals = []
-        tempFiles = []
         totalTranss = []
-        bestVals = []
         for possInd, poss in enumerate(allPossList):
-
-            # print('Doing poss #' + str(possInd))
 
             totalTransform = np.eye(4)
             totalTransform[:3, 3] = -SWC2AlignMean
 
             poss = np.array(poss)
-            # Testing the correspondence
-            # refEvecs[:, i] = sign(STAEvecs[:, poss[i]]) * STAEvecs[:, poss[i]] for i in {0, 1, 2}
             possSTAEvecs = np.dot(STAEvecs[:, np.abs(poss) - 1], np.diag(np.sign(poss)))
 
-            # # Solving transform * possSTAEvecs = refEvecs for transform
-            # transform = np.linalg.solve(possSTAEvecs.T, refEvecs.T).T
 
             temp = np.eye(4)
             temp[:3, :3] = possSTAEvecs.T
