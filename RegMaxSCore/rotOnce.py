@@ -43,7 +43,7 @@ for gridInd, gridSize in enumerate(gridSizes):
         print(np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)]))
     possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[gridInd])
-    funcVals = pool.map(objFun, argGen)
+    funcVals = pool.map_async(objFun, argGen).get(1800)
     minimum = min(funcVals)
     minimzers = [y for x, y in enumerate(possiblePts3D) if funcVals[x] == minimum]
 
@@ -74,7 +74,7 @@ if minRes < stepSizes[-1]:
     possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
 
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[-1])
-    funcVals = pool.map(objFun, argGen)
+    funcVals = pool.map_async(objFun, argGen).get(1800)
     minimum = min(funcVals)
     minimzers = [y for x, y in enumerate(possiblePts3D) if funcVals[x] == minimum]
     prevVals = [objFun((x, SWCDatas[-2])) for x in minimzers]

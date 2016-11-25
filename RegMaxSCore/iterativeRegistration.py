@@ -240,7 +240,6 @@ class IterativeRegistration(object):
 
 
         SWC2AlignLocal = os.path.join(tempOutPath, str(iterationNo) + '.swc')
-        SWC2AlignLocalBS = os.path.join(tempOutPath, 'bestSol' + str(iterationNo) + '.json')
         SWC2AlignMean = np.loadtxt(SWC2Align)[:, 2:5].mean(axis=0)
 
         if initGuessType == 'just_centroids':

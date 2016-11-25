@@ -6,6 +6,8 @@ import sys
 from itertools import product
 from transforms import compose_matrix
 
+debugging = False
+# debugging = True
 
 assert len(sys.argv) == 2, 'Only one argument, the path of the swcfile expected, ' + str(len(sys.argv)) + 'found'
 
@@ -21,15 +23,21 @@ bestSol = [0, 0, 0]
 
 for gridInd, gridSize in enumerate(gridSizes):
 
-    # print('Gridsize:' + str(gridSize))
+
     bounds = (np.array(bounds).T - np.array(bestSol)).T
     boundsRoundedUp = np.sign(bounds) * np.ceil(np.abs(bounds) / gridSize) * gridSize
     possiblePts1D = [(bestSol[ind] + np.arange(x[0], x[1] + gridSize, gridSize)).tolist()
                      for ind, x in enumerate(boundsRoundedUp)]
-    # print([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)])
+
     possiblePts3D = list(product(*possiblePts1D))
+    if debugging:
+        print('Gridsize:' + str(gridSize))
+        print(bounds)
+        print(map(len, possiblePts1D))
+        print([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)])
+
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[gridInd])
-    funcVals = pool.map(objFun, argGen)
+    funcVals = pool.map_async(objFun, argGen).get(1800)
     minimum = min(funcVals)
     minimzers = [y for x, y in enumerate(possiblePts3D) if funcVals[x] == minimum]
 
@@ -41,20 +49,26 @@ for gridInd, gridSize in enumerate(gridSizes):
         prevVals = [objFun((x, SWCDatas[gridInd - 1])) for x in minimzers]
         bestSol = minimzers[np.argmin(prevVals)]
     bounds = map(lambda x: [x - gridSize, x + gridSize], bestSol)
-    # bestVal = objFun((bestSol, SWCDatas[gridInd]))
-    # print(bestSol, bestVal)
+    if debugging:
+        bestVal = objFun((bestSol, SWCDatas[gridInd]))
+        print(bestSol, bestVal)
 
 if minRes < gridSizes[-1]:
 
     bounds = (np.array(bounds).T - np.array(bestSol)).T
     boundsRoundedUp = np.sign(bounds) * np.ceil(np.abs(bounds) / minRes) * minRes
-    # print([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)])
     possiblePts1D = [(bestSol[ind] + np.arange(x[0], x[1] + minRes, minRes)).tolist()
                      for ind, x in enumerate(boundsRoundedUp)]
     possiblePts3D = list(product(*possiblePts1D))
 
+    if debugging:
+        print('StepSize:' + str(minRes))
+        print(bounds)
+        print(map(len, possiblePts1D))
+        print([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)])
+
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[-1])
-    funcVals = pool.map(objFun, argGen)
+    funcVals = pool.map_async(objFun, argGen).get(1800)
 
     minimum = min(funcVals)
 
@@ -64,8 +78,9 @@ if minRes < gridSizes[-1]:
 
 bestVal = objFun((bestSol, SWCDatas[-1]))
 nochange = objFun(([0, 0, 0], SWCDatas[-1]))
-# bestVals = [objFun((bestSol, x)) for x in SWCDatas]
-# print(bestSol, bestVals, noChangeVals[-1])
+if debugging:
+    bestVals = [objFun((bestSol, x)) for x in SWCDatas]
+    print(bestSol, bestVals)
 
 done = False
 

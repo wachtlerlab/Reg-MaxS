@@ -6,8 +6,8 @@ import sys
 from itertools import product
 from transforms import compose_matrix
 
-debug = False
-# debug = True
+debugging = False
+# debugging = True
 
 assert len(sys.argv) == 2, 'Only one argument, the path of the swcfile expected, ' + str(len(sys.argv)) + 'found'
 
@@ -29,7 +29,7 @@ SWCDatas = [SWCScale(refSWC, SWC2Align, x) for x in gridSizes]
 bestSol = [1.0, 1.0, 1.0]
 
 stepSizes = [max(minStepSize, min(2.0, (maxDist / (maxDist - g)))) for g in gridSizes]
-if debug:
+if debugging:
     print(maxDist, [(maxDist / (maxDist - g)) for g in gridSizes])
 
 overestimationError = lambda d, g: (d + g) / d
@@ -42,17 +42,18 @@ for gridInd, gridSize in enumerate(gridSizes):
     bounds = np.array(bounds)
     boundsExponents = np.log([x / y for x, y in zip(bounds, bestSol)]) / np.log(stepSize)
     boundsExponentsRoundedDown = np.sign(boundsExponents) * np.ceil(np.abs(boundsExponents))
-    # print([bestSol[x] * (stepSize ** y) for x, y in enumerate(boundsExponentsRoundedDown)])
+
     possiblePts1D = [(bestSol[x] * (stepSize ** np.arange(int(y[0]), int(y[1]) + 1)))
                         for x, y in enumerate(boundsExponentsRoundedDown)]
-    if debug:
+    if debugging:
         print(stepSize)
         print('Gridsize:' + str(gridSize))
         print(bounds)
         print(map(len, possiblePts1D))
+        print([bestSol[x] * (stepSize ** y) for x, y in enumerate(boundsExponentsRoundedDown)])
     possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[gridInd])
-    funcVals = pool.map(objFun, argGen)
+    funcVals = pool.map_async(objFun, argGen).get(1800)
     minimum = min(funcVals)
     minimzers = [y for x, y in enumerate(possiblePts3D) if funcVals[x] == minimum]
 
@@ -68,7 +69,7 @@ for gridInd, gridSize in enumerate(gridSizes):
                boundL(x * underestimationError(maxDist, gridSize), iB)]
               for x, iB in zip(bestSol, initBounds)]
 
-    if debug:
+    if debugging:
         print(bestSol)
 
 
@@ -79,27 +80,27 @@ if stepSizes[-1] > minStepSize:
 
     boundsExponents = np.log([x / y for x, y in zip(bounds, bestSol)]) / np.log(stepSize)
     boundsExponentsRoundedDown = np.sign(boundsExponents) * np.ceil(np.abs(boundsExponents))
-    # print([bestSol[x] * (stepSize ** y) for x, y in enumerate(boundsExponentsRoundedDown)])
     possiblePts1D = [(bestSol[x] * (stepSize ** np.arange(int(y[0]), int(y[1]) + 1)))
         for x, y in enumerate(boundsExponentsRoundedDown)]
-    if debug:
+    if debugging:
         print(stepSize)
         print(bounds)
         print(map(len, possiblePts1D))
+        print([bestSol[x] * (stepSize ** y) for x, y in enumerate(boundsExponentsRoundedDown)])
     possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[-1])
-    funcVals = pool.map(objFun, argGen)
+    funcVals = pool.map_async(objFun, argGen).get(1800)
     minimum = min(funcVals)
     minimzers = [y for x, y in enumerate(possiblePts3D) if funcVals[x] == minimum]
     prevVals = [objFun((x, SWCDatas[-2])) for x in minimzers]
     bestSol = minimzers[np.argmin(prevVals)]
-    if debug:
+    if debugging:
         print(bestSol, min(funcVals))
 
 bestVal = objFun((bestSol, SWCDatas[-1]))
 nochange = objFun(([1, 1, 1], SWCDatas[-1]))
 
-if debug:
+if debugging:
     bestVals = [objFun((bestSol, x)) for x in SWCDatas]
     print(bestSol, nochange, bestVal)
 

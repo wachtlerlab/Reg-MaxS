@@ -1,7 +1,7 @@
 import numpy as np
 import os
 import operator
-from matplotlib import  pyplot as plt
+from matplotlib import pyplot as plt
 # plt.ion()
 
 homeFolder = os.path.expanduser('~')
