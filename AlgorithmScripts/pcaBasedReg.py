@@ -1,121 +1,94 @@
 import os
-import shutil
-from RegMaxSCore.iterativeRegistration import IterativeRegistration
-from RegMaxSCore.swcFuncs import transSWC_rotAboutPoint
+from RegMaxSCore.swcFuncs import transSWC, getPCADetails
+from RegMaxSCore.SWCTransforms import objFun, SWCTranslate
+import json
+import numpy as np
+import sys
 
+
+def pca_based(parFile, parNames):
+
+    ch = raw_input('Using parameter File {}.\n Continue?(y/n)'.format(parFile))
+
+    if ch != 'y':
+        print('User Abort!')
+        sys.exit()
+
+    with open(parFile, 'r') as fle:
+        parsList = json.load(fle)
+        assert type(parsList) == list, 'Parameter file {} ' \
+                                       'does not contain a list of ' \
+                                       'dictionaries as is the requirement'.format(parFile)
+        for parInd, par in enumerate(parsList):
+            assert type(par) == dict, 'Parameter set # {} in {} not a list'.format(parInd, parFile)
+
+            for pn in parNames:
+                assert pn in par, 'Parameter {} not found in ' \
+                                  'parameter set # {} of {}'.format(pn, parInd, parFile)
+
+    for parInd, pars in enumerate(parsList):
+
+        print('Current Parameters:')
+        for parN, parV in pars.iteritems():
+            print('{}: {}'.format(parN, parV))
+
+        refSWC = pars['refSWC']
+        SWC2Align = pars['testSWC']
+        gridSizes = pars['gridSizes']
+        resFile = pars['resFile']
+        resDir, expName = os.path.split(resFile[:-4])
+
+        resSolFile = os.path.join(resDir, expName + 'bestSol.txt')
+
+        refPts = np.loadtxt(refSWC)[:, 2:5]
+        refMean = refPts.mean(axis=0)
+        SWC2AlignPts = np.loadtxt(SWC2Align)[:, 2:5]
+        SWC2AlignMean = SWC2AlignPts.mean(axis=0)
+
+        refEvecs, refNStds = getPCADetails(refSWC)
+        STAEvecs, STANStds = getPCADetails(SWC2Align)
+
+        scales = [x / y for x, y in zip(refNStds, STANStds)]
+
+        totalTransform = np.eye(4)
+        totalTransform[:3, 3] = -SWC2AlignMean
+
+        temp = np.eye(4)
+        temp[:3, :3] = STAEvecs.T
+        totalTransform = np.dot(temp, totalTransform)
+
+        temp = np.eye(4)
+        temp[:3, :3] = np.diag(scales)
+        totalTransform = np.dot(temp, totalTransform)
+
+        temp = np.eye(4)
+        temp[:3, :3] = refEvecs
+        totalTransform = np.dot(temp, totalTransform)
+
+        totalTranslation = refMean
+
+        totalTransform[:3, 3] += totalTranslation
+
+        transSWC(SWC2Align, totalTransform[:3, :3], totalTransform[:3, 3], resFile)
+
+        trans = SWCTranslate(refSWC, resFile, gridSizes[-1])
+        bestVal = objFun(([0, 0, 0], trans))
+
+        with open(resSolFile, 'w') as fle:
+            json.dump({'transMat': totalTransform.tolist(), 'bestVal': bestVal,
+                       'refSWC': refSWC, 'testSWC': SWC2Align, 'gridSizes': gridSizes}, fle)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-#
-dirPath = 'TestFiles'
 
-expNames = [
+if __name__ == '__main__':
 
-            'HSN-fluoro01.CNG',
-            'HSN-fluoro01.CNGRandTrans',
-            'HSN-fluoro01.CNGRandTrans1',
-            'HSN-fluoro01.CNGRandTrans2',
-            'HSN-fluoro01.CNGRandTrans3',
-            'HSN-fluoro01.CNGRandTrans4',
-            'HSN-fluoro01.CNGRandTrans5',
-            'HSN-fluoro01.CNGRandTrans6',
-            'HSN-fluoro01.CNGRandTrans7',
-            'HSN-fluoro01.CNGRandTrans8',
-            'HSN-fluoro01.CNGRandTrans9',
+    from RegMaxSCore.RegMaxSPars import pcaBasedParNames
+    assert len(sys.argv) == 2, 'Improper usage! Please use as \'python pcaBasedReg.py parFile\''
 
-            # 'HSN-fluoro01.CNGNoiseStd1RandTrans',
-            # 'HSN-fluoro01.CNGNoiseStd2RandTrans',
-            # 'HSN-fluoro01.CNGNoiseStd3RandTrans',
-            # 'HSN-fluoro01.CNGNoiseStd4RandTrans',
-            # 'HSN-fluoro01.CNGNoiseStd5RandTrans',
-            # 'HSN-fluoro01.CNGNoiseStd6RandTrans',
-            # 'HSN-fluoro01.CNGNoiseStd7RandTrans',
-            # 'HSN-fluoro01.CNGNoiseStd8RandTrans',
-            # 'HSN-fluoro01.CNGNoiseStd9RandTrans',
-            ]
+    parFile = sys.argv[1]
 
-
-refInd = 0
-resDir = os.path.join('Results', 'Reg-MaxS')
-if not os.path.isdir(resDir):
-    os.mkdir(resDir)
-
-# --------------------------------------------------------------------------------------
-#
-# gridSizes = [40.0, 20.0, 10.0]
-# # gridSizes = [20.0, 10.0]
-# transBounds = [[-30, 30], [-30, 30], [-30, 30]]
-# transMinRes = 1
-# rotBounds = [[-np.pi / 6, np.pi / 6], [-np.pi / 6, np.pi / 6], [-np.pi / 6, np.pi / 6]]
-# rotMinRes = np.deg2rad(1).round(4)
-# scaleBounds = [[0.5, 1 / 0.5], [0.5, 1 / 0.5], [0.5, 1 / 0.5]]
-# minScaleStepSize = 1.005
-# nCPU = 6
-# nIter = 100
-
-if os.path.isdir(resDir):
-
-    ch = raw_input('Folder exists: ' + resDir + '\nDelete(y/n)?')
-    if ch == 'y':
-        shutil.rmtree(resDir)
-    else:
-        quit()
-
-os.mkdir(resDir)
-
-
-refSWC = os.path.join(dirPath, expNames[refInd] + '.swc')
-
-
-iterReg = IterativeRegistration(refSWC, None, None, None, None, None, None, None)
-
-ipParFile = os.path.join(resDir, 'tmp.json')
-vals = ['rot', 'scale', 'trans']
-tempOutFiles = {}
-for val in vals:
-    fle1 = os.path.join(resDir, val + '.swc')
-    fle2 = os.path.join(resDir, val + 'bestSol.txt')
-    tempOutFiles[val] = [fle1, fle2]
+    pca_based(parFile, pcaBasedParNames)
 
 
 
-for expInd, expName in enumerate(expNames):
-
-    print('Doing ' + expName)
-
-    SWC2Align = os.path.join(dirPath, expName + '.swc')
-
-    tempDir = os.path.join(resDir, expName + 'trans')
-    if not os.path.isdir(tempDir):
-        os.mkdir(tempDir)
-
-    outSWCFile = os.path.join(resDir, expName + '.swc')
-    outBSFile = os.path.join(resDir, expName + 'BS.swc')
-
-    totalTransform = iterReg.pca_based(SWC2Align, [outSWCFile, outBSFile], tempDir, 5)
-
-    partsDir = os.path.join(dirPath, expName)
-
-    if os.path.isdir(partsDir):
-
-        dirList = os.listdir(partsDir)
-        dirList = [x for x in dirList if x.endswith('swc')]
-
-        resPartsDir = os.path.join(resDir, expName)
-        if not os.path.isdir(resPartsDir):
-            os.mkdir(resPartsDir)
-
-        for entry in dirList:
-            transSWC_rotAboutPoint(os.path.join(partsDir, entry),
-                                   totalTransform[:3, :3], totalTransform[:3, 3],
-                                   os.path.join(resPartsDir, entry),
-                                   [0, 0, 0]
-                                   )
-
-    shutil.rmtree(tempDir)
-    os.remove(outBSFile)
-
-for g in vals:
-    [os.remove(x) for x in tempOutFiles[g] if os.path.exists(x)]
-if os.path.exists(ipParFile):
-    os.remove(ipParFile)

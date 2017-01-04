@@ -7,30 +7,29 @@ homeFolder = os.path.expanduser('~')
 
 # ----------------------------------------------------------------------------------------------------------------------
 # #
-dirPath = 'TestFiles'
+temp = os.path.split(__file__)[0]
+temp1 = os.path.split(temp)[0]
+
+dirPath = os.path.join(temp1, 'TestFiles')
 expNames = [
-                'HB130313-4',
-                'HB130313-4RandScale',
+                'HSN-fluoro01.CNG',
+                'HSN-fluoro01.CNGRandScale',
               ]
 refInd = 0
-resDir = os.path.join('Results', 'rotRefined')
+resDir = os.path.join(temp1, 'Results', 'scaleRefined')
 if not os.path.isdir(resDir):
     os.mkdir(resDir)
 # ----------------------------------------------------------------------------------------------------------------------
 
 gridSizes = [40.0, 20.0, 10.0]
-transBounds = [[-30, 30], [-30, 30], [-30, 30]]
-transMinRes = 1
-rotBounds = [[-np.pi / 6, np.pi / 6], [-np.pi / 6, np.pi / 6], [-np.pi / 6, np.pi / 6]]
-rotMinRes = np.deg2rad(1).round(4)
 scaleBounds = [[0.5, 1/0.5], [0.5, 1/0.5], [0.5, 1/0.5]]
 minScaleStepSize = 1.005
 nCPU = 6
 
 
 refSWC = os.path.join(dirPath, expNames[refInd] + '.swc')
-iterReg = IterativeRegistration(refSWC, gridSizes, rotBounds, transBounds,
-                                transMinRes, minScaleStepSize, rotMinRes, nCPU)
+iterReg = IterativeRegistration(refSWC, gridSizes, None, None,
+                                None, minScaleStepSize, None, nCPU)
 
 ipParFile = os.path.join(resDir, 'tmp.json')
 vals = ['scale']

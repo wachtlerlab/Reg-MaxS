@@ -144,85 +144,13 @@ class IterativeRegistration(object):
         return tempDones, presBestSol, presBestVal, presBestDone, presBestTrans
 
 
-    def pca_based(self, SWC2Align, outFiles, tempOPath, gridSize):
-
-
-        allPossList = [[1, 2, 3]]
-
-        refPts = np.loadtxt(self.refSWC)[:, 2:5]
-        refMean = refPts.mean(axis=0)
-        SWC2AlignPts = np.loadtxt(SWC2Align)[:, 2:5]
-        SWC2AlignMean = SWC2AlignPts.mean(axis=0)
-
-        refEvecs, refNStds = getPCADetails(self.refSWC)
-        STAEvecs, STANStds = getPCADetails(SWC2Align)
-
-        scales = [x / y for x, y in zip(refNStds, STANStds)]
-        # print scales
-
-
-        funcVals = []
-        totalTranss = []
-        for possInd, poss in enumerate(allPossList):
-
-            totalTransform = np.eye(4)
-            totalTransform[:3, 3] = -SWC2AlignMean
-
-            poss = np.array(poss)
-            possSTAEvecs = np.dot(STAEvecs[:, np.abs(poss) - 1], np.diag(np.sign(poss)))
-
-
-            temp = np.eye(4)
-            temp[:3, :3] = possSTAEvecs.T
-            totalTransform = np.dot(temp, totalTransform)
-
-            temp = np.eye(4)
-            temp[:3, :3] = np.diag(scales)
-            totalTransform = np.dot(temp, totalTransform)
-
-            temp = np.eye(4)
-            temp[:3, :3] = refEvecs
-            totalTransform = np.dot(temp, totalTransform)
-
-            totalTranslation = refMean
-
-            totalTransform[:3, 3] += totalTranslation
-
-            totalTranss.append(totalTransform)
-
-            SWCPoss = os.path.join(tempOPath, 'poss' + str(possInd) + '.swc')
-
-            transSWC(SWC2Align, totalTransform[:3, :3], totalTransform[:3, 3], SWCPoss)
-
-            trans = SWCTranslate(self.refSWC, SWCPoss, gridSize)
-            funcVals.append(objFun(([0, 0, 0], trans)))
-
-        # print(zip(allPossList, funcVals))
-        minimum = min(funcVals)
-        minimizers = [y for x, y in enumerate(allPossList) if funcVals[x] == minimum]
-        minimizerInds = [x for x, y in enumerate(allPossList) if funcVals[x] == minimum]
-        numberReflections = [sum([x < 0 for x in y]) for y in minimizers]
-        bestSolInd = np.argmin(numberReflections)
-        if numberReflections[bestSolInd]:
-            print('Reflecting!')
-        # bestSol = minimizers[bestSolInd]
-        # print(scales[bestSolInd])
-
-        bestTransform = totalTranss[minimizerInds[bestSolInd]]
-        transSWC(SWC2Align, bestTransform[:3, :3], bestTransform[:3, 3], outFiles[0])
 
 
 
-        # for tFile in tempFiles:
-        #     os.remove(tFile)
+    def performReg(self, SWC2Align, resFile, scaleBounds, partsDir=None, initGuessType='just_centroids',
+                   retainTempFiles=False):
 
-        with open(outFiles[1], 'w') as fle:
-            json.dump({'transMat': bestTransform.tolist(), 'bestVal': minimum}, fle)
-
-        return bestTransform
-
-
-    def performReg(self, SWC2Align, expName, resDir, scaleBounds, partsDir=None, initGuessType='just_centroids'):
+        resDir, expName = os.path.split(resFile[:-4])
 
         ipParFile = os.path.join(resDir, 'tmp.json')
         vals = ['trans', 'rot', 'scale']
@@ -238,7 +166,6 @@ class IterativeRegistration(object):
         tempOutPath = os.path.join(resDir, expName + 'trans')
         if not os.path.isdir(tempOutPath):
             os.mkdir(tempOutPath)
-
 
         SWC2AlignLocal = os.path.join(tempOutPath, str(iterationNo) + '.swc')
         SWC2AlignMean = np.loadtxt(SWC2Align)[:, 2:5].mean(axis=0)
@@ -258,7 +185,7 @@ class IterativeRegistration(object):
             totalTranslation = SWC2AlignMean
 
         else:
-            raise(ValueError('Unknown value for arguement \'initGuessType\''))
+            raise(ValueError('Unknown value for argument \'initGuessType\''))
 
 
         SWC2AlignT = SWC2AlignLocal
@@ -360,6 +287,9 @@ class IterativeRegistration(object):
             [os.remove(x) for x in tempOutFiles[g]]
         os.remove(ipParFile)
 
+        if not retainTempFiles:
+            shutil.rmtree(tempOutPath)
+
         finalFile = os.path.join(resDir, expName + '.swc')
         transSWC_rotAboutPoint(SWC2Align,
                                totalTransform[:3, :3], totalTransform[:3, 3],
@@ -376,12 +306,13 @@ class IterativeRegistration(object):
 
         if partsDir is not None:
 
+            partsDirName = os.path.split(partsDir)[1]
             if os.path.isdir(partsDir):
 
                 dirList = os.listdir(partsDir)
                 dirList = [x for x in dirList if x.endswith('swc')]
 
-                resPartsDir = os.path.join(resDir, expName)
+                resPartsDir = os.path.join(resDir, partsDirName)
                 if not os.path.isdir(resPartsDir):
                     os.mkdir(resPartsDir)
 
