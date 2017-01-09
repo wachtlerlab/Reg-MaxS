@@ -6,7 +6,7 @@ import json
 import sys
 from RegMaxSCore.transforms import decompose_matrix
 from RegMaxSCore.swcFuncs import transSWC
-
+from RegMaxSCore.misc import parFileCheck
 
 def normalizeFinally(ipFiles, resDir, opFiles, fnwrtName):
 
@@ -53,18 +53,7 @@ def runRegMaxSN(parFile, parNames):
         print('User Abort!')
         sys.exit()
 
-
-    with open(parFile, 'r') as fle:
-        parsList = json.load(fle)
-        assert type(parsList) == list, 'Parameter file {} ' \
-                                       'does not contain a list of ' \
-                                       'dictionaries as is the requirement'.format(parFile)
-        for parInd, par in enumerate(parsList):
-            assert type(par) == dict, 'Parameter set # {} in {} not a list'.format(parInd, parFile)
-
-            for pn in parNames:
-                assert pn in par, 'Parameter {} not found in ' \
-                                  'parameter set # {} of {}'.format(pn, parInd, parFile)
+    parsList = parFileCheck(parFile, parNames)
 
     for pars in parsList:
         resDir = pars['resDir']
