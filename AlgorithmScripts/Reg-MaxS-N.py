@@ -82,7 +82,7 @@ def runRegMaxSN(parFile, parNames):
         try:
             os.mkdir(resDir)
         except Exception as e:
-            raise('Could not create {}'.format(resDir))
+            raise(IOError('Could not create {}'.format(resDir)))
 
         assert os.path.isfile(refSWC), 'Could  not find {}'.format(refSWC)
 
@@ -96,7 +96,7 @@ def runRegMaxSN(parFile, parNames):
 
     for parInd, pars in enumerate(parsList):
 
-        print ('Starting Job # {}'.format(parInd + 1))
+        print('Starting Job # {}'.format(parInd + 1))
 
         print('Current Parameters:')
         for parN, parV in pars.iteritems():
