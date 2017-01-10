@@ -36,55 +36,55 @@ nCPU = 6
 
 # **********************************************************************************************************************
 
-# Case 1: Default or user defined parameters above, one reference, one test
-# Replace refSWC, testSWC, resFile and parFile as required and run this file to generate parFile
-# Then run python <...>/RegMaxS.py parFile
-
-refSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNG.swc')
-testSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNGRandTrans1.swc')
-resFile = os.path.join(temp1, 'Results', 'Tests', 'HSN-fluoro01.CNGRandTrans1.swc')
-parFile = os.path.join('/tmp/tempParFile')
-
-
-ns = vars()
-pars = [{k: ns[k] for k in RegMaxSParNames}]
+# # Case 1: Default or user defined parameters above, one reference, one test
+# # Replace refSWC, testSWC, resFile and parFile as required and run this file to generate parFile
+# # Then run python <...>/RegMaxS.py parFile
+#
+# refSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNG.swc')
+# testSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNGRandTrans1.swc')
+# resFile = os.path.join(temp1, 'Results', 'Tests', 'HSN-fluoro01.CNGRandTrans1.swc')
+# parFile = os.path.join(temp1, 'ExampleParFiles', 'Reg-MaxS', 'HSN-fluoro01.CNGRandTrans1.json')
+#
+#
+# ns = vars()
+# pars = [{k: ns[k] for k in RegMaxSParNames}]
 # **********************************************************************************************************************
 
-# # Case 2: Default or user defined parameters above, one reference, many tests, all in same directory
-#
-# dirPath = os.path.join(temp1, 'TestFiles')
-# refSWC = os.path.join(dirPath, 'HSN-fluoro01.CNG.swc')
-# testSWCFiles = [
-#             'HSN-fluoro01.CNGRandTrans0.swc',
-#             'HSN-fluoro01.CNGRandTrans1.swc',
-#             'HSN-fluoro01.CNGRandTrans2.swc',
-#             'HSN-fluoro01.CNGRandTrans3.swc',
-#             'HSN-fluoro01.CNGRandTrans4.swc',
-#             'HSN-fluoro01.CNGRandTrans5.swc',
-#             'HSN-fluoro01.CNGRandTrans6.swc',
-#             'HSN-fluoro01.CNGRandTrans7.swc',
-#             'HSN-fluoro01.CNGRandTrans8.swc',
-#             'HSN-fluoro01.CNGRandTrans9.swc',
-#
-#             # 'HSN-fluoro01.CNGNoiseStd1RandTrans.swc',
-#             # 'HSN-fluoro01.CNGNoiseStd2RandTrans.swc',
-#             # 'HSN-fluoro01.CNGNoiseStd3RandTrans.swc',
-#             # 'HSN-fluoro01.CNGNoiseStd4RandTrans.swc',
-#             # 'HSN-fluoro01.CNGNoiseStd5RandTrans.swc',
-#             # 'HSN-fluoro01.CNGNoiseStd6RandTrans.swc',
-#             # 'HSN-fluoro01.CNGNoiseStd7RandTrans.swc',
-#             # 'HSN-fluoro01.CNGNoiseStd8RandTrans.swc',
-#             # 'HSN-fluoro01.CNGNoiseStd9RandTrans.swc',
-#             ]
-# resPath = os.path.join(temp1, 'Results', 'Tests')
-# parFile = os.path.join('/tmp/tempParFile')
-#
-# pars = []
-# for sfr in testSWCFiles:
-#     testSWC = os.path.join(dirPath, sfr)
-#     resFile = os.path.join(resPath, sfr)
-#     ns = vars()
-#     pars.append({k: ns[k] for k in RegMaxSParNames})
+# Case 2: Default or user defined parameters above, one reference, many tests, all in same directory
+
+dirPath = os.path.join(temp1, 'TestFiles')
+refSWC = os.path.join(dirPath, 'HSN-fluoro01.CNG.swc')
+testSWCFiles = [
+            'HSN-fluoro01.CNGRandTrans0.swc',
+            'HSN-fluoro01.CNGRandTrans1.swc',
+            'HSN-fluoro01.CNGRandTrans2.swc',
+            'HSN-fluoro01.CNGRandTrans3.swc',
+            'HSN-fluoro01.CNGRandTrans4.swc',
+            'HSN-fluoro01.CNGRandTrans5.swc',
+            'HSN-fluoro01.CNGRandTrans6.swc',
+            'HSN-fluoro01.CNGRandTrans7.swc',
+            'HSN-fluoro01.CNGRandTrans8.swc',
+            'HSN-fluoro01.CNGRandTrans9.swc',
+
+            # 'HSN-fluoro01.CNGNoiseStd1RandTrans.swc',
+            # 'HSN-fluoro01.CNGNoiseStd2RandTrans.swc',
+            # 'HSN-fluoro01.CNGNoiseStd3RandTrans.swc',
+            # 'HSN-fluoro01.CNGNoiseStd4RandTrans.swc',
+            # 'HSN-fluoro01.CNGNoiseStd5RandTrans.swc',
+            # 'HSN-fluoro01.CNGNoiseStd6RandTrans.swc',
+            # 'HSN-fluoro01.CNGNoiseStd7RandTrans.swc',
+            # 'HSN-fluoro01.CNGNoiseStd8RandTrans.swc',
+            # 'HSN-fluoro01.CNGNoiseStd9RandTrans.swc',
+            ]
+resPath = os.path.join(temp1, 'Results', 'Tests')
+parFile = os.path.join(temp1, 'ExampleParFiles', 'Reg-MaxS', 'HSN-fluoro01.CNGRandTrans0-9.json')
+
+pars = []
+for sfr in testSWCFiles:
+    testSWC = os.path.join(dirPath, sfr)
+    resFile = os.path.join(resPath, sfr)
+    ns = vars()
+    pars.append({k: ns[k] for k in RegMaxSParNames})
 
 # **********************************************************************************************************************
 
