@@ -105,3 +105,4 @@ if __name__ == '__main__':
 
     parFile = sys.argv[1]
     figs = plotIOUTraj(parFile, RegMaxSNParNames)
+    raw_input('Press any key to close figures and quit:')

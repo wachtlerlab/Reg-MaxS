@@ -70,7 +70,7 @@ def plotPairwiseDistances(parFile):
 
     ax.set_xlim(-1, len(regErrs))
     ax.set_ylim(0, 40)
-    ax.set_xticklabels(['par{}'.format(x) for x in range(len(parsList))], rotation=90)
+    ax.set_xticklabels(['job {}'.format(x) for x in range(len(parsList))], rotation=90)
     ax.set_xlabel('')
 
     ax1.set_xlim(-1, len(regErrs))
