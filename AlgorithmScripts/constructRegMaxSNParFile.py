@@ -41,7 +41,7 @@ maxIter = 100
 # Case 1: Default or user defined parameters above, one reference, one test
 # Replace initRefSWC, swcDir, expNames, resDir, parFile, finallyNormalizeWRT as required and
 # run this file to generate parFile
-# Then run python <...>/Reg-MaxS-N.py parFile
+# Then run python <...>/RegMaxSN.py parFile
 
 # -----------------------------------------------------------------------------------
 # initRefSWC = os.path.join(temp1, 'TestFiles', 'HSNL', 'HSN-fluoro02.CNG.swc')

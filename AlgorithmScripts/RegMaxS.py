@@ -30,7 +30,7 @@ def runRegMaxS(parFile, parNames):
 if __name__ == '__main__':
 
     from RegMaxSCore.RegMaxSPars import RegMaxSParNames
-    assert len(sys.argv) == 2, 'Improper usage! Please use as \'python Reg-MaxS.py parFile\''
+    assert len(sys.argv) == 2, 'Improper usage! Please use as \'python RegMaxS.py parFile\''
 
     parFile = sys.argv[1]
 

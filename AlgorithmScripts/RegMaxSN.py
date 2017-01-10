@@ -232,7 +232,7 @@ def runRegMaxSN(parFile, parNames):
 if __name__ == '__main__':
 
     from RegMaxSCore.RegMaxSPars import RegMaxSNParNames
-    assert len(sys.argv) == 2, 'Improper usage! Please use as \'python Reg-MaxS-N.py parFile\''
+    assert len(sys.argv) == 2, 'Improper usage! Please use as \'python RegMaxSN.py parFile\''
 
     parFile = sys.argv[1]
 
