@@ -1,7 +1,7 @@
 import sys
-import json
 from RegMaxSCore.iterativeRegistration import IterativeRegistration
 from RegMaxSCore.misc import parFileCheck
+import os
 
 def runRegMaxS(parFile, parNames):
     parsList = parFileCheck(parFile, parNames)
@@ -10,6 +10,25 @@ def runRegMaxS(parFile, parNames):
         print('Current Parameters:')
         for parN, parV in pars.iteritems():
             print('{}: {}'.format(parN, parV))
+
+        resFile = pars['resFile']
+        refSWC = pars['refSWC']
+        testSWC = pars['testSWC']
+
+        if os.path.isfile(resFile):
+
+            ch = raw_input('File exists: ' + resFile + '\nDelete(y/n)?')
+            if ch == 'y':
+                os.remove(resFile)
+            else:
+                quit()
+
+        resDir = os.path.split(resFile)[0]
+        if not os.path.exists(resDir):
+            raise(ValueError('Could not create result file in specified directory: {}'.format(resDir)))
+
+        assert os.path.isfile(refSWC), 'Could  not find {}'.format(refSWC)
+        assert os.path.isfile(testSWC), 'Could  not find {}'.format(testSWC)
 
         iterReg = IterativeRegistration(refSWC=pars['refSWC'],
                                         gridSizes=pars['gridSizes'],
