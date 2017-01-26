@@ -11,7 +11,7 @@ temp1 = os.path.split(temp)[0]
 # Default parameters
 # distances in um, angles in radians
 gridSizes = [40.0, 20.0, 10.0]
-usePartsDir = False
+usePartsDir = True
 
 # **********************************************************************************************************************
 

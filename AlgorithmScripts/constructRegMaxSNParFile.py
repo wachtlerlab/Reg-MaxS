@@ -1,3 +1,19 @@
+# Ajayrama Kumaraswamy, 2017, LMU Munich
+
+"""
+Description:        This script is used to generate parameter files required to run RegMaxS.py. This parameter file
+                    contains a json string of a list of dictionaries. Each dictionary is one Reg-MaxS job contains the
+                    following parameters. See RegMaxSCore/RegMaxSPars.py for the description of the parameters.
+
+Usage:              python constructRegMaxSNParFile.py
+
+Usage guidelines:   There are a couple of cases with examples shown below.
+                    Read the comments starting with Case 1 or Case2.
+                    Essentially edit the values of some variables in this script and run it.
+
+
+"""
+
 from numpy import pi, deg2rad
 import os
 import json
@@ -18,7 +34,7 @@ rotBounds = [[-pi / 6, pi / 6], [-pi / 6, pi / 6], [-pi / 6, pi / 6]]
 rotMinRes = deg2rad(1).round(4)
 scaleBounds = [[0.5, 1 / 0.5], [0.5, 1 / 0.5], [0.5, 1 / 0.5]]
 minScaleStepSize = 1.005
-usePartsDir = False
+usePartsDir = True
 nCPU = 6
 maxIter = 100
 
@@ -38,12 +54,13 @@ maxIter = 100
 
 # **********************************************************************************************************************
 
-# Case 1: Default or user defined parameters above, one reference, one test
+# Case 1: Using Default or user defined parameters above, one reference, one test
 # Replace initRefSWC, swcDir, expNames, resDir, parFile, finallyNormalizeWRT as required and
 # run this file to generate parFile
 # Then run python <...>/RegMaxSN.py parFile
 
 # -----------------------------------------------------------------------------------
+# # Example 1
 # initRefSWC = os.path.join(temp1, 'TestFiles', 'HSNL', 'HSN-fluoro02.CNG.swc')
 # swcDir = os.path.join(temp1, 'TestFiles', 'HSNL')
 # expNames = [
@@ -61,6 +78,7 @@ maxIter = 100
 # ns = vars()
 # pars = [{k: ns[k] for k in RegMaxSNParNames}]
 # -----------------------------------------------------------------------------------
+# Example 2
 initRefSWC = os.path.join(temp1, 'TestFiles', 'LLC', 'Gad1-F-000062.CNG.swc')
 swcDir = os.path.join(temp1, 'TestFiles', 'LLC')
 expNames = [
@@ -83,8 +101,9 @@ pars = [{k: ns[k] for k in RegMaxSNParNames}]
 # -----------------------------------------------------------------------------------
 # **********************************************************************************************************************
 
-# # Case 2: Default or user defined parameters above, multiple jobs. Each job is a dictionary of parameters
-# # that is put together in pars and written into the parFile
+# # Case 2: Using Default or user defined parameters above, and other parameter below. This is an example where
+# a set of SWCs(expNames) in a folder(swcDir) are to be registered together using Reg-MaxS. Each job specifies
+# swcDir, expNames, resDir and possibly other parameters differently.
 #
 # pars = []
 # parFile = os.path.join(temp1, 'ExampleParFiles', 'Reg-MaxS-N', 'HSNL-HSNR.json')
