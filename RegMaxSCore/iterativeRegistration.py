@@ -147,7 +147,9 @@ class IterativeRegistration(object):
 
 
 
-    def performReg(self, SWC2Align, resFile, scaleBounds, partsDir=None, initGuessType='just_centroids',
+    def performReg(self, SWC2Align, resFile, scaleBounds,
+                   inPartsDir=None, outPartsDir=None,
+                   initGuessType='just_centroids',
                    retainTempFiles=False):
 
         resDir, expName = os.path.split(resFile[:-4])
@@ -304,26 +306,25 @@ class IterativeRegistration(object):
             json.dump({'finalVal': finalVal, 'finalTransMat': totalTransform.tolist(), 'refSWC': self.refSWC,
                        'SWC2Align': SWC2Align}, fle)
 
-        if partsDir is not None:
+        if inPartsDir is not None:
 
-            partsDirName = os.path.split(partsDir)[1]
-            if os.path.isdir(partsDir):
+            if os.path.isdir(inPartsDir):
 
-                dirList = os.listdir(partsDir)
-                dirList = [x for x in dirList if x.endswith('swc')]
+                dirList = os.listdir(inPartsDir)
+                dirList = [x for x in dirList if x.endswith('.swc')]
 
-                resPartsDir = os.path.join(resDir, partsDirName)
-                if not os.path.isdir(resPartsDir):
-                    os.mkdir(resPartsDir)
+                if not os.path.isdir(outPartsDir):
+                    os.mkdir(outPartsDir)
 
                 for entry in dirList:
-                    transSWC_rotAboutPoint(os.path.join(partsDir, entry),
+                    transSWC_rotAboutPoint(os.path.join(inPartsDir, entry),
                                            totalTransform[:3, :3], totalTransform[:3, 3],
-                                           os.path.join(resPartsDir, entry),
+                                           os.path.join(outPartsDir, entry),
                                            [0, 0, 0]
                                            )
 
-
+            else:
+                print('Specified partsDir {} not found'.format(inPartsDir))
 
 
         return finalFile, finalSolFile

@@ -42,7 +42,8 @@ def runRegMaxS(parFile, parNames):
         iterReg.performReg(SWC2Align=pars['testSWC'],
                            resFile=pars['resFile'],
                            scaleBounds=pars['scaleBounds'],
-                           partsDir=pars['partsDir'],
+                           inPartsDir=pars['inPartsDir'],
+                           outPartsDir=pars['outPartsDir'],
                            retainTempFiles=pars['retainTempFiles'])
 
 

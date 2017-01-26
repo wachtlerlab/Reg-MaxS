@@ -145,14 +145,17 @@ def runRegMaxSN(parFile, parNames):
                 initVals = [calcOverlap(refSWC, SWC2Align, g) for g in gridSizes]
 
                 if usePartsDir:
-                    prevPartsDir = os.path.join(resDir, expName + str(iterInd - 1))
+                    inPartsDir = os.path.join(resDir, expName + str(iterInd - 1))
+                    outPartsDir = os.path.join(resDir, expName + str(iterInd))
                 else:
-                    prevPartsDir = None
+                    inPartsDir = None
+                    outPartsDir = None
 
                 resFile = os.path.join(resDir, expName + str(iterInd) + '.swc')
                 resSWC, resSol = iterReg.performReg(SWC2Align, resFile,
                                                     scaleBounds=nrnScaleBounds[swc],
-                                                    partsDir=prevPartsDir,
+                                                    inPartsDir=inPartsDir,
+                                                    outPartsDir=outPartsDir,
                                                     initGuessType=initGuessTypeT,
                                                     retainTempFiles=True)
 
@@ -174,10 +177,9 @@ def runRegMaxSN(parFile, parNames):
 
                     shutil.copy(SWC2Align, resSWC)
                     shutil.rmtree(os.path.join(resDir, expName + str(iterInd) + 'trans'))
-                    newPartsDir = os.path.join(resDir, expName + str(iterInd))
-                    if usePartsDir and os.path.exists(newPartsDir):
-                        shutil.rmtree(newPartsDir)
-                        shutil.copytree(prevPartsDir, newPartsDir)
+                    if usePartsDir and os.path.exists(outPartsDir):
+                        shutil.rmtree(outPartsDir)
+                        shutil.copytree(inPartsDir, outPartsDir)
                     os.remove(resSol)
                     print('finalVal (' + str(finalVals) + ') >= initVal (' + str(initVals) + '). Doing Nothing!')
                     done = True
