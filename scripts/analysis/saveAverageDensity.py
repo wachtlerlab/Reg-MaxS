@@ -1,5 +1,5 @@
 import os
-from RegMaxSCore.plotDensities import DensityVizualizations, writeTIFF
+from core.plotDensities import DensityVizualizations, writeTIFF
 import numpy as np
 from matplotlib import pyplot as plt
 homeFolder = os.path.expanduser('~')

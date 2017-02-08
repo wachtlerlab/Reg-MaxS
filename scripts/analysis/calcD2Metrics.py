@@ -3,7 +3,7 @@
 # used to quantify the how well a method has worked.
 
 import os
-from RegMaxSCore.swcFuncs import resampleSWC
+from core.swcFuncs import resampleSWC
 from scipy.spatial import cKDTree
 import numpy as np
 from multiprocessing import cpu_count

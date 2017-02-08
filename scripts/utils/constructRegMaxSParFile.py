@@ -3,7 +3,7 @@
 """
 Description:        This script is used to generate a parameter file required to run RegMaxS.py. This parameter file
                     should contain a json string of a list of dictionaries. Each dictionary is one Reg-MaxS job that
-                    contains Reg-MaxS parameters. See RegMaxSCore/RegMaxSPars.py for the description of the parameters.
+                    contains Reg-MaxS parameters. See core/RegMaxSPars.py for the description of the parameters.
 
 Usage:              python <path to file>constructRegMaxSParFile.py
 

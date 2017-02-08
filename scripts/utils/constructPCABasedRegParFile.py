@@ -4,7 +4,7 @@
 Description:        This script is used to generate a parameter file required to run pcaBased.py. This parameter file
                     should contain a json string of a list of dictionaries. Each dictionary is one 'pcaBased' job
                     that contains 'pcaBased' parameters.
-                    See RegMaxSCore/RegMaxSPars.py for the description of the parameters.
+                    See core/RegMaxSPars.py for the description of the parameters.
 
 Usage:              python constructPCABasedRegParFile.py
 

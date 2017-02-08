@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from RegMaxSCore.misc import parFileCheck
+from core.misc import parFileCheck
 from matplotlib import pyplot as plt
 import seaborn as sns
 import sys
@@ -99,7 +99,7 @@ def plotIOUTraj(parFile, parNames):
 
 if __name__ == '__main__':
 
-    from RegMaxSCore.RegMaxSPars import RegMaxSNParNames
+    from core.RegMaxSPars import RegMaxSNParNames
 
     assert len(sys.argv) == 2, 'Improper usage! Please use as \'python plotReg-MaxS-NIOUTraj.py parFile\''
 

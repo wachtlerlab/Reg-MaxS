@@ -3,8 +3,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 import seaborn as sns
 import json
-from RegMaxSCore.RegMaxSPars import RegMaxSParNames
-from RegMaxSCore.misc import parFileCheck
+from core.RegMaxSPars import RegMaxSParNames
+from core.misc import parFileCheck
 
 homeFolder = os.path.expanduser('~')
 
