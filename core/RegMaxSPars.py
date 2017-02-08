@@ -68,7 +68,8 @@ swcList:                list of strings. Each member must refer to a valid SWC f
 initRefSWC:             string. The initial reference to use for Reg-MaxS-N, i.e., the reference of the first iteration.
                         Must be a valid SWC file on the file system.
 
-resDir:                 string. The directory into which the results of Reg-MaxS-N are written.
+resDir:                 string. The directory into which the results of Reg-MaxS-N are written. Will be created anew
+                        or replaced if it exists.
 
 finallyNormalizeWRT:    string. Must be one of the SWCs of swcList. The whole set of SWCs after registration
                         is transformed affinely together so that this SWC is restored to it's final form.
@@ -95,6 +96,11 @@ RegMaxSNParNames = [
 """
 Parameters of the registration PCA-based algorithm. Some parameters have the same meaning as in Reg-MaxS above and
 hence have been omitted here.
+
+gridSizes:              list of floats. These are the voxel sizes over which Reg-MaxS is run.
+                        Values must be in micrometers. These values are not used in the actual algorithm. The last
+                        element of this list is used to calculate a measure of dissimilarity between the reference SWC
+                        and the result SWC produced by the 'pcaBased' algorithm.
 
 usePartsDir:            boolean. If True, Reg-MaxS-N check if for every SWC in swcList, a folder exists with the
                         same name and path without the '.swc' extention. If such folders exist, the SWCs in them are

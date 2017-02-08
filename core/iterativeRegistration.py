@@ -1,15 +1,19 @@
 import os
 import numpy as np
-from swcFuncs import transSWC, transSWC_rotAboutPoint, getPCADetails
+from swcFuncs import transSWC, transSWC_rotAboutPoint
 from SWCTransforms import SWCTranslate, objFun
 import shutil
 import json
 import subprocess
-from itertools import product
-
 
 def transPreference(x, y):
-
+    """
+    Given two transforms x and y, returns if x is preferred over y. Preferences are scaling > translation,
+    scaling > rotation, translation > rotation.
+    :param x:
+    :param y:
+    :return:
+    """
     if x == 'scale':
         return 0
     elif y == 'scale':
@@ -21,7 +25,13 @@ def transPreference(x, y):
 
 
 def getRemainderScale(scale, oldScale):
-
+    """
+    Elementwise divides oldScale by scale, effectively removing scale from old scale. The first entry is bounded
+    above by 1 and the second entry is bounded below by 1.
+    :param scale: 3 member list of 2 member float lists.
+    :param oldScale: 3 member list of 2 member float lists.
+    :return: 3 member list of 2 member float lists.
+    """
     toReturn = []
     for s, oldS in zip(scale, oldScale):
 
@@ -31,10 +41,23 @@ def getRemainderScale(scale, oldScale):
 
 
 class IterativeRegistration(object):
-
+    """
+    This class is used to run basic Reg-MaxS algorithm.
+    """
     def __init__(self, refSWC, gridSizes, rotBounds, transBounds,
                  transMinRes, scaleMinRes, rotMinRes, nCPU):
-
+        """
+        Initialization
+        :param refSWC: valid file path to a valid SWC file, reference SWC
+        :param gridSizes: list of three floats, the voxel sizes over which estimations are run, in micrometer
+        :param rotBounds: three member list of two member float lists, the bounds for rotation euler angles abour XYZ
+                            axes, in radians
+        :param transBounds: three member list of two member float lists, the bounds for translations along XYZ axes.
+        :param transMinRes: float, minimum resolution of exhaustive search for translation parameters in micrometer.
+        :param scaleMinRes: float. minimum (multiplicative) resolution of exhuasitve search for scaling paramers.
+        :param rotMinRes: float. minimum resolution of exhuastive search for rotation euler angle parameters in radians.
+        :param nCPU: int, number of processes to use
+        """
         super(IterativeRegistration, self).__init__()
 
         self.refSWC = refSWC
@@ -51,7 +74,20 @@ class IterativeRegistration(object):
 
 
     def rotOnce(self, SWC2Align, outFiles, ipParFile):
-
+        """
+        Runs exhaustive search to find the best rotation euler angles about XYZ axes that maximize the volume overlap
+        between SWC2Align and self.refSWC. Results are written in the two file paths of outFiles.
+        If solution found is no better than doing nothing or if the angles found are lower than minimum resolution,
+        zero angles are returned with done as true
+        :param SWC2Align: valid file path to a valid SWC file
+        :param outFiles: list of two valid file paths. SWC2Align rotated with optimum parameters is written to
+        outFiles[0], a log file of the process is written into ouFiles[1].
+        :param ipParFile: valid file path. Temporary file used.
+        :return: bestSol, bestVal, done
+                bestSol: list of three floats, best Euler angles in radians
+                bestVal: float, best value of dissimilarity between SWC2Align and refSWC at the lowest voxel size
+                done: boolean, see above.
+        """
         pars = [self.refSWC, SWC2Align, outFiles,
                 self.gridSizes, self.rotBounds, self.rotMinRes, self.nCPU]
 
@@ -71,7 +107,20 @@ class IterativeRegistration(object):
         return bestSol, bestVal, done
 
     def transOnce(self, SWC2Align, outFiles, ipParFile):
-
+        """
+        Runs exhaustive search to find the best translations along XYZ axes that maximize the volume overlap between
+        SWC2Align and self.refSWC. Results are written in the two file paths of outFiles.
+        If solution found is no better than doing nothing or if the translations found are lower than
+        the minimum resolution, zero translations are returned with done set to true
+        :param SWC2Align: valid file path to a valid SWC file
+        :param outFiles: list of two valid file paths. SWC2Align translated with optimum parameters is written to
+        outFiles[0], a log file of the process is written into ouFiles[1].
+        :param ipParFile: valid file path. Temporary file used.
+        :return: bestSol, bestVal, done
+                bestSol: list of three floats, best translations in micrometer
+                bestVal: float, best value of dissimilarity between SWC2Align and refSWC at the lowest voxel size
+                done: boolean, see above.
+        """
         pars = [self.refSWC, SWC2Align, outFiles,
                 self.gridSizes, self.transBounds, self.transMinRes, self.nCPU]
 
@@ -91,7 +140,20 @@ class IterativeRegistration(object):
         return bestSol, bestVal, done
 
     def scaleOnce(self, SWC2Align, outFiles, ipParFile, scaleBounds):
-
+        """
+        Runs exhaustive search to find the best scaling parameters along XYZ axes that maximize the volume overlap
+        between SWC2Align and self.refSWC. Results are written in the two file paths of outFiles.
+        If solution found is no better than doing nothing or if the scaling parameters found are lower than
+        the minimum resolution, unity scaling parameters are returned with done set to true
+        :param SWC2Align: valid file path to a valid SWC file
+        :param outFiles: list of two valid file paths. SWC2Align scaled with optimum parameters is written to
+        outFiles[0], a log file of the process is written into ouFiles[1].
+        :param ipParFile: valid file path. Temporary file used.
+        :return: bestSol, bestVal, done
+                bestSol: list of three floats, best scaling parameters
+                bestVal: float, best value of dissimilarity between SWC2Align and refSWC at the lowest voxel size
+                done: boolean, see above.
+        """
         pars = [self.refSWC, SWC2Align, outFiles,
                 self.gridSizes, scaleBounds, self.scaleMinRes, self.nCPU]
 
@@ -111,7 +173,21 @@ class IterativeRegistration(object):
         return bestSol, bestVal, done
 
     def compare(self, srts, SWC2Align, tempOutFiles, ipParFile, scaleBounds):
-
+        """
+        Runs the exhaustive searchs for the transforms in srts and returns some info about the searches
+        :param srts: list of strings, valid entries are 'scale', 'trans' and 'rot'
+        :param SWC2Align: valid file path of valid SWC file.
+        :param tempOutFiles: list of two valid file paths, for temporary internal use.
+        :param ipParFile: valid file path, for temporary internal use.
+        :param scaleBounds: three member list of two member float lists, the bounds for scaling parameters
+         along XYZ axes.
+        :return: tempDones, presBestSol, presBestVal, presBestDone, presBestTrans
+                 tempDones: list of booleans, same size as srts, contains the value of 'done' of respective exhaustive
+                 searches
+                 presBestTrans: transform among srts leading to the lowest dissimilarity
+                 presBestSol: list of three floats, correspong transform parameters
+                 presBestDone: boolean, 'done' value of presBestTrans
+        """
         presBestVal = 1e6
         presBestTrans = 'trans'
         presBestSol = [0, 0, 0]
@@ -151,6 +227,23 @@ class IterativeRegistration(object):
                    inPartsDir=None, outPartsDir=None,
                    initGuessType='just_centroids',
                    retainTempFiles=False):
+        """
+        Repeatedly applies translation, rotation and scaling transforms to SWC2Align to maximize its volume overlap
+        with self.refSWC. See Reg-MaxS-N manuscript for more info.
+
+        :param SWC2Align: valid file path of a valid SWC file, the SWC that is registered to self.refSWC
+        :param resFile: valid file path, where SWC2Align registered to self.refSWC is written
+        :param scaleBounds: three member list of two member float lists, the bounds for scaling parameters
+        :param inPartsDir: valid directory path, any swc files with this will be transformed exactly same as
+                            SWC2Align and written in to outPartsDir
+        :param outPartsDir: valid directory path
+        :param initGuessType: string, valid values are 'just centroids' and 'nothing'. If 'just centroids', the
+        centroids are initially matched, if 'nothing' they are not.
+        :param retainTempFiles: boolean, whether to retain the intermediate files.
+        :return: finalFile, finalSolFile
+                 finalFile: same as resFile
+                 finalSolFile: a file at <resFile name>Sol.txt where results of the process are logged.
+        """
 
         resDir, expName = os.path.split(resFile[:-4])
 
@@ -331,7 +424,13 @@ class IterativeRegistration(object):
 
 
 def composeRefSWC(alignedSWCs, newRefSWC, gridSize):
-
+    """
+    Given a list of SWCs, it constructs a fake SWC to represent the union of the volumes occupied by the SWCs.
+    :param alignedSWCs: list of SWC files
+    :param newRefSWC: valid file path, where the resulting SWC is written
+    :param gridSize: float, the voxel size at which the volumes are discretized before forming the union.
+    :return: dissim: float, 1 - (# of voxels in the intersection of volumes) / (# of voxels in the union of volumes)
+    """
     indVoxs = []
 
     for aswc in alignedSWCs:
@@ -359,7 +458,14 @@ def composeRefSWC(alignedSWCs, newRefSWC, gridSize):
 
 
 def calcOverlap(refSWC, SWC2Align, gridSize):
-
+    """
+    Given two SWCs, it calculates a measure of dissimilarity between them using their discretized volumes.
+    It's defined as 1 - size of intersection of the volumes / size of union of the volumes
+    :param refSWC: valid file path to a valid SWC file
+    :param SWC2Align: valid file path to a valid SWC file
+    :param gridSize: float, the voxel size at which the volumes are discretized.
+    :return: float, dissimilarity value
+    """
     trans = SWCTranslate(refSWC, SWC2Align, gridSize)
 
     return objFun(([0, 0, 0], trans))
@@ -367,7 +473,14 @@ def calcOverlap(refSWC, SWC2Align, gridSize):
 
 
 def writeFakeSWC(data, fName, extraCol=None):
-
+    """
+    Forms a 7 column SWC data from the 3 column XYZ data in 'data' and writes it to a file at path fName adding
+    a '!! Fake SWC !!' warning in the header.
+    :param data: numpy.ndarray, 3 column XYZ data
+    :param fName: valid file path to write the fake SWC file
+    :param extraCol: iterable of the same size as the number of rows of data, will be added as the 8th column
+    :return:
+    """
     data = np.array(data)
 
     assert data.shape[1] == 3
