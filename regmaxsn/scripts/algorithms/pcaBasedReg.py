@@ -1,7 +1,7 @@
 import os
-from RegMaxSCore.swcFuncs import transSWC, getPCADetails, transSWC_rotAboutPoint
-from RegMaxSCore.SWCTransforms import objFun, SWCTranslate
-from RegMaxSCore.misc import parFileCheck
+from RegMaxSN.core.swcFuncs import transSWC, getPCADetails, transSWC_rotAboutPoint
+from RegMaxSN.core.SWCTransforms import objFun, SWCTranslate
+from RegMaxSN.core.misc import parFileCheck
 import json
 import numpy as np
 import sys
@@ -15,7 +15,7 @@ def pca_based(parFile):
         print('User Abort!')
         sys.exit()
 
-    from RegMaxSCore.RegMaxSPars import pcaBasedParNames
+    from RegMaxSN.core.RegMaxSPars import pcaBasedParNames
     parsList = parFileCheck(parFile, pcaBasedParNames)
 
     for parInd, pars in enumerate(parsList):

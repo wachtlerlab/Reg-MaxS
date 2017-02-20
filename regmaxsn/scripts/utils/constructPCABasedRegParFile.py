@@ -19,7 +19,7 @@ Usage guidelines:   There are a couple of cases with examples shown below.
 
 import os
 import json
-from RegMaxSN.RegMaxSCore.RegMaxSPars import pcaBasedParNames
+from RegMaxSN.core.RegMaxSPars import pcaBasedParNames
 
 temp = os.path.split(os.path.abspath(__file__))[0]
 temp1 = os.path.split(temp)[0]

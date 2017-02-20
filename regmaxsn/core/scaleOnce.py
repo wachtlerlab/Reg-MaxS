@@ -4,7 +4,7 @@ import numpy as np
 import json
 import sys
 from itertools import product
-from transforms import compose_matrix
+from regmaxsn.core.transforms import compose_matrix
 
 debugging = False
 # debugging = True

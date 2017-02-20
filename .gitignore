@@ -3,3 +3,5 @@
 *.pyc
 .idea
 tmp
+*egg-info
+.eggs

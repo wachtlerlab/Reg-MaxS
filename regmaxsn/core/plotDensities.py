@@ -2,7 +2,6 @@ from .swcFuncs import resampleSWC, digitizeSWCXYZ, getPCADetails, readSWC_numpy,
 import numpy as np
 import os
 from scipy.ndimage import gaussian_filter
-from GJEMS.morph.funcs import getPCADetails, readSWC_numpy, writeSWC_numpy
 import tifffile
 
 class DensityVizualizations(object):

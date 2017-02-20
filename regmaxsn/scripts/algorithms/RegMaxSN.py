@@ -1,12 +1,12 @@
 import os
 import numpy as np
-from RegMaxSCore.iterativeRegistration import IterativeRegistration, composeRefSWC, calcOverlap, getRemainderScale
+from regmaxsn.core.iterativeRegistration import IterativeRegistration, composeRefSWC, calcOverlap, getRemainderScale
 import shutil
 import json
 import sys
-from RegMaxSCore.transforms import decompose_matrix
-from RegMaxSCore.swcFuncs import transSWC
-from RegMaxSCore.misc import parFileCheck
+from regmaxsn.core.transforms import decompose_matrix
+from regmaxsn.core.swcFuncs import transSWC
+from regmaxsn.core.misc import parFileCheck
 
 def normalizeFinally(ipFiles, resDir, opFiles, fnwrtName):
 
@@ -233,7 +233,7 @@ def runRegMaxSN(parFile, parNames):
 
 if __name__ == '__main__':
 
-    from RegMaxSCore.RegMaxSPars import RegMaxSNParNames
+    from regmaxsn.core.RegMaxSPars import RegMaxSNParNames
     assert len(sys.argv) == 2, 'Improper usage! Please use as \'python RegMaxSN.py parFile\''
 
     parFile = sys.argv[1]

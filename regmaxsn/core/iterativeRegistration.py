@@ -1,7 +1,7 @@
 import os
 import numpy as np
-from swcFuncs import transSWC, transSWC_rotAboutPoint
-from SWCTransforms import SWCTranslate, objFun
+from .swcFuncs import transSWC, transSWC_rotAboutPoint
+from .SWCTransforms import SWCTranslate, objFun
 import shutil
 import json
 import subprocess

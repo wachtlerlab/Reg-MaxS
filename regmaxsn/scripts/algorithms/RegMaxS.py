@@ -1,7 +1,8 @@
 import sys
-from RegMaxSCore.iterativeRegistration import IterativeRegistration
-from RegMaxSCore.misc import parFileCheck
+from regmaxsn.core.iterativeRegistration import IterativeRegistration
+from regmaxsn.core.misc import parFileCheck
 import os
+
 
 def runRegMaxS(parFile, parNames):
     parsList = parFileCheck(parFile, parNames)
@@ -49,7 +50,7 @@ def runRegMaxS(parFile, parNames):
 
 if __name__ == '__main__':
 
-    from RegMaxSCore.RegMaxSPars import RegMaxSParNames
+    from regmaxsn.core.RegMaxSPars import RegMaxSParNames
     assert len(sys.argv) == 2, 'Improper usage! Please use as \'python RegMaxS.py parFile\''
 
     parFile = sys.argv[1]

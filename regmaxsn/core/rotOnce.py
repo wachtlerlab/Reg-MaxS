@@ -1,13 +1,14 @@
-from SWCTransforms import SWCTranslate, ArgGenIterator, objFun
+from SWCTransforms import SWCRotate, ArgGenIterator, objFun
 import multiprocessing as mp
 import numpy as np
 import json
 import sys
 from itertools import product
-from transforms import compose_matrix
+from regmaxsn.core.transforms import compose_matrix
 
 debugging = False
 # debugging = True
+
 
 assert len(sys.argv) == 2, 'Only one argument, the path of the swcfile expected, ' + str(len(sys.argv)) + 'found'
 
@@ -17,25 +18,30 @@ with open(parFile, 'r') as fle:
 
 refSWC, SWC2Align, outFiles, gridSizes, bounds, minRes, nCPU = pars
 
-SWCDatas = [SWCTranslate(refSWC, SWC2Align, x) for x in gridSizes]
+data = np.loadtxt(SWC2Align)[:, 2:5]
+dataCentered = data - data.mean(axis=0)
+maxDist = np.linalg.norm(data, axis=1).max()
 pool = mp.Pool(processes=nCPU)
+
+SWCDatas = [SWCRotate(refSWC, SWC2Align, x) for x in gridSizes]
+stepSizes = [max(x / maxDist, minRes) for x in gridSizes]
+
 bestSol = [0, 0, 0]
 
 for gridInd, gridSize in enumerate(gridSizes):
 
-
-    bounds = (np.array(bounds).T - np.array(bestSol)).T
-    boundsRoundedUp = np.sign(bounds) * np.ceil(np.abs(bounds) / gridSize) * gridSize
-    possiblePts1D = [(bestSol[ind] + np.arange(x[0], x[1] + gridSize, gridSize)).tolist()
-                     for ind, x in enumerate(boundsRoundedUp)]
-
-    possiblePts3D = list(product(*possiblePts1D))
     if debugging:
         print('Gridsize:' + str(gridSize))
-        print(bounds)
-        print(map(len, possiblePts1D))
-        print([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)])
-
+    stepSize = stepSizes[gridInd]
+    if debugging:
+        print('Stepsize: ' + str(np.rad2deg(stepSize)))
+    bounds = (np.array(bounds).T - np.array(bestSol)).T
+    boundsRoundedUp = np.sign(bounds) * np.ceil(np.abs(bounds) / stepSize) * stepSize
+    possiblePts1D = [np.round(bestSol[ind] + np.arange(x[0], x[1] + stepSize, stepSize), 3).tolist()
+                     for ind, x in enumerate(boundsRoundedUp)]
+    if debugging:
+        print(np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)]))
+    possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[gridInd])
     funcVals = pool.map_async(objFun, argGen).get(1800)
     minimum = min(funcVals)
@@ -48,39 +54,40 @@ for gridInd, gridSize in enumerate(gridSizes):
 
         prevVals = [objFun((x, SWCDatas[gridInd - 1])) for x in minimzers]
         bestSol = minimzers[np.argmin(prevVals)]
-    bounds = map(lambda x: [x - gridSize, x + gridSize], bestSol)
+    bounds = map(lambda x: [x - np.sqrt(2) * stepSize, x + np.sqrt(2) * stepSize], bestSol)
+
     if debugging:
         bestVal = objFun((bestSol, SWCDatas[gridInd]))
-        print(bestSol, bestVal)
+        print(np.rad2deg(bestSol), bestVal)
 
-if minRes < gridSizes[-1]:
 
-    bounds = (np.array(bounds).T - np.array(bestSol)).T
-    boundsRoundedUp = np.sign(bounds) * np.ceil(np.abs(bounds) / minRes) * minRes
-    possiblePts1D = [(bestSol[ind] + np.arange(x[0], x[1] + minRes, minRes)).tolist()
-                     for ind, x in enumerate(boundsRoundedUp)]
-    possiblePts3D = list(product(*possiblePts1D))
+if minRes < stepSizes[-1]:
 
     if debugging:
-        print('StepSize:' + str(minRes))
-        print(bounds)
-        print(map(len, possiblePts1D))
-        print([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)])
+        print('Stepsize: ' + str(np.rad2deg(minRes)))
+    bounds = (np.array(bounds).T - np.array(bestSol)).T
+    boundsRoundedUp = np.sign(bounds) * np.ceil(np.abs(bounds) / minRes) * minRes
+    if debugging:
+        print(np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)]))
+    possiblePts1D = [np.round(bestSol[ind] + np.arange(x[0], x[1] + minRes, minRes), 3).tolist()
+                     for ind, x in enumerate(boundsRoundedUp)]
+    possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
 
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[-1])
     funcVals = pool.map_async(objFun, argGen).get(1800)
-
     minimum = min(funcVals)
-
     minimzers = [y for x, y in enumerate(possiblePts3D) if funcVals[x] == minimum]
     prevVals = [objFun((x, SWCDatas[-2])) for x in minimzers]
     bestSol = minimzers[np.argmin(prevVals)]
+    if debugging:
+        bestVal = objFun((bestSol, SWCDatas[-1]))
+        print(np.rad2deg(bestSol), bestVal)
 
 bestVal = objFun((bestSol, SWCDatas[-1]))
 nochange = objFun(([0, 0, 0], SWCDatas[-1]))
 if debugging:
-    bestVals = [objFun((bestSol, x)) for x in SWCDatas]
-    print(bestSol, bestVals)
+    print(np.rad2deg(bestSol), bestVal, nochange)
+
 
 done = False
 
@@ -94,8 +101,8 @@ if bestVal > nochange:
 # best solution and no change are equally worse
 elif bestVal == nochange:
 
-    # the solution is very close to zero or there is already an exact overlap
-    if np.abs(bestSol).max() <= min(minRes, gridSizes[-1]) or bestVal == 0:
+    # the solution is very close to zero or there is already exact overlap
+    if np.abs(bestSol).max() <= min(minRes, stepSizes[-1]) or bestVal == 0:
 
         done = True
         bestSol = [0, 0, 0]
@@ -104,9 +111,9 @@ elif bestVal == nochange:
 
 
 SWCDatas[-1].writeSolution(outFiles[0], bestSol)
-matrix = compose_matrix(translate=bestSol).tolist()
+matrix = compose_matrix(angles=bestSol).tolist()
 with open(outFiles[1], 'w') as fle:
-    json.dump({'type': 'XYZ Translations in um','bestSol': bestSol,
+    json.dump({'type': 'XYZ Euler Angles in radians','bestSol': bestSol,
                'transMat': matrix, 'done': done, 'bestVal': bestVal}, fle)
 
 
