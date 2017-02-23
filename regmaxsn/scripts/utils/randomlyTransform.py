@@ -26,8 +26,8 @@ Usage guidelines:   Edit the variables dirPath, expNames, outPath, N, suffix, tr
 
 import numpy as np
 import os
-from RegMaxSN.RegMaxSCore.transforms import compose_matrix
-from RegMaxSN.RegMaxSCore.swcFuncs import transSWC_rotAboutPoint
+from regmaxsn.core.transforms import compose_matrix
+from regmaxsn.core.swcFuncs import transSWC_rotAboutPoint
 import json
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -79,7 +79,6 @@ for ind in range(N):
 
     rotMat = compose_matrix(angles=rots, scale=scale)[:3, :3]
 
-
     for expName in expNames:
         inFile = os.path.join(dirPath, expName + '.swc')
         outFile = os.path.join(outPath, expName + suffix + str(ind) + '.swc')
@@ -93,4 +92,3 @@ for ind in range(N):
                        'translation': translation.tolist(), 'angles': rots.tolist(), 'scale': scale.tolist(),
                        'comments': 'rotation and scaling about inFile centroid'}
             json.dump(toWrite, fle)
-

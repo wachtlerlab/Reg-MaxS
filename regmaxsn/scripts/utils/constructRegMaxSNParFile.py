@@ -20,7 +20,7 @@ Usage guidelines:   There are a couple of cases with examples shown below.
 from numpy import pi, deg2rad
 import os
 import json
-from RegMaxSN.RegMaxSCore.RegMaxSPars import RegMaxSNParNames
+from regmaxsn.core.RegMaxSPars import RegMaxSNParNames
 
 temp = os.path.split(os.path.abspath(__file__))[0]
 temp1 = os.path.split(temp)[0]
@@ -173,4 +173,3 @@ pars = [{k: ns[k] for k in RegMaxSNParNames}]
 # write the parameters into the parameter file.
 with open(parFile, 'w') as fle:
     json.dump(pars, fle)
-

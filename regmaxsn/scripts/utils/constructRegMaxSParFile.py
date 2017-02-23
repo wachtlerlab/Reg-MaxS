@@ -18,7 +18,7 @@ Usage guidelines:   There are a couple of cases with examples shown below.
 from numpy import pi, deg2rad
 import os
 import json
-from RegMaxSN.RegMaxSCore.RegMaxSPars import RegMaxSParNames
+from regmaxsn.core.RegMaxSPars import RegMaxSParNames
 
 # obtaining the directory path containing the folder containing this file
 temp = os.path.split(os.path.abspath(__file__))[0]
@@ -158,4 +158,3 @@ pars = [{k: ns[k] for k in RegMaxSParNames}]
 # write the parameters into the parameter file.
 with open(parFile, 'w') as fle:
     json.dump(pars, fle)
-

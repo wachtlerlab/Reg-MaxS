@@ -17,7 +17,7 @@ Usage guidelines:   Edit the variables dirPath, expNames, outPath, noiseStds and
 
 import numpy as np
 import os
-from RegMaxSN.RegMaxSCore.swcFuncs import readSWC_numpy, writeSWC_numpy
+from regmaxsn.core.swcFuncs import readSWC_numpy, writeSWC_numpy
 # ----------------------------------------------------------------------------------------------------------------------
 temp = os.path.split(__file__)[0]
 dirPath = os.path.join(os.path.split(temp)[0], 'TestFiles')
