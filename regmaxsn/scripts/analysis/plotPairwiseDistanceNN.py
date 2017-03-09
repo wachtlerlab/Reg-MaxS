@@ -44,11 +44,6 @@ def plotPairwiseDistancesNN(parFile):
         refPts = np.loadtxt(refSWC)[:, 2:5]
         testPts = np.loadtxt(resFile)[:, 2:5]
 
-        if refPts.shape[0] != testPts.shape[0]:
-
-            print('Number of points do not match for ' + refSWC + 'and' + resFile)
-            continue
-
         refKDTree = cKDTree(refPts, compact_nodes=True, leafsize=100)
         minDists = refKDTree.query(testPts, n_jobs=cpu_count() - 1)[0]
         minDists[minDists == np.inf] = 1000
@@ -68,19 +63,19 @@ def plotPairwiseDistancesNN(parFile):
     with sns.axes_style('darkgrid'):
 
         sns.boxplot(x='Exp. Name', y='Pairwise Distance in $\mu$m',
-                    ax=ax, data=transErrs, whis='range', color=sns.color_palette()[0])
+                    ax=ax, data=transErrs, color=sns.color_palette()[0], whis='range')
         ax1.plot(range(regErrs.size), regErrs['\% of points closer than\n lowest grid size'],
                  color=sns.color_palette()[0], marker='o', linestyle='-', ms=10)
 
     ax.set_xlim(-1, len(regErrs))
     ax.set_ylim(0, 40)
-    ax.set_xticklabels(['par{}'.format(x) for x in range(len(parsList))], rotation=90)
+    ax.set_xticklabels(['job {}'.format(x) for x in range(len(parsList))], rotation=90)
     ax.set_xlabel('')
 
     ax1.set_xlim(-1, len(regErrs))
     ax1.set_ylim(-10, 110)
     ax1.set_xticks(range(regErrs.size))
-    ax1.set_xticklabels(['par{}'.format(x) for x in range(len(parsList))], rotation=90)
+    ax1.set_xticklabels(['job {}'.format(x) for x in range(len(parsList))], rotation=90)
     ax1.set_ylabel('\% of points closer than\n lowest grid size')
 
 
