@@ -14,5 +14,5 @@ setup(
                           "pandas>=0.19.0",
                           "seaborn>=0.7.1",
                           "tifffile>=0.11.1"],
-        python_requires="python>=2.7",
+        python_requires=">=2.7",
     )

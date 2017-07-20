@@ -4,6 +4,7 @@
 The input parameters of different Algorithms
 """
 
+# **********************************************************************************************************************
 """
 Parameters of Reg-MaxS.
 refSWC:                 string. The reference SWC file, to which testFile is registered.
@@ -60,6 +61,8 @@ RegMaxSParNames = ['refSWC', 'testSWC', 'resFile',
                    'scaleBounds', 'minScaleStepSize',
                    'nCPU', 'inPartsDir', 'outPartsDir', 'retainTempFiles']
 
+# **********************************************************************************************************************
+
 """
 Parameters of Reg-MaxS-N. Some parameters are same as of Reg-MaxS above and hence are omitted here.
 
@@ -93,6 +96,8 @@ RegMaxSNParNames = [
                     'nCPU', 'usePartsDir'
                     ]
 
+# **********************************************************************************************************************
+
 """
 Parameters of the registration PCA-based algorithm. Some parameters have the same meaning as in Reg-MaxS above and
 hence have been omitted here.
@@ -112,3 +117,4 @@ pcaBasedParNames = [
                     'refSWC', 'testSWC', 'resFile',
                     'gridSizes', 'usePartsDir'
                     ]
+# **********************************************************************************************************************

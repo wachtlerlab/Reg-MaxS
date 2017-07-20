@@ -6,10 +6,10 @@ import sys
 homeFolder = os.path.expanduser('~')
 
 try:
-    import RegMaxSN
-    utilsDir = os.path.join(os.path.abspath(RegMaxSN.__path__[0]), 'scripts', 'utils')
+    import regmaxsn
+    utilsDir = os.path.join(os.path.abspath(regmaxsn.__path__[0]), 'scripts', 'utils')
 except ImportError as e:
-    raise(ImportError('The package RegMaxSN must be installed before this script can be used.'))
+    raise(ImportError('The package regmaxsn must be installed before this script can be used.'))
 whereToCreate = raw_input("Enter where the workspace must be created (using {} "
                           "if nothing is specifed):".format(homeFolder))
 if whereToCreate == "":
