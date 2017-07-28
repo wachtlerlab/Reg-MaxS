@@ -286,11 +286,13 @@ class IterativeRegistration(object):
         SWC2AlignT = SWC2AlignLocal
 
         scaleDone = False
+        bestVals = {}
 
         while not scaleDone:
 
             done = False
             srts = ['rot', 'trans']
+
 
             while not done:
 
@@ -312,6 +314,13 @@ class IterativeRegistration(object):
                         totalTransform = np.dot(presTrans, totalTransform)
 
                 print(str(iterationNo) + g)
+
+                bestVals[bestVal] = {"outFile": outFile, "outFileSol": outFileSol,
+                                     "totalTransform": totalTransform,
+                                     "totalTranslation": totalTranslation,
+                                     "iterationIndicator": str(iterationNo) + g
+                                     }
+
                 iterationNo += 1
 
                 done = lDone
@@ -334,6 +343,13 @@ class IterativeRegistration(object):
                 totalTransform = np.dot(presTrans, totalTransform)
 
             print(str(iterationNo) + 's')
+
+            bestVals[bestVal] = {"outFile": outFile, "outFileSol": outFileSol,
+                                 "totalTransform": totalTransform,
+                                 "totalTranslation": totalTranslation,
+                                 "iterationIndicator": str(iterationNo) + 's'
+                                 }
+
             iterationNo += 1
 
             SWC2AlignT = outFile
@@ -372,9 +388,23 @@ class IterativeRegistration(object):
                         totalTransform = np.dot(presTrans, totalTransform)
 
                 print(str(iterationNo) + g)
+
+                bestVals[bestVal] = {"outFile": outFile, "outFileSol": outFileSol,
+                                     "totalTransform": totalTransform,
+                                     "totalTranslation": totalTranslation,
+                                     "iterationIndicator": str(iterationNo) + g
+                                     }
+
                 iterationNo += 1
 
                 SWC2AlignT = outFile
+
+        championBestVal = min(bestVals.keys())
+        totalTransform = bestVals[championBestVal]["totalTransform"]
+        totalTranslation = bestVals[championBestVal]["totalTranslation"]
+        bestIterIndicator = bestVals[championBestVal]["iterationIndicator"]
+
+        print("bestIter: {}, bestVal: {}".format(bestIterIndicator, championBestVal))
 
         totalTransform[:3, 3] += totalTranslation
 
@@ -397,7 +427,7 @@ class IterativeRegistration(object):
 
         with open(finalSolFile, 'w') as fle:
             json.dump({'finalVal': finalVal, 'finalTransMat': totalTransform.tolist(), 'refSWC': self.refSWC,
-                       'SWC2Align': SWC2Align}, fle)
+                       'SWC2Align': SWC2Align, 'bestIteration': bestIterIndicator}, fle)
 
         if inPartsDir is not None:
 

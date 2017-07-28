@@ -7,6 +7,7 @@ import sys
 from regmaxsn.core.transforms import decompose_matrix
 from regmaxsn.core.swcFuncs import transSWC
 from regmaxsn.core.misc import parFileCheck
+from regmaxsn.core.occupancyBasedMeasure import occupancyEMD
 
 def normalizeFinally(ipFiles, resDir, opFiles, fnwrtName):
 
@@ -118,7 +119,7 @@ def runRegMaxSN(parFile, parNames):
 
         prevAlignedSWCs = swcList
 
-        overallOverlaps = []
+        occupancyMeasureLargestGridSize = []
         bestIterInd = nIter - 1
 
         nrnScaleBounds = {swc: scaleBounds[:] for swc in swcList}
@@ -201,22 +202,18 @@ def runRegMaxSN(parFile, parNames):
 
             newRefSWC = os.path.join(resDir, 'ref' + str(iterInd) + '.swc')
             overallOverlap = composeRefSWC(presAlignedSWCs, newRefSWC, gridSizes[-1])
-            overallOverlaps.append(overallOverlap)
+            occupancyMeasure = occupancyEMD(presAlignedSWCs, gridSizes[0])
+            occupancyMeasureLargestGridSize.append(occupancyMeasure)
             refSWC = newRefSWC
 
             prevAlignedSWCs = presAlignedSWCs
 
             if all(dones):
 
-                bestIterInd = iterInd
                 break
 
-            else:
-                bestIterInd = None
-
-
-        if bestIterInd is None:
-            bestIterInd = np.argmin(overallOverlaps)
+        bestIterInd = np.argmin(occupancyMeasureLargestGridSize)
+        bestMeasure = min(occupancyMeasureLargestGridSize)
 
         shutil.copy(os.path.join(resDir, 'ref' + str(bestIterInd) + '.swc'), os.path.join(resDir, 'finalRef.swc'))
 
@@ -228,6 +225,13 @@ def runRegMaxSN(parFile, parNames):
             ipFiles.append(os.path.join(resDir, '{}{}.swc'.format(expName, bestIterInd)))
             opFiles.append(os.path.join(resDir, '{}.swc'.format(expName)))
         normalizeFinally(ipFiles, resDir, opFiles, fnwrtName)
+
+        finalSolFile = os.path.join(resDir, "bestIterInd.json")
+
+        with open(finalSolFile, 'w') as fle:
+            json.dump({'finalVal': bestMeasure,
+                       'bestIteration': bestIterInd}, fle)
+
         print ('Finished Job # {}'.format(parInd + 1))
 
 
