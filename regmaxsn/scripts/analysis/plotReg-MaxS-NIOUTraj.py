@@ -1,7 +1,8 @@
 import os
 import numpy as np
-from core.misc import parFileCheck
+from regmaxsn.core.misc import parFileCheck
 from matplotlib import pyplot as plt
+from regmaxsn.core.matplotlibRCParams import mplPars
 import seaborn as sns
 import sys
 
@@ -10,16 +11,6 @@ def plotIOUTraj(parFile, parNames):
 
     plt.ion()
 
-    mplPars = {'text.usetex': True,
-               'axes.labelsize': 'large',
-               'font.family': 'sans-serif',
-               'font.sans-serif': 'computer modern roman',
-               'font.size': 42,
-               'font.weight': 'black',
-               'xtick.labelsize': 36,
-               'ytick.labelsize': 36,
-               'legend.fontsize': 36,
-               }
     sns.set(rc=mplPars)
 
     parsList = parFileCheck(parFile, parNames)
@@ -99,7 +90,7 @@ def plotIOUTraj(parFile, parNames):
 
 if __name__ == '__main__':
 
-    from core.RegMaxSPars import RegMaxSNParNames
+    from regmaxsn.core.RegMaxSPars import RegMaxSNParNames
 
     assert len(sys.argv) == 2, 'Improper usage! Please use as \'python plotReg-MaxS-NIOUTraj.py parFile\''
 

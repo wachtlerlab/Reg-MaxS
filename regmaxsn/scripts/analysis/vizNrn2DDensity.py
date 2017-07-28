@@ -5,17 +5,10 @@ from matplotlib import patches as mpatches
 import colorsys
 plt.ion()
 import os
-homeFolder = os.path.expanduser('~')
-mplPars = { 'text.usetex'       :    True,
-            'axes.labelsize'    :   'large',
-            'axes.titlesize'    :   'large',
-            'font.family'       :   'sans-serif',
-            'font.sans-serif'   :   'computer modern roman',
-            'font.size'         :    48,
-            'font.weight'       :   'black',
-            'xtick.labelsize'   :    40,
-            'ytick.labelsize'   :    40,
-            }
+from regmaxsn.core.matplotlibRCParams import mplPars
+
+homeFolder = "/media/ajay/ADATA_HD720/Ginjang/"
+
 sns.set(rc=mplPars)
 
 def getLighterColor(col, saturation):
@@ -38,17 +31,11 @@ def getLighterColor(col, saturation):
 
 swcFiles = [
             os.path.join(homeFolder,
-                         'DataAndResults/morphology/OriginalData/borstHSN2D/HSN-fluoro01.CNG2D.swc'),
+                         'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNG.swc'),
             os.path.join(homeFolder,
-                                'DataAndResults/morphology/OriginalData/borstHSN2D/HSN-fluoro01.CNG2DRandRot.swc')
-            # os.path.join(homeFolder,
-            #              'DataAndResults/morphology/OriginalData/borstHSN2D/HSN-fluoro01.CNG2DRandRot1.swc'),
-            # os.path.join(homeFolder,
-            #         'DataAndResults/morphology/OriginalData/borstHSN2D/HSN-fluoro01.CNGNoiseStd42DRandRot1.swc'),
-            # os.path.join(homeFolder,
-            #              'DataAndResults/morphology/OriginalData/borstHSN2D/HSN-fluoro01.CNG2DRandTranslate1.swc'),
-            # os.path.join(homeFolder,
-            #              'DataAndResults/morphology/OriginalData/borstHSN2D/HSN-fluoro01.CNG2DRandScale.swc'),
+                         'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNGRandRotY0.swc'),
+            os.path.join(homeFolder,
+                         'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNGRandRotY1.swc'),
            ]
 # gridSize = 20.0
 # gridSize = 40.0

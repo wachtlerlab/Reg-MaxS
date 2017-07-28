@@ -87,7 +87,7 @@ for ind in range(N):
 
         transSWC_rotAboutPoint(inFile, rotMat, translation, outFile, rotCenter)
 
-        with open(os.path.join(outPath, expName + suffix + '.json'), 'w') as fle:
+        with open(os.path.join(outPath, expName + suffix + str(ind) + '.json'), 'w') as fle:
             toWrite = {'inFile': inFile,
                        'translation': translation.tolist(), 'angles': rots.tolist(), 'scale': scale.tolist(),
                        'comments': 'rotation and scaling about inFile centroid'}

@@ -12,7 +12,10 @@ setup(
                           "matplotlib>=1.5.3",
                           "scipy>=0.18.1",
                           "pandas>=0.19.0",
+                          "openpyxl>=2.4.7",
+                          "xlrd>=1",
                           "seaborn>=0.7.1",
-                          "tifffile>=0.11.1"],
+                          "tifffile>=0.11.1",
+                          "pyemd>=0.4.4"],
         python_requires=">=2.7",
     )
