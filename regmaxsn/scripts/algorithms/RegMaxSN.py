@@ -9,10 +9,12 @@ from regmaxsn.core.swcFuncs import transSWC
 from regmaxsn.core.misc import parFileCheck
 from regmaxsn.core.occupancyBasedMeasure import occupancyEMD
 
-def normalizeFinally(ipFiles, resDir, opFiles, fnwrtName):
+def normalizeFinally(ipFiles, resDir, opFiles, fnwrtName, maxIter):
 
 
-    iters = sorted([int(fle[3:-4]) for fle in os.listdir(resDir) if fle.find('ref') == 0])
+    itersAll = sorted([int(fle[3:-4]) for fle in os.listdir(resDir) if fle.find('ref') == 0])
+
+    iters = [x for x in itersAll if x <= maxIter]
 
     totalTrans = np.eye(4)
 
@@ -47,6 +49,8 @@ def normalizeFinally(ipFiles, resDir, opFiles, fnwrtName):
 
 
 def runRegMaxSN(parFile, parNames):
+
+    assert os.path.isfile(parFile), "{} not found".format(parFile)
 
     ch = raw_input('Using parameter File {}.\n Continue?(y/n)'.format(parFile))
 
@@ -224,7 +228,7 @@ def runRegMaxSN(parFile, parNames):
             dirPath, expName = os.path.split(swc[:-4])
             ipFiles.append(os.path.join(resDir, '{}{}.swc'.format(expName, bestIterInd)))
             opFiles.append(os.path.join(resDir, '{}.swc'.format(expName)))
-        normalizeFinally(ipFiles, resDir, opFiles, fnwrtName)
+        normalizeFinally(ipFiles, resDir, opFiles, fnwrtName, bestIterInd)
 
         finalSolFile = os.path.join(resDir, "bestIterInd.json")
 

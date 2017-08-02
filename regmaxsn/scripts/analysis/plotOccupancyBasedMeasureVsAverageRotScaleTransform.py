@@ -87,13 +87,14 @@ def plotData():
                            columns="std of {}".format(label),
                            values="metric")
         fig, ax = plt.subplots(figsize=(14, 11.2))
-        sns.heatmap(data=df2Plot, ax=ax, xticklabels=10, yticklabels=10, cmap=plt.cm.tab10)
+        sns.heatmap(data=df2Plot, ax=ax, xticklabels=10, yticklabels=10, cmap=plt.cm.jet)
         ax.set_xticklabels(ax.get_xticklabels(), rotation="vertical")
         ax.set_yticklabels(ax.get_yticklabels(), rotation="horizontal")
         fig.tight_layout()
         outFile = str(resDir / "metricVs{}.png".format(suffix))
         fig.savefig(outFile, dpi=150)
         figs.append(fig)
+    plt.show()
 
 
 if __name__ == "__main__":

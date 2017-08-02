@@ -16,6 +16,8 @@ def standardizedExpNameLambda(x):
     else:
         return x
 
+homeFolder = "/media/ajay/ADATA_HD720/Ginjang/DataAndResults/morphology/"
+
 expNames = [
             'Gad1-F-000062_Standardized',
             'Gad1-F-000062.CNG',
@@ -27,7 +29,7 @@ expNames = [
             'Cha-F-400051.CNG',
             'Cha-F-200000.CNG'
             ]
-homeFolder = "/media/ajay/ADATA_HD720/Ginjang/DataAndResults/morphology/"
+
 case1 = {'resDirs': {
     "PCA": os.path.join(homeFolder, "PCA-Based", "chiangLLC"),
     "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangLLC"),
@@ -54,7 +56,33 @@ case2 = {'resDirs': {
              lambda x:x, lambda x:x, lambda x:x, lambda x:x, lambda x:x, standardizedExpNameLambda
          ]}
 
-cases = [case1, case2]
+case3 = {'resDirs': {
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangLLC_Cha-F-000018.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangLLC_Cha-F-000018.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangLLC_Cha-F-000018.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangLLC_Cha-F-000018.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangLLC_Cha-F-000018.CNG"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangLLC"),
+    },
+         'initRef': "Cha-F-000018",
+         'expNameLambdas': [
+             lambda x:x, lambda x:x, lambda x:x, lambda x:x, lambda x:x, standardizedExpNameLambda
+         ]}
+
+case4 = {'resDirs': {
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangLLC_Cha-F-300331.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangLLC_Cha-F-300331.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangLLC_Cha-F-300331.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangLLC_Cha-F-300331.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangLLC_Cha-F-300331.CNG"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangLLC"),
+    },
+         'initRef': "Cha-F-300331",
+         'expNameLambdas': [
+             lambda x:x, lambda x:x, lambda x:x, lambda x:x, lambda x:x, standardizedExpNameLambda
+         ]}
+
+cases = [case1, case2, case3, case4]
 
 voxelSize = 10
 
@@ -135,3 +163,5 @@ ax3.legend(loc="best", ncol=3)
 
 for fig in [fig1, fig2, fig3]:
     fig.tight_layout()
+
+plt.show()

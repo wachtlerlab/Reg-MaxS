@@ -25,7 +25,9 @@ def calcOccupancyDistribution(swcList, voxelSize):
 
     hist, bins = np.histogram(counts, bins)
 
-    histNormed = hist / float(sum(hist))
+    histWeighted = hist * (bins[:-1] + 0.5)
+
+    histNormed = histWeighted / float(sum(histWeighted))
 
     return dict(zip(np.arange(1, len(swcList) + 1), histNormed))
 
