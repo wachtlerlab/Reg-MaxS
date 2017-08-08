@@ -3,21 +3,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 import seaborn as sns
 import json
-from core.RegMaxSPars import RegMaxSParNames
-from core.misc import parFileCheck
+from regmaxsn.core.RegMaxSPars import RegMaxSParNames
+from regmaxsn.core.misc import parFileCheck
+from regmaxsn.core.matplotlibRCParams import mplPars
 
 homeFolder = os.path.expanduser('~')
 
 plt.ion()
-mplPars = { 'text.usetex'       :    True,
-            'axes.labelsize'    :   'large',
-            'font.family'       :   'sans-serif',
-            'font.sans-serif'   :   'computer modern roman',
-            'font.size'         :    24,
-            'font.weight'       :   'black',
-            'xtick.labelsize'   :    20,
-            'ytick.labelsize'   :    20,
-            }
+
 
 # Example colFunc, takes refSWC and testSWC and returns an object that can be passed to matplotlib plotting argument
 # color. For example return objects could be 'b' (blue), 'r' (red) and  [0, 0, 1] (green).

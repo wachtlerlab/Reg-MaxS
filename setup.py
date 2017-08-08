@@ -16,6 +16,7 @@ setup(
                           "xlrd>=1",
                           "seaborn>=0.7.1",
                           "tifffile>=0.11.1",
-                          "pyemd>=0.4.4"],
+                          "pyemd>=0.4.4",
+                          "statsmodels>=0.8"],
         python_requires=">=2.7",
     )

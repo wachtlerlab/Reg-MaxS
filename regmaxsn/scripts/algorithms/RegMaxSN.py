@@ -206,7 +206,7 @@ def runRegMaxSN(parFile, parNames):
 
             newRefSWC = os.path.join(resDir, 'ref' + str(iterInd) + '.swc')
             overallOverlap = composeRefSWC(presAlignedSWCs, newRefSWC, gridSizes[-1])
-            occupancyMeasure = occupancyEMD(presAlignedSWCs, gridSizes[0])
+            occupancyMeasure = occupancyEMD(presAlignedSWCs, gridSizes[-1])
             occupancyMeasureLargestGridSize.append(occupancyMeasure)
             refSWC = newRefSWC
 

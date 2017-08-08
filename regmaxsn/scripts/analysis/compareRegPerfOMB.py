@@ -19,26 +19,32 @@ def standardizedExpNameLambda(x):
 homeFolder = "/media/ajay/ADATA_HD720/Ginjang/DataAndResults/morphology/"
 
 expNames = [
-            'Gad1-F-000062_Standardized',
-            'Gad1-F-000062.CNG',
-            'Cha-F-000012.CNG',
-            'Cha-F-300331.CNG',
-            'Gad1-F-600000.CNG',
-            'Cha-F-000018.CNG',
-            'Cha-F-300051.CNG',
-            'Cha-F-400051.CNG',
-            'Cha-F-200000.CNG'
+            'VGlut-F-500085_Standardized',
+            'VGlut-F-500085.CNG',
+            'VGlut-F-700500.CNG',
+            'VGlut-F-700567.CNG',
+            'VGlut-F-500471.CNG',
+            'Cha-F-000353.CNG',
+            'VGlut-F-600253.CNG',
+            'VGlut-F-400434.CNG',
+            'VGlut-F-600379.CNG',
+            'VGlut-F-700558.CNG',
+            'VGlut-F-500183.CNG',
+            'VGlut-F-300628.CNG',
+            'VGlut-F-500031.CNG',
+            'VGlut-F-500852.CNG',
+            'VGlut-F-600366.CNG'
             ]
 
 case1 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangLLC"),
-    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangLLC"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangLLC"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangLLC"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangLLC"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangLLC",),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOMB"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangOMB"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOMB"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOMB"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOMB"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangOMB",),
     },
-        'initRef': "Gad1-F-000062-Standardized",
+        'initRef': "VGlut-F-500085-Standardized",
         'expNameLambdas': {
             "PCA": lambda x: x,
             "blastneuron": lambda x: x,
@@ -49,15 +55,15 @@ case1 = {'resDirs': {
 }
 
 case2 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangLLC_Gad1-F-000062.CNG"),
-    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangLLC_Gad1-F-000062.CNG"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangLLC_Gad1-F-000062.CNG"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangLLC_Gad1-F-000062.CNG"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangLLC_Gad1-F-000062.CNG"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangLLC"),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOMB_VGlut-F-500085.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangOMB_VGlut-F-500085.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOMB_VGlut-F-500085.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOMB_VGlut-F-500085.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOMB_VGlut-F-500085.CNG"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangOMB",),
     },
-        'initRef': "Gad1-F-000062",
-        'expNameLambdas': {
+         'initRef': "VGlut-F-500085",
+         'expNameLambdas': {
             "PCA": lambda x: x,
             "blastneuron": lambda x: x,
             "PCA + RobartsICP": lambda x: x,
@@ -67,43 +73,43 @@ case2 = {'resDirs': {
 }
 
 case3 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangLLC_Cha-F-000018.CNG"),
-    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangLLC_Cha-F-000018.CNG"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangLLC_Cha-F-000018.CNG"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangLLC_Cha-F-000018.CNG"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangLLC_Cha-F-000018.CNG"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangLLC"),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOMB_VGlut-F-500031.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangOMB_VGlut-F-500031.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOMB_VGlut-F-500031.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOMB_VGlut-F-500031.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOMB_VGlut-F-500031.CNG"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangOMB",),
     },
-        'initRef': "Cha-F-000018",
-        'expNameLambdas': {
-            "PCA": lambda x: x,
-            "blastneuron": lambda x: x,
-            "PCA + RobartsICP": lambda x: x,
-            "Reg-MaxS": lambda x: x,
-            "Reg-MaxS-N": lambda x: x,
-            "Standardized": standardizedExpNameLambda}
-}
+         'initRef': "VGlut-F-500031",
+         'expNameLambdas': {
+             "PCA": lambda x:x,
+             "blastneuron": lambda x:x,
+             "PCA + RobartsICP": lambda x:x,
+             "Reg-MaxS": lambda x:x,
+             "Reg-MaxS-N": lambda x:x,
+             "Standardized": standardizedExpNameLambda}
+         }
 
 case4 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangLLC_Cha-F-300331.CNG"),
-    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangLLC_Cha-F-300331.CNG"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangLLC_Cha-F-300331.CNG"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangLLC_Cha-F-300331.CNG"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangLLC_Cha-F-300331.CNG"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangLLC"),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOMB_VGlut-F-600379.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangOMB_VGlut-F-600379.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOMB_VGlut-F-600379.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOMB_VGlut-F-600379.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOMB_VGlut-F-600379.CNG"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangOMB",),
     },
-        'initRef': "Cha-F-300331",
-        'expNameLambdas': {
-            "PCA": lambda x: x,
-            "blastneuron": lambda x: x,
-            "PCA + RobartsICP": lambda x: x,
-            "Reg-MaxS": lambda x: x,
-            "Reg-MaxS-N": lambda x: x,
-            "Standardized": standardizedExpNameLambda}
-}
+         'initRef': "VGlut-F-600379",
+         'expNameLambdas': {
+             "PCA": lambda x:x,
+             "blastneuron": lambda x:x,
+             "PCA + RobartsICP": lambda x:x,
+             "Reg-MaxS": lambda x:x,
+             "Reg-MaxS-N": lambda x:x,
+             "Standardized": standardizedExpNameLambda}
+         }
+
 
 cases = [case1, case2, case3, case4]
-
 
 voxelSize = 10
 
