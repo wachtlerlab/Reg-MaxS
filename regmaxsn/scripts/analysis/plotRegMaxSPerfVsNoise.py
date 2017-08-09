@@ -98,10 +98,11 @@ def regmaxsPerfVsNoise(parFile, anisoThresh):
 
     fig, ax = plt.subplots(figsize=(14, 11.2))
     # ax.bar(perfVsNoise.index.values, perfVsNoise.values, width=1.5)
-    ax.plot(perfVsNoise.index.values, perfVsNoise.values, 'r-o',
-            label="\% of tests with significant number \nof pairwise distances smaller than \nlowest voxel size")
-    ax.plot(worstPerfVsNoise.index.values, worstPerfVsNoise.values, 'b-s',
-            label="\% of tests with significant number \nof pairwise distances not greater than \nlowest voxel size")
+    ax.plot(perfVsNoise.index.values, perfVsNoise.values, 'r-o')
+    # ax.plot(worstPerfVsNoise.index.values, worstPerfVsNoise.values, 'b-s',
+    #         label="\% of tests with significant number \nof pairwise distances not greater than \nlowest voxel size")
+    ax.set_ylabel("\% of tests with significant number \nof pairwise distances smaller than \nlowest voxel size")
+
     ax.set_xticks(perfVsNoise.index.values)
     ax.set_xlabel("Noise Standard deviation ($\mu$ m)")
     ax.legend(loc='best')

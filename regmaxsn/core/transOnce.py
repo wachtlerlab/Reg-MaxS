@@ -95,7 +95,7 @@ if bestVal > nochange:
 elif bestVal == nochange:
 
     # the solution is very close to zero or there is already an exact overlap
-    if np.abs(bestSol).max() <= min(minRes, gridSizes[-1]) or bestVal == 0:
+    if np.abs(bestSol).max() <= min(minRes, gridSizes[-1]):
 
         done = True
         bestSol = [0, 0, 0]
