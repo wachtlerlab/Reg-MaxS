@@ -4,19 +4,9 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+from regmaxsn.core.matplotlibRCParams import mplPars
 
 homeFolder = os.path.expanduser('~')
-
-mplPars = {
-            'text.usetex'           :   True,
-            'axes.labelsize'        :   'large',
-            'font.family'           :   'sans-serif',
-            'font.sans-serif'       :   'Computer Modern Sans serif',
-            'font.size'             :   48,
-            'font.weight'           :   'black',
-            'xtick.labelsize'       :   36,
-            'ytick.labelsize'       :   36,
-            }
 
 
 def plotPairwiseDistances(parFile):

@@ -20,45 +20,35 @@ def standardizedExpNameLambda(x):
 homeFolder = "/media/ajay/ADATA_HD720/Ginjang/DataAndResults/morphology/"
 
 expNames = [
-    'Trh-F-000047_Standardized',
-    'Trh-F-000047.CNG',
-    'Trh-M-000143.CNG',
-    'Trh-F-000092.CNG',
-    'Trh-F-700009.CNG',
-    'Trh-M-000013.CNG',
-    'Trh-M-000146.CNG',
-    'Trh-M-100009.CNG',
-    'Trh-F-000019.CNG',
-    'Trh-M-000081.CNG',
-    'Trh-M-900003.CNG',
-    'Trh-F-200035.CNG',
-    'Trh-F-200015.CNG',
-    'Trh-M-000040.CNG',
-    'Trh-M-600023.CNG',
-    'Trh-M-100048.CNG',
-    'Trh-M-700019.CNG',
-    'Trh-F-100009.CNG',
-    'Trh-M-400000.CNG',
-    'Trh-M-000067.CNG',
-    'Trh-M-000114.CNG',
-    'Trh-M-100018.CNG',
-    'Trh-M-000141.CNG',
-    'Trh-M-900019.CNG',
-    'Trh-M-800002.CNG'
+    "VGlut-F-300181_Standardized",
+    "VGlut-F-300181.CNG",
+    "VGlut-F-400545.CNG",
+    "VGlut-F-500778.CNG",
+    "VGlut-F-300196.CNG",
+    "VGlut-F-300288.CNG",
+    "VGlut-F-600290.CNG",
+    "VGlut-F-600499.CNG",
+    "VGlut-F-400665.CNG",
+    "VGlut-F-300142.CNG",
+    "VGlut-F-500147.CNG",
+    "VGlut-F-600181.CNG",
+    "VGlut-F-700190.CNG"
+
+
 ]
 
 case1 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOPSInt"),
-    # "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangOPSInt"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOPSInt"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOPSInt"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOPSInt"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangOPSInt",),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangAA1"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangAA1"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangAA1"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangAA1"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangAA1"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangAA1",),
     },
-        'initRef': "Trh-F-000047-Standardized",
+        'initRef': "VGlut-F-300181-Standardized",
         'expNameLambdas': {
             "PCA": lambda x: x,
-            # "blastneuron": lambda x: x,
+            "blastneuron": lambda x: x,
             "PCA + RobartsICP": lambda x: x,
             "Reg-MaxS": lambda x: x,
             "Reg-MaxS-N": lambda x: x,
@@ -66,17 +56,17 @@ case1 = {'resDirs': {
 }
 
 case2 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOPSInt"),
-    # "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangOPSInt_Trh-F-000047.CNG"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOPSInt_Trh-F-000047.CNG"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOPSInt_Trh-F-000047.CNG"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOPSInt_Trh-F-000047.CNG"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangOPSInt",),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangAA1_VGlut-F-300181.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangAA1_VGlut-F-300181.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangAA1_VGlut-F-300181.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangAA1_VGlut-F-300181.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangAA1_VGlut-F-300181.CNG"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangAA1"),
     },
-         'initRef': "Trh-F-000047",
-         'expNameLambdas': {
+        'initRef': "VGlut-F-300181",
+        'expNameLambdas': {
             "PCA": lambda x: x,
-            # "blastneuron": lambda x: x,
+            "blastneuron": lambda x: x,
             "PCA + RobartsICP": lambda x: x,
             "Reg-MaxS": lambda x: x,
             "Reg-MaxS-N": lambda x: x,
@@ -84,48 +74,45 @@ case2 = {'resDirs': {
 }
 
 case3 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOPSInt_Trh-M-900003.CNG"),
-    # "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangOPSInt_Trh-M-900003.CNG"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOPSInt_Trh-M-900003.CNG"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOPSInt_Trh-M-900003.CNG"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOPSInt_Trh-M-900003.CNG"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangOPSInt",),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangAA1_VGlut-F-600290.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangAA1_VGlut-F-600290.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangAA1_VGlut-F-600290.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangAA1_VGlut-F-600290.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangAA1_VGlut-F-600290.CNG"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangAA1"),
     },
-         'initRef': "Trh-M-900003",
-         'expNameLambdas': {
-             "PCA": lambda x:x,
-             # "blastneuron": lambda x:x,
-             "PCA + RobartsICP": lambda x:x,
-             "Reg-MaxS": lambda x:x,
-             "Reg-MaxS-N": lambda x:x,
-             "Standardized": standardizedExpNameLambda}
-         }
+        'initRef': "VGlut-F-600290",
+        'expNameLambdas': {
+            "PCA": lambda x: x,
+            "blastneuron": lambda x: x,
+            "PCA + RobartsICP": lambda x: x,
+            "Reg-MaxS": lambda x: x,
+            "Reg-MaxS-N": lambda x: x,
+            "Standardized": standardizedExpNameLambda}
+}
 
-# case4 = {'resDirs': {
-#     "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOPSInt_Trh-M-100018.CNG"),
-#     "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangOPSInt_Trh-M-100018.CNG"),
-#     "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOPSInt_Trh-M-100018.CNG"),
-#     "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOPSInt_Trh-M-100018.CNG"),
-#     "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOPSInt_Trh-M-100018.CNG"),
-#     "Standardized": os.path.join(homeFolder, "Registered", "chiangOPSInt",),
-#     },
-#          'initRef': "Trh-M-100018",
-#          'expNameLambdas': {
-#              "PCA": lambda x:x,
-#              "blastneuron": lambda x:x,
-#              "PCA + RobartsICP": lambda x:x,
-#              "Reg-MaxS": lambda x:x,
-#              "Reg-MaxS-N": lambda x:x,
-#              "Standardized": standardizedExpNameLambda}
-#          }
+case4 = {'resDirs': {
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangAA1_VGlut-F-500147.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangAA1_VGlut-F-500147.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangAA1_VGlut-F-500147.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangAA1_VGlut-F-500147.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangAA1_VGlut-F-500147.CNG"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangAA1"),
+    },
+        'initRef': "VGlut-F-500147",
+        'expNameLambdas': {
+            "PCA": lambda x: x,
+            "blastneuron": lambda x: x,
+            "PCA + RobartsICP": lambda x: x,
+            "Reg-MaxS": lambda x: x,
+            "Reg-MaxS-N": lambda x: x,
+            "Standardized": standardizedExpNameLambda}
+}
 
+cases = [case1, case2, case3, case4]
 
-# cases = [case1, case2, case3, case4]
-
-cases = [case1, case2, case3]
 
 voxelSize = 10
-
 
 def saveData(outXLFile):
 
@@ -223,7 +210,7 @@ if __name__ == "__main__":
     if sys.argv[1] == "save":
         saveData(sys.argv[2])
     elif sys.argv[1] == "plot":
-        fig1 = plotData(sys.argv[2])
+        fig = plotData(sys.argv[2])
     else:
         raise(ValueError("Improper Usage! Please use as:\n"
                          "python {fName} save <outFile> or python {fName} plot <inFile>".format(fName=sys.argv[0])))

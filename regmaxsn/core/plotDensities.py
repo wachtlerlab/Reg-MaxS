@@ -114,9 +114,11 @@ class DensityVizualizations(object):
                 raise(ValueError(swcFile + ' not initialized in constructing DensityVizualizations object'))
             densityMat[digDataTranslated[:, 0], digDataTranslated[:, 1], digDataTranslated[:, 2]] = 1
             densityMatSum += densityMat
+            del densityMat
 
         densityMatSum /= float(len(swcFiles))
         smoothDensityMat = gaussian_filter(densityMatSum, sigma=digSigs, truncate=3)
+        del densityMatSum
         smoothDensityMat *= (2 ** 1.5) * digSigs.prod()
 
         smoothDensityMat[smoothDensityMat > 1] = 1

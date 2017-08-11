@@ -116,7 +116,7 @@ if bestVal > nochange:
 # best solution and no change are equally worse
 elif bestVal == nochange:
 
-    # the solution is very close to zero or there is already exact overlap
+    # the solution step is very close to zero
     if np.abs(bestSol).max() <= min(minStepSize, stepSizes[-1]):
         done = True
         bestSol = [1, 1, 1]

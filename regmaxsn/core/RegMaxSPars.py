@@ -118,3 +118,5 @@ pcaBasedParNames = [
                     'gridSizes', 'usePartsDir'
                     ]
 # **********************************************************************************************************************
+
+DensitySaveParNames = ['refSWC', 'resFile']

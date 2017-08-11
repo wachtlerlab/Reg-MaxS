@@ -6,6 +6,7 @@ from regmaxsn.core.matplotlibRCParams import mplPars
 from regmaxsn.core.occupancyBasedMeasure import occupancyEMD
 from regmaxsn.core.farthestPointStats import maxDistStats
 import numpy as np
+import sys
 
 plt.ion()
 sns.set(rc=mplPars)
@@ -113,83 +114,103 @@ cases = [case1, case2, case3, case4]
 
 voxelSize = 10
 
-metricsDF = pd.DataFrame()
-maxDistStatsDF = pd.DataFrame()
+def saveData(outXLFile):
 
-for case in cases:
+    metricsDF = pd.DataFrame()
+    maxDistStatsDF = pd.DataFrame()
 
-    resDirs = case["resDirs"]
-    initRef = case["initRef"]
-    expNameLambdas = case['expNameLambdas']
+    for case in cases:
 
-    for (resDirLabel, resDir) in resDirs.iteritems():
+        resDirs = case["resDirs"]
+        initRef = case["initRef"]
+        expNameLambdas = case['expNameLambdas']
 
-        outFiles = []
-        expNameLambda = expNameLambdas[resDirLabel]
+        for (resDirLabel, resDir) in resDirs.iteritems():
 
-        for expName in expNames:
+            outFiles = []
+            expNameLambda = expNameLambdas[resDirLabel]
 
-            outFile = os.path.join(resDir, "{}.swc".format(expNameLambda(expName)))
-            if os.path.isfile(outFile):
-                outFiles.append(outFile)
+            for expName in expNames:
+
+                outFile = os.path.join(resDir, "{}.swc".format(expNameLambda(expName)))
+                if os.path.isfile(outFile):
+                    outFiles.append(outFile)
+                else:
+                    print("{} not found. Ignoring it.".format(outFile))
+
+            if outFiles:
+
+                print("Collecting data for resDirLabel={}, initRef={}".format(resDirLabel, initRef))
+
+                metric = occupancyEMD(outFiles, voxelSize)
+
+                tempDict = {"Initial Reference": initRef,
+                            "Occupancy Based Dissimilarity Measure": metric,
+                            "Method": resDirLabel}
+
+                metricsDF = metricsDF.append(tempDict, ignore_index=True)
+
+
+                # crdMaxDistsStatsDFFull = maxDistStats(outFiles)
+                # aggDictRename = {"mean": "mean of \nmaximum distances",
+                #            "std": "standard deviation of \nmaximum distances"}
+                # crdMaxDistsStatsDF = crdMaxDistsStatsDFFull.loc[:, ("maximum distance", "source point")]
+                # crdMaxDistsStatsDF.set_index("source point", inplace=True)
+                # crdMaxDistMeanStd = crdMaxDistsStatsDF.groupby("source point")["maximum distance"]\
+                #     .aggregate([np.mean, np.std])
+                # crdMaxDistMeanStd = crdMaxDistMeanStd.rename(columns=aggDictRename)
+                # tempDF = crdMaxDistMeanStd.reset_index()
+                # tempDF['Initial Reference'] = initRef
+                # tempDF['Method'] = resDirLabel
+                # maxDistStatsDF = maxDistStatsDF.append(tempDF, ignore_index=True)
+
             else:
-                print("{} not found. Ignoring it.".format(outFile))
+                print("No usable SWCs found in {}".format(resDir))
 
-        if outFiles:
+    metricsDF.to_excel(outXLFile)
 
-            print("Collecting data for resDirLabel={}, initRef={}".format(resDirLabel, initRef))
-
-            metric = occupancyEMD(outFiles, voxelSize)
-
-            tempDict = {"Initial Reference": initRef,
-                        "Occupancy Based Dissimilarity Measure": metric,
-                        "Method": resDirLabel}
-
-            metricsDF = metricsDF.append(tempDict, ignore_index=True)
+def plotData(inFile):
 
 
-            # crdMaxDistsStatsDFFull = maxDistStats(outFiles)
-            # aggDictRename = {"mean": "mean of \nmaximum distances",
-            #            "std": "standard deviation of \nmaximum distances"}
-            # crdMaxDistsStatsDF = crdMaxDistsStatsDFFull.loc[:, ("maximum distance", "source point")]
-            # crdMaxDistsStatsDF.set_index("source point", inplace=True)
-            # crdMaxDistMeanStd = crdMaxDistsStatsDF.groupby("source point")["maximum distance"]\
-            #     .aggregate([np.mean, np.std])
-            # crdMaxDistMeanStd = crdMaxDistMeanStd.rename(columns=aggDictRename)
-            # tempDF = crdMaxDistMeanStd.reset_index()
-            # tempDF['Initial Reference'] = initRef
-            # tempDF['Method'] = resDirLabel
-            # maxDistStatsDF = maxDistStatsDF.append(tempDF, ignore_index=True)
+    metricsDF = pd.read_excel(inFile)
+    fig1, ax1 = plt.subplots(figsize=(14, 11.2))
+    sns.barplot(data=metricsDF, x="Initial Reference",
+                y="Occupancy Based Dissimilarity Measure", hue="Method",
+                ax=ax1, hue_order=["PCA", "blastneuron","PCA + RobartsICP",
+                                   "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
+    ax1.legend(loc='best', ncol=3)
+    ax1.set_ylabel("Occupancy Based Dissimilarity Measure")
 
-        else:
-            print("No usable SWCs found in {}".format(resDir))
-
-fig1, ax1 = plt.subplots(figsize=(14, 11.2))
-sns.barplot(data=metricsDF, x="Initial Reference",
-            y="Occupancy Based Dissimilarity Measure", hue="Method",
-            ax=ax1, hue_order=["PCA", "blastneuron","PCA + RobartsICP",
-                               "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
-ax1.legend(loc='best', ncol=3)
-ax1.set_ylabel("Occupancy Based Dissimilarity Measure")
-
-
-# fig2, ax2 = plt.subplots(figsize=(14, 11.2))
-# sns.boxplot(data=maxDistStatsDF, x="Initial Reference", y="mean of \nmaximum distances",
-#             hue="Method", whis=np.inf,
-#             ax=ax2, hue_order=["PCA", "blastneuron","PCA + RobartsICP",
-#                                "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
-# ax2.legend(loc="best", ncol=3)
-#
-# fig3, ax3 = plt.subplots(figsize=(14, 11.2))
-# sns.boxplot(data=maxDistStatsDF, x="Initial Reference", y="standard deviation of \nmaximum distances",
-#             hue="Method", whis=np.inf,
-#             ax=ax3, hue_order=["PCA", "blastneuron","PCA + RobartsICP",
-#                                "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
-# ax3.legend(loc="best", ncol=3)
+    # fig2, ax2 = plt.subplots(figsize=(14, 11.2))
+    # sns.boxplot(data=maxDistStatsDF, x="Initial Reference", y="mean of \nmaximum distances",
+    #             hue="Method", whis=np.inf,
+    #             ax=ax2, hue_order=["PCA", "blastneuron","PCA + RobartsICP",
+    #                                "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
+    # ax2.legend(loc="best", ncol=3)
+    #
+    # fig3, ax3 = plt.subplots(figsize=(14, 11.2))
+    # sns.boxplot(data=maxDistStatsDF, x="Initial Reference", y="standard deviation of \nmaximum distances",
+    #             hue="Method", whis=np.inf,
+    #             ax=ax3, hue_order=["PCA", "blastneuron","PCA + RobartsICP",
+    #                                "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
+    # ax3.legend(loc="best", ncol=3)
 
 
-# for fig in [fig1, fig2, fig3]:
-for fig in [fig1]:
-    fig.tight_layout()
+    # for fig in [fig1, fig2, fig3]:
+    for fig in [fig1]:
+        fig.tight_layout()
 
-plt.show()
+    return fig1
+
+if __name__ == "__main__":
+
+    assert len(sys.argv) == 3, "Improper Usage! Please use as:\n" \
+                               "python {fName} save <outFile> or python {fName} plot <inFile>".format(fName=sys.argv[0])
+
+    if sys.argv[1] == "save":
+        saveData(sys.argv[2])
+    elif sys.argv[1] == "plot":
+        fig = plotData(sys.argv[2])
+    else:
+        raise(ValueError("Improper Usage! Please use as:\n"
+                         "python {fName} save <outFile> or python {fName} plot <inFile>".format(fName=sys.argv[0])))
