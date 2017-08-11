@@ -1,14 +1,22 @@
 import os
 from regmaxsn.core.plotDensities import DensityVizualizations, writeTIFF
+from regmaxsn.core.transforms import compose_matrix
 import numpy as np
 from matplotlib import pyplot as plt
 from regmaxsn.core.RegMaxSPars import DensitySaveParNames
 from regmaxsn.core.misc import parFileCheck
 homeFolder = os.path.expanduser('~')
 import sys
-from itertools import product
 
-def saveAverageDensity(regMaxSParFile, refSWC, outFile, gridUnitSize, sigma, onlyTips=False):
+
+def saveAverageDensity(regMaxSParFile, refSWC, outFile, gridUnitSize, sigma, reflections, rotations,
+                       onlyTips=False):
+
+    tempRotMat = compose_matrix(angles=np.deg2rad(rotations))
+
+
+    initTrans = np.dot(np.diag(reflections), tempRotMat[:3, :3])
+
 
     resampleLen = 1
 
@@ -33,7 +41,7 @@ def saveAverageDensity(regMaxSParFile, refSWC, outFile, gridUnitSize, sigma, onl
             masks.append(mask)
 
         densityViz = DensityVizualizations(swcFiles, gridUnitSize, resampleLen, masks=masks,
-                                           pcaView=True, refSWC=refSWC)
+                                           pcaView=True, refSWC=refSWC, initTrans=initTrans)
         density, bins = densityViz.calculateDensity(swcFiles, sigmas)
 
     else:
@@ -41,7 +49,8 @@ def saveAverageDensity(regMaxSParFile, refSWC, outFile, gridUnitSize, sigma, onl
         # densityViz = DensityVizualizations(swcFiles, gridUnitSize, resampleLen,
         #                                    pcaView='closestPCMatch', refSWC=refSWC, initTrans=initTrans)
         densityViz = DensityVizualizations(swcFiles, gridUnitSize, resampleLen,
-                                           pcaView='assumeRegistered', refSWC=refSWC)
+                                           pcaView='assumeRegistered', refSWC=refSWC,
+                                           initTrans=initTrans)
         density, bins = densityViz.calculateDensity(swcFiles, sigmas)
         # density, bins = calcMorphDensity(swcFiles, sigmas, gridUnitSize, resampleLen, pcaView=False, refSWC=refSWC)
 
@@ -210,13 +219,15 @@ def savePlotsSingle(npCompressedFile, label, outDir):
 
 if __name__ == "__main__":
 
-    if len(sys.argv) == 7 and sys.argv[1] == "saveData":
+    if len(sys.argv) == 9 and sys.argv[1] == "saveData":
         parFile = sys.argv[2]
         refSWC = sys.argv[3]
         outFile = sys.argv[4]
         gridUnitSize = float(sys.argv[5])
         sigma = float(sys.argv[6])
-        saveAverageDensity(parFile, refSWC, outFile, gridUnitSize, sigma)
+        reflections = np.array([int(x) for x in sys.argv[7].split()])
+        rotations = np.array([float(x) for x in sys.argv[8].split()])
+        saveAverageDensity(parFile, refSWC, outFile, gridUnitSize, sigma, reflections, rotations)
     elif len(sys.argv) == 5 and sys.argv[1] == "savePlotsSingle":
         npCompressedFile = sys.argv[2]
         label = sys.argv[3]
