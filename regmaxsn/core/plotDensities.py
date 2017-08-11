@@ -94,6 +94,7 @@ class DensityVizualizations(object):
         self.bins = [np.arange(x, y + 1) * z for x, y, z in zip(self.minXYZ, self.maxXYZ, self.gridUnitSizes)]
 
 
+
     def calculateDensity(self, swcFiles, sigmas):
 
         assert all(np.greater_equal(sigmas, self.gridUnitSizes)), 'sigma along every dimenstion must be larger than gridUnitSize'
