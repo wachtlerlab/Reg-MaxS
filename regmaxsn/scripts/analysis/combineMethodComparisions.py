@@ -25,13 +25,15 @@ def combinePlotMethodComparisons(inDir):
             metricsDF["Group"] = setName
             allPerfsDF = allPerfsDF.append(metricsDF, ignore_index=True)
 
+    [darkblue, green, red, violet, yellow, lightblue] = sns.color_palette()
     fig1, ax1 = plt.subplots(figsize=(14, 11.2))
     sns.barplot(data=allPerfsDF, x="Group", y="Occupancy Based Dissimilarity Measure",
-                hue='Method',  ax=ax1, hue_order=["PCA", "blastneuron", "PCA + RobartsICP",
-                                   "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
+                hue='Method',  ax=ax1, hue_order=["PCA", "PCA + RobartsICP", "BlastNeuron",
+                                   "Reg-MaxS", "Reg-MaxS-N", "Standardized"],
+                palette=[red, violet, yellow, lightblue, darkblue, green])
     ax1.set_ylabel("Occupancy Based Dissimilarity Measure")
     ax1.set_xticklabels(setNames)
-    ax1.text(0, 12, 'n=4', color='r', fontsize=48)
+    # ax1.text(0, 12, 'n=4', color='r', fontsize=48)
     fig1.tight_layout()
     return fig1
 

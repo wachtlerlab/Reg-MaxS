@@ -19,6 +19,7 @@ def plotPairwiseDistances(parFile):
 
     transErrs = pd.DataFrame(None, columns=['Exp. Name', 'Pairwise Distance in $\mu$m'])
 
+
     for par in parsList:
 
         refSWC = par['refSWC']
@@ -59,9 +60,11 @@ def plotPairwiseDistances(parFile):
                  color=sns.color_palette()[0], marker='o', linestyle='-', ms=10)
 
     ax.set_xlim(-1, len(regErrs))
+    ax.plot(ax.get_xlim(), [thresh, thresh], 'r--')
     ax.set_ylim(0, 40)
     ax.set_xticklabels(['job {}'.format(x) for x in range(len(parsList))], rotation=90)
     ax.set_xlabel('')
+
 
     ax1.set_xlim(-1, len(regErrs))
     ax1.set_ylim(-10, 110)

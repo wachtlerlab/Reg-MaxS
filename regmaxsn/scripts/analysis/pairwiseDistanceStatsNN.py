@@ -3,6 +3,8 @@ import json
 import numpy as np
 import pandas as pd
 from statsmodels.sandbox.descstats import sign_test
+from scipy.spatial import cKDTree
+from multiprocessing import cpu_count
 
 homeFolder = os.path.expanduser('~')
 
@@ -34,23 +36,17 @@ def pairwiseDistanceStats(parFile):
         testPtsFull = np.loadtxt(resFile)
         testPts = testPtsFull[:, 2:5]
 
+        refKDTree = cKDTree(refPts, compact_nodes=True, leafsize=100)
+        minDists = refKDTree.query(testPts, n_jobs=cpu_count() - 1)[0]
+        minDists[minDists == np.inf] = 1000
 
-        if refPts.shape[0] != testPts.shape[0]:
-
-            print('Number of points do not match for ' + refSWC + 'and' + resFile)
-            continue
-
-        allSizes.append(refPts.shape[0])
-        allThreshs.append(thresh)
-        ptDiff = np.linalg.norm(refPts - testPts, axis=1)
-
-        transErrs = transErrs.append(pd.DataFrame({'Pairwise Distance in $\mu$m': ptDiff,
+        transErrs = transErrs.append(pd.DataFrame({'Pairwise Distance in $\mu$m': minDists,
                                       'Exp. Name': testName,
                                       "Node ID": testPtsFull[:, 0]}),
                                      ignore_index=True)
 
-        t, p = sign_test(ptDiff, thresh)
-        print(t, p)
+        t, p = sign_test(minDists, thresh)
+        print(minDists.shape)
         oneSidedP = 0.5 * p
         signCloserThanSmallestVoxelSize = t < 0 and oneSidedP < 0.01
 
