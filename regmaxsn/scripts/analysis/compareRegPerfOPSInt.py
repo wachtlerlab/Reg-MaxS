@@ -55,7 +55,7 @@ case1 = {'resDirs': {
     "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOPSInt"),
     "Standardized": os.path.join(homeFolder, "Registered", "chiangOPSInt",),
     },
-        'initRef': "Trh-F-000047-Standardized",
+        'initRef': "Trh-F-000047\n-Standardized",
         'expNameLambdas': {
             "PCA": lambda x: x,
             # "blastneuron": lambda x: x,
@@ -131,6 +131,7 @@ def saveData(outXLFile):
 
     metricsDF = pd.DataFrame()
     maxDistStatsDF = pd.DataFrame()
+    runTimesDF = pd.DataFrame()
 
     for case in cases:
 
@@ -157,12 +158,23 @@ def saveData(outXLFile):
 
                 metric = occupancyEMD(outFiles, voxelSize)
 
+                if resDirLabel == "Reg-MaxS-N":
+                    finalRef = os.path.join(resDir, "finalRef.swc")
+                    initialRef = os.path.join(resDir, "ref-1.swc")
+
+                    runtime = os.stat(finalRef).st_mtime - os.stat(initialRef).st_mtime
+                else:
+                    outFileModTimes = [os.stat(outFile).st_mtime for outFile in outFiles]
+                    outFileModTimesSorted = sorted(outFileModTimes)
+                    nFiles = float(len(outFiles))
+                    runtime = (outFileModTimesSorted[-1] - outFileModTimesSorted[0]) * nFiles / (nFiles - 1)
+
                 tempDict = {"Initial Reference": initRef,
                             "Occupancy Based Dissimilarity Measure": metric,
+                            "Total runtime (s)": runtime,
                             "Method": resDirLabel}
 
                 metricsDF = metricsDF.append(tempDict, ignore_index=True)
-
 
                 # crdMaxDistsStatsDFFull = maxDistStats(outFiles)
                 # aggDictRename = {"mean": "mean of \nmaximum distances",
@@ -180,19 +192,23 @@ def saveData(outXLFile):
             else:
                 print("No usable SWCs found in {}".format(resDir))
 
+
     metricsDF.to_excel(outXLFile)
 
 def plotData(inFile):
-
+    [darkblue, green, red, violet, yellow, lightblue] = sns.color_palette()
 
     metricsDF = pd.read_excel(inFile)
     fig1, ax1 = plt.subplots(figsize=(14, 11.2))
     sns.barplot(data=metricsDF, x="Initial Reference",
                 y="Occupancy Based Dissimilarity Measure", hue="Method",
-                ax=ax1, hue_order=["PCA", "blastneuron","PCA + RobartsICP",
-                                   "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
+                ax=ax1, hue_order=["PCA", "PCA + RobartsICP", "BlastNeuron",
+                                   "Reg-MaxS", "Reg-MaxS-N", "Standardized"],
+                palette=[red, violet, yellow, lightblue, darkblue, green])
     ax1.legend(loc='best', ncol=3)
     ax1.set_ylabel("Occupancy Based Dissimilarity Measure")
+    temp = ax1.get_ylim()
+    ax1.set_ylim(temp[0], temp[1] + 2)
 
     # fig2, ax2 = plt.subplots(figsize=(14, 11.2))
     # sns.boxplot(data=maxDistStatsDF, x="Initial Reference", y="mean of \nmaximum distances",
@@ -223,7 +239,7 @@ if __name__ == "__main__":
     if sys.argv[1] == "save":
         saveData(sys.argv[2])
     elif sys.argv[1] == "plot":
-        fig1 = plotData(sys.argv[2])
+        fig = plotData(sys.argv[2])
     else:
         raise(ValueError("Improper Usage! Please use as:\n"
                          "python {fName} save <outFile> or python {fName} plot <inFile>".format(fName=sys.argv[0])))

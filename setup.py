@@ -7,7 +7,7 @@ setup(
         package_data={
                         '': ["ParFiles", "TestFiles"]
                     },
-        exclude_package_data={'': ["Readme.txt"]},
+        exclude_package_data={'': ["Readme.md"]},
         install_requires=["numpy>=1.11.2",
                           "matplotlib>=1.5.3",
                           "scipy>=0.18.1",

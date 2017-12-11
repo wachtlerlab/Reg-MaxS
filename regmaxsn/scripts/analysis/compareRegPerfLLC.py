@@ -39,7 +39,7 @@ case1 = {'resDirs': {
     "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangLLC"),
     "Standardized": os.path.join(homeFolder, "Registered", "chiangLLC",),
     },
-        'initRef': "Gad1-F-000062-Standardized",
+        'initRef': "Gad1-F-000062\n-Standardized",
         'expNameLambdas': {
             "PCA": lambda x: x,
             "BlastNeuron": lambda x: x,
@@ -139,8 +139,20 @@ def saveData(outXLFile):
 
                 metric = occupancyEMD(outFiles, voxelSize)
 
+                if resDirLabel == "Reg-MaxS-N":
+                    finalRef = os.path.join(resDir, "finalRef.swc")
+                    initialRef = os.path.join(resDir, "ref-1.swc")
+
+                    runtime = os.stat(finalRef).st_mtime - os.stat(initialRef).st_mtime
+                else:
+                    outFileModTimes = [os.stat(outFile).st_mtime for outFile in outFiles]
+                    outFileModTimesSorted = sorted(outFileModTimes)
+                    nFiles = float(len(outFiles))
+                    runtime = (outFileModTimesSorted[-1] - outFileModTimesSorted[0]) * nFiles / (nFiles - 1)
+
                 tempDict = {"Initial Reference": initRef,
                             "Occupancy Based Dissimilarity Measure": metric,
+                            "Total runtime (s)": runtime,
                             "Method": resDirLabel}
 
                 metricsDF = metricsDF.append(tempDict, ignore_index=True)
@@ -165,16 +177,20 @@ def saveData(outXLFile):
     metricsDF.to_excel(outXLFile)
 
 def plotData(inFile):
-
+    [darkblue, green, red, violet, yellow, lightblue] = sns.color_palette()
 
     metricsDF = pd.read_excel(inFile)
     fig1, ax1 = plt.subplots(figsize=(14, 11.2))
     sns.barplot(data=metricsDF, x="Initial Reference",
                 y="Occupancy Based Dissimilarity Measure", hue="Method",
-                ax=ax1, hue_order=["PCA", "BlastNeuron","PCA + RobartsICP",
-                                   "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
+                ax=ax1, hue_order=["PCA", "PCA + RobartsICP", "BlastNeuron",
+                                   "Reg-MaxS", "Reg-MaxS-N", "Standardized"],
+                palette=[red, violet, yellow, lightblue, darkblue, green])
+
     ax1.legend(loc='best', ncol=3)
     ax1.set_ylabel("Occupancy Based Dissimilarity Measure")
+    temp = ax1.get_ylim()
+    ax1.set_ylim(temp[0], temp[1] + 2)
 
     # fig2, ax2 = plt.subplots(figsize=(14, 11.2))
     # sns.boxplot(data=maxDistStatsDF, x="Initial Reference", y="mean of \nmaximum distances",
