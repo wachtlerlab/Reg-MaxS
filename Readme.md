@@ -20,7 +20,7 @@ With Conda (Linux or Windows):
 >(on Linux) source activate regmaxsn 
 >(on Windows) activate regmaxsn
 3. Install regmaxsn: 
->pip install <path to Reg-MaxS repository>
+>pip install \<path to Reg-MaxS repository\>
 4. Create Reg-MaxS Workspace. Note where your Reg-MaxS Workspace is created.
 >python <path to Reg-MaxS repository>/setupWorkspace.py
 
@@ -30,8 +30,8 @@ Without Conda, with pip and virtualenvwrapper (only for Linux):
 >mkvirtualenv regmaxsn
 2. Activate environment: 
 >workon regmaxsn
-3. Install GJEMS: 
->pip install <path to Reg-MaxS repository>
+3. Install regmaxsn:
+>pip install \<path to Reg-MaxS repository\>
 4. Create Reg-MaxS Workspace. Note where your Reg-MaxS Workspace is created.
 >python <path to Reg-MaxS repository>/setupWorkspace.py
 

@@ -1,9 +1,9 @@
 import os
-from pkg_resources import Requirement,  resource_filename
 import shutil
 import sys
 
 homeFolder = os.path.expanduser('~')
+thisFilePath = os.path.split(os.path.abspath(__file__))[0]
 
 try:
     import regmaxsn
@@ -16,8 +16,12 @@ if whereToCreate == "":
     whereToCreate = homeFolder
 assert os.path.exists(whereToCreate), "Specified path {} does not exist".format(whereToCreate)
 
-pkgParFilesDir = resource_filename(Requirement.parse("RegMaxSN"), "ParFiles")
-pkgTestFilesDir = resource_filename(Requirement.parse("RegMaxSN"), "TestFiles")
+pkgParFilesDir = os.path.join(thisFilePath, "ParFiles")
+pkgTestFilesDir = os.path.join(thisFilePath, "TestFiles")
+
+assert os.path.isdir(pkgParFilesDir) and os.path.isdir(pkgTestFilesDir), "Folders 'ParFiles' and 'TestFiles' that " \
+                                                                         "came along with this script were not found!" \
+                                                                         "Aborting!"
 
 workSpace = os.path.join(whereToCreate, 'RegMaxSN_WorkSpace')
 try:
