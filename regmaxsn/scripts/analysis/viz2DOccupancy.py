@@ -7,7 +7,7 @@ from regmaxsn.core.matplotlibRCParams import mplPars
 from collections import Counter
 import pandas as pd
 
-homeFolder = "/media/ajay/ADATA_HD720/Ginjang/"
+homeFolder = "/home/aj/"
 
 sns.set(rc=mplPars)
 
@@ -16,8 +16,8 @@ swcFiles = [
                          'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNG.swc'),
             os.path.join(homeFolder,
                          'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNGRandRotY0.swc'),
-            os.path.join(homeFolder,
-                         'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNGRandRotY1.swc'),
+            # os.path.join(homeFolder,
+            #              'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNGRandRotY1.swc'),
            ]
 # gridSize = 20.0
 # gridSize = 40.0

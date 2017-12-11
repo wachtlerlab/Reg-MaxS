@@ -17,7 +17,7 @@ def standardizedExpNameLambda(x):
     else:
         return x
 
-homeFolder = "/media/ajay/ADATA_HD720/Ginjang/DataAndResults/morphology/"
+homeFolder = "/home/aj/DataAndResults/morphology"
 
 expNames = [
     'Trh-F-000047_Standardized',

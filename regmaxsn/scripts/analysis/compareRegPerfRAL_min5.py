@@ -17,38 +17,33 @@ def standardizedExpNameLambda(x):
     else:
         return x
 
-homeFolder = "/home/aj/DataAndResults/morphology"
+homeFolder = "/home/aj/DataAndResults/morphology/"
 
 expNames = [
-            'VGlut-F-500085_Standardized',
-            'VGlut-F-500085.CNG',
-            'VGlut-F-700500.CNG',
-            'VGlut-F-700567.CNG',
-            'VGlut-F-500471.CNG',
-            'Cha-F-000353.CNG',
-            'VGlut-F-600253.CNG',
-            'VGlut-F-400434.CNG',
-            'VGlut-F-600379.CNG',
-            'VGlut-F-700558.CNG',
-            'VGlut-F-500183.CNG',
-            'VGlut-F-300628.CNG',
-            'VGlut-F-500031.CNG',
-            'VGlut-F-500852.CNG',
-            'VGlut-F-600366.CNG'
-            ]
+    "Trh-F-700063_Standardized",
+    "Trh-F-700063.CNG",
+    "Trh-F-500050.CNG",
+    "Trh-F-500106.CNG",
+    "Trh-M-500051.CNG",
+    "Trh-F-600071.CNG",
+    "Trh-F-500093.CNG",
+    "Trh-F-500148.CNG",
+    "Trh-F-500154.CNG",
+    "Trh-F-700018.CNG",
+]
 
 case1 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOMB"),
-    "BlastNeuron": os.path.join(homeFolder, "BlastNeuron", "chiangOMB"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOMB"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOMB"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOMB"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangOMB",),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangRAL"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangRAL"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangRAL"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangRAL"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangRAL_min5"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangRAL",),
     },
-        'initRef': "VGlut-F-500085-Standardized",
+        'initRef': "Trh-F-700063-Standardized",
         'expNameLambdas': {
             "PCA": lambda x: x,
-            "BlastNeuron": lambda x: x,
+            "blastneuron": lambda x: x,
             "PCA + RobartsICP": lambda x: x,
             "Reg-MaxS": lambda x: x,
             "Reg-MaxS-N": lambda x: x,
@@ -56,17 +51,17 @@ case1 = {'resDirs': {
 }
 
 case2 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOMB_VGlut-F-500085.CNG"),
-    "BlastNeuron": os.path.join(homeFolder, "BlastNeuron", "chiangOMB_VGlut-F-500085.CNG"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOMB_VGlut-F-500085.CNG"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOMB_VGlut-F-500085.CNG"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOMB_VGlut-F-500085.CNG"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangOMB",),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangRAL_Trh-F-700063.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangRAL_Trh-F-700063.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangRAL_Trh-F-700063.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangRAL_Trh-F-700063.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangRAL_Trh-F-700063.CNG_min5"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangRAL"),
     },
-         'initRef': "VGlut-F-500085",
-         'expNameLambdas': {
+        'initRef': "Trh-F-700063",
+        'expNameLambdas': {
             "PCA": lambda x: x,
-            "BlastNeuron": lambda x: x,
+            "blastneuron": lambda x: x,
             "PCA + RobartsICP": lambda x: x,
             "Reg-MaxS": lambda x: x,
             "Reg-MaxS-N": lambda x: x,
@@ -74,43 +69,43 @@ case2 = {'resDirs': {
 }
 
 case3 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOMB_VGlut-F-500031.CNG"),
-    "BlastNeuron": os.path.join(homeFolder, "BlastNeuron", "chiangOMB_VGlut-F-500031.CNG"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOMB_VGlut-F-500031.CNG"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOMB_VGlut-F-500031.CNG"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOMB_VGlut-F-500031.CNG"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangOMB",),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangRAL_Trh-F-700018.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangRAL_Trh-F-700018.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangRAL_Trh-F-700018.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangRAL_Trh-F-700018.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangRAL_Trh-F-700018.CNG_min5"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangRAL"),
     },
-         'initRef': "VGlut-F-500031",
-         'expNameLambdas': {
-             "PCA": lambda x:x,
-             "BlastNeuron": lambda x:x,
-             "PCA + RobartsICP": lambda x:x,
-             "Reg-MaxS": lambda x:x,
-             "Reg-MaxS-N": lambda x:x,
-             "Standardized": standardizedExpNameLambda}
-         }
+        'initRef': "Trh-F-700018",
+        'expNameLambdas': {
+            "PCA": lambda x: x,
+            "blastneuron": lambda x: x,
+            "PCA + RobartsICP": lambda x: x,
+            "Reg-MaxS": lambda x: x,
+            "Reg-MaxS-N": lambda x: x,
+            "Standardized": standardizedExpNameLambda}
+}
 
 case4 = {'resDirs': {
-    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangOMB_VGlut-F-600379.CNG"),
-    "BlastNeuron": os.path.join(homeFolder, "BlastNeuron", "chiangOMB_VGlut-F-600379.CNG"),
-    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangOMB_VGlut-F-600379.CNG"),
-    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangOMB_VGlut-F-600379.CNG"),
-    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangOMB_VGlut-F-600379.CNG"),
-    "Standardized": os.path.join(homeFolder, "Registered", "chiangOMB",),
+    "PCA": os.path.join(homeFolder, "PCA-Based", "chiangRAL_Trh-M-500051.CNG"),
+    "blastneuron": os.path.join(homeFolder, "BlastNeuron", "chiangRAL_Trh-M-500051.CNG"),
+    "PCA + RobartsICP": os.path.join(homeFolder, "RobartsICP", "chiangRAL_Trh-M-500051.CNG"),
+    "Reg-MaxS": os.path.join(homeFolder, "Reg-MaxS", "chiangRAL_Trh-M-500051.CNG"),
+    "Reg-MaxS-N": os.path.join(homeFolder, "Reg-MaxS-N", "chiangRAL_Trh-M-500051.CNG_min5"),
+    "Standardized": os.path.join(homeFolder, "Registered", "chiangRAL"),
     },
-         'initRef': "VGlut-F-600379",
-         'expNameLambdas': {
-             "PCA": lambda x:x,
-             "BlastNeuron": lambda x:x,
-             "PCA + RobartsICP": lambda x:x,
-             "Reg-MaxS": lambda x:x,
-             "Reg-MaxS-N": lambda x:x,
-             "Standardized": standardizedExpNameLambda}
-         }
-
+        'initRef': "Trh-M-500051",
+        'expNameLambdas': {
+            "PCA": lambda x: x,
+            "blastneuron": lambda x: x,
+            "PCA + RobartsICP": lambda x: x,
+            "Reg-MaxS": lambda x: x,
+            "Reg-MaxS-N": lambda x: x,
+            "Standardized": standardizedExpNameLambda}
+}
 
 cases = [case1, case2, case3, case4]
+
 
 voxelSize = 10
 
@@ -176,7 +171,7 @@ def plotData(inFile):
     fig1, ax1 = plt.subplots(figsize=(14, 11.2))
     sns.barplot(data=metricsDF, x="Initial Reference",
                 y="Occupancy Based Dissimilarity Measure", hue="Method",
-                ax=ax1, hue_order=["PCA", "BlastNeuron","PCA + RobartsICP",
+                ax=ax1, hue_order=["PCA", "blastneuron","PCA + RobartsICP",
                                    "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
     ax1.legend(loc='best', ncol=3)
     ax1.set_ylabel("Occupancy Based Dissimilarity Measure")
@@ -184,14 +179,14 @@ def plotData(inFile):
     # fig2, ax2 = plt.subplots(figsize=(14, 11.2))
     # sns.boxplot(data=maxDistStatsDF, x="Initial Reference", y="mean of \nmaximum distances",
     #             hue="Method", whis=np.inf,
-    #             ax=ax2, hue_order=["PCA", "BlastNeuron","PCA + RobartsICP",
+    #             ax=ax2, hue_order=["PCA", "blastneuron","PCA + RobartsICP",
     #                                "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
     # ax2.legend(loc="best", ncol=3)
     #
     # fig3, ax3 = plt.subplots(figsize=(14, 11.2))
     # sns.boxplot(data=maxDistStatsDF, x="Initial Reference", y="standard deviation of \nmaximum distances",
     #             hue="Method", whis=np.inf,
-    #             ax=ax3, hue_order=["PCA", "BlastNeuron","PCA + RobartsICP",
+    #             ax=ax3, hue_order=["PCA", "blastneuron","PCA + RobartsICP",
     #                                "Reg-MaxS", "Reg-MaxS-N", "Standardized"])
     # ax3.legend(loc="best", ncol=3)
 

@@ -7,9 +7,9 @@ plt.ion()
 import os
 from regmaxsn.core.matplotlibRCParams import mplPars
 
-homeFolder = "/media/ajay/ADATA_HD720/Ginjang/"
+homeFolder = "/home/aj/"
 
-sns.set(rc=mplPars)
+sns.set(rc=mplPars, style='whitegrid')
 
 def getLighterColor(col, saturation):
     '''
@@ -30,13 +30,17 @@ def getLighterColor(col, saturation):
 
 
 swcFiles = [
-            os.path.join(homeFolder,
-                         'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNG.swc'),
-            os.path.join(homeFolder,
-                         'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNGRandRotY0.swc'),
-            os.path.join(homeFolder,
-                         'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNGRandRotY1.swc'),
+            # os.path.join(homeFolder,
+            #              'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNG.swc'),
+            # os.path.join(homeFolder,
+            #              'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNGRandRotY0.swc'),
+            # os.path.join(homeFolder,
+            #              'DataAndResults/morphology/OriginalData/Tests/HSN-fluoro01.CNGRandRotY1.swc'),
+    os.path.join(homeFolder, 'DataAndResults/morphology/OriginalData/chiangAA1', "VGlut-F-300181.CNG.swc"),
+    os.path.join(homeFolder, 'DataAndResults/morphology/OriginalData/chiangAA1', "VGlut-F-400665.CNG.swc"),
            ]
+
+# gridSize = 80.0
 # gridSize = 20.0
 # gridSize = 40.0
 gridSize = 10.0
@@ -46,12 +50,11 @@ maxMarkerSize = 10
 minRad = 1
 maxRad = 5
 
-cols = plt.cm.rainbow(np.linspace(0, 1, len(swcFiles)))
+cols = plt.cm.rainbow(np.linspace(1, 0, len(swcFiles)))
 
 xDis = []
 yDis = []
-with sns.axes_style('whitegrid'):
-    fig, ax = plt.subplots(figsize=(14, 10))
+fig, ax = plt.subplots(figsize=(14, 11.2))
 
 for swcInd, swcFile in enumerate(swcFiles):
     data = np.loadtxt(swcFile)
@@ -78,20 +81,19 @@ for swcInd, swcFile in enumerate(swcFiles):
 
     xySet = set(map(tuple, xyDis))
 
-    with sns.axes_style('whitegrid'):
-        col = cols[swcInd]
-        lightCol = getLighterColor(col[:3], 0.5)
-        for xy in xySet:
 
-            ax.add_patch(
-                mpatches.Rectangle((xy[0] - 0.5 * gridSize, xy[1] - 0.5 * gridSize), width=gridSize, height=gridSize,
-                                   fc=lightCol))
+    col = cols[swcInd]
+    lightCol = getLighterColor(col[:3], 0.5)
+    for xy in xySet:
 
-        ax.plot(xs, ys, color=col, ls='-', ms=3)
+        ax.add_patch(
+            mpatches.Rectangle((xy[0] - 0.5 * gridSize, xy[1] - 0.5 * gridSize), width=gridSize, height=gridSize,
+                               fc=lightCol))
+
+    ax.plot(xs, ys, color=col, ls='-', ms=3)
 
     for x, y, r in zip(xs[0, :], ys[0, :], rads):
-        with sns.axes_style('whitegrid'):
-            ax.plot(x, y, color=col, marker='o', ms=rad2MarkerSize(r))
+        ax.plot(x, y, color=col, marker='o', ms=rad2MarkerSize(r))
 
 ax.axis('square')
 
