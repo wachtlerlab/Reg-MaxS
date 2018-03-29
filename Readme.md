@@ -22,7 +22,7 @@ With Conda (Linux or Windows):
 3. Install regmaxsn: 
 >pip install \<path to Reg-MaxS repository\>
 4. Create Reg-MaxS Workspace. Note where your Reg-MaxS Workspace is created.
->python <path to Reg-MaxS repository>/setupWorkspace.py
+>python \<path to Reg-MaxS repository\>/setupWorkspace.py
 
 Without Conda, with pip and virtualenvwrapper (only for Linux):
 
@@ -33,7 +33,7 @@ Without Conda, with pip and virtualenvwrapper (only for Linux):
 3. Install regmaxsn:
 >pip install \<path to Reg-MaxS repository\>
 4. Create Reg-MaxS Workspace. Note where your Reg-MaxS Workspace is created.
->python <path to Reg-MaxS repository>/setupWorkspace.py
+>python \<path to Reg-MaxS repository\>/setupWorkspace.py
 
 NOTE: This environment must be activated every time you want to run Reg-MaxS, Reg-MaxS-N or any other scripts of this package.
 
@@ -42,25 +42,25 @@ NOTE: This environment must be activated every time you want to run Reg-MaxS, Re
 ## Reg-MaxS
 
 1. First you need to create a parameter file for Reg-MaxS. This is created using the file
-> <path to your Reg-MaxS Workspace>/utilityScripts/constructRegMaxSParFile.py
+> \<path to your Reg-MaxS Workspace\>/utilityScripts/constructRegMaxSParFile.py
 
 You need to open this .py file in a editor and change variables as needed. The detailed usage instructions of this script are provided at the top of it. Two different use cases have been illustrated using three examples. Take a look at them and modify the script according to your needs.
 
 2. After editing the "constructRegMaxSParFile.py" as needed, create a parameter file as below:
-> python <path to your Reg-MaxS Workspace>/utilityScripts/constructRegMaxSParFile.py
+> python \<path to your Reg-MaxS Workspace\>/utilityScripts/constructRegMaxSParFile.py
 
 3. Run Reg-MaxS with this parameter file:
-> python -m regmaxsn.scripts.algorithms.RegMaxS <path to the above created Reg-MaxS parameter file>
+> python -m regmaxsn.scripts.algorithms.RegMaxS \<path to the above created Reg-MaxS parameter file\>
 
 ## Reg-MaxS-N
 
 1. First you need to create a parameter file for Reg-MaxS-N. This is created using the file
-> <path to your Reg-MaxS Workspace>/utilityScripts/constructRegMaxSNParFile.py
+> \<path to your Reg-MaxS Workspace\>/utilityScripts/constructRegMaxSNParFile.py
 
 You need to open this .py file in a editor and change variables as needed. The detailed usage instructions of this script are provided at the top of it. Two different use cases have been illustrated using three examples. Take a look at them and modify the script according to your needs.
 
 2. After editing the "constructRegMaxSNParFile.py" as needed, create a parameter file as below:
-> python <path to your Reg-MaxS Workspace>/utilityScripts/constructRegMaxSNParFile.py
+> python \<path to your Reg-MaxS Workspace\>/utilityScripts/constructRegMaxSNParFile.py
 
 3. Run Reg-MaxS-N with this parameter file:
-> python -m regmaxsn.scripts.algorithms.RegMaxSN <path to the above created Reg-MaxS-N parameter file>
+> python -m regmaxsn.scripts.algorithms.RegMaxSN \<path to the above created Reg-MaxS-N parameter file\>
