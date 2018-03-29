@@ -3,17 +3,17 @@ Welcome to regmaxsn repository!
 Description
 ---
 
-Reg-MaxS : Registration of neuron morphologies based on maximization of spatial overlap
+**Reg-MaxS and Reg-MaxS-N: Algorithms for co-registration of pairs and groups of neuron morphologies based on maximization of spatial overlap**
 
-This algorithms had been discussed in detail in the following publication:
+These algorithms have been discussed in detail in the following publication:
 
 Kumaraswamy A., Kai K., Ai H., Ikeno H., Wachtler T. (2018). "Spatial registration of neuron morphologies based on maximization of volume overlap". In *BMC Bioinformatics*, DOI: [10.1186/s12859-018-2136-z](https://doi.org/10.1186/s12859-018-2136-z)
 
-This repository contains scripts for running Reg-MaxS and Reg-MaxS-N algorithms for registering pairs and groups of neuron morphologies based on maximizing spatial overlap.
+This repository contains scripts for running Reg-MaxS and Reg-MaxS-N algorithms for registering pairs and groups of neuron morphologies respectively.
 
 The algorithms are written in  Python and at the moment work only with SWC files.
 
-# Install
+# Installation
 
 
 With Conda (Linux or Windows):
