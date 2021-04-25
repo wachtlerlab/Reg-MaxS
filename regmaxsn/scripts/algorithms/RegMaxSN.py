@@ -52,7 +52,7 @@ def runRegMaxSN(parFile, parNames):
 
     assert os.path.isfile(parFile), "{} not found".format(parFile)
 
-    ch = raw_input('Using parameter File {}.\n Continue?(y/n)'.format(parFile))
+    ch = input('Using parameter File {}.\n Continue?(y/n)'.format(parFile))
 
     if ch != 'y':
         print('User Abort!')
@@ -68,7 +68,7 @@ def runRegMaxSN(parFile, parNames):
 
         if os.path.isdir(resDir):
 
-            ch = raw_input('Folder exists: ' + resDir + '\nDelete(y/n)?')
+            ch = input('Folder exists: ' + resDir + '\nDelete(y/n)?')
             if ch == 'y':
                 shutil.rmtree(resDir)
             else:
@@ -76,7 +76,7 @@ def runRegMaxSN(parFile, parNames):
         try:
             os.mkdir(resDir)
         except Exception as e:
-            raise(IOError('Could not create {}'.format(resDir)))
+            raise IOError
 
         assert os.path.isfile(refSWC), 'Could  not find {}'.format(refSWC)
 
@@ -90,11 +90,11 @@ def runRegMaxSN(parFile, parNames):
 
     for parInd, pars in enumerate(parsList):
 
-        print('Starting Job # {}'.format(parInd + 1))
+        print(('Starting Job # {}'.format(parInd + 1)))
 
         print('Current Parameters:')
-        for parN, parV in pars.iteritems():
-            print('{}: {}'.format(parN, parV))
+        for parN, parV in pars.items():
+            print(('{}: {}'.format(parN, parV)))
 
         resDir = pars['resDir']
         refSWC = pars['initRefSWC']
@@ -138,7 +138,7 @@ def runRegMaxSN(parFile, parNames):
             for swcInd, swc in enumerate(swcList):
                 dirPath, expName = os.path.split(swc[:-4])
 
-                print('Doing Iter ' + str(iterInd) + ' : ' + expName)
+                print(('Doing Iter ' + str(iterInd) + ' : ' + expName))
 
                 SWC2Align = prevAlignedSWCs[swcInd]
 
@@ -186,10 +186,10 @@ def runRegMaxSN(parFile, parNames):
                         shutil.rmtree(outPartsDir)
                         shutil.copytree(inPartsDir, outPartsDir)
                     os.remove(resSol)
-                    print('finalVal (' + str(finalVals) + ') >= initVal (' + str(initVals) + '). Doing Nothing!')
+                    print(('finalVal (' + str(finalVals) + ') >= initVal (' + str(initVals) + '). Doing Nothing!'))
                     done = True
                 else:
-                    print('finalVal (' + str(finalVals) + ') < initVal (' + str(initVals) + '). Keeping the iteration!')
+                    print(('finalVal (' + str(finalVals) + ') < initVal (' + str(initVals) + '). Keeping the iteration!'))
                     with open(resSol, 'r') as fle:
                         pars = json.load(fle)
                         totalTrans = np.array(pars['finalTransMat'])
@@ -198,9 +198,9 @@ def runRegMaxSN(parFile, parNames):
                         scale, shear, angles, trans, persp = decompose_matrix(totalTrans)
                         nrnScaleBounds[swc] = getRemainderScale(scale, nrnScaleBounds[swc])
                 dones.append(done)
-                print('Finished ' + expName + ' : ' + str(done))
+                print(('Finished ' + expName + ' : ' + str(done)))
 
-                print('Remainder scale: ' + str(nrnScaleBounds[swc]))
+                print(('Remainder scale: ' + str(nrnScaleBounds[swc])))
                 presAlignedSWCs.append(resSWC)
 
 
@@ -234,9 +234,9 @@ def runRegMaxSN(parFile, parNames):
 
         with open(finalSolFile, 'w') as fle:
             json.dump({'finalVal': bestMeasure,
-                       'bestIteration': bestIterInd}, fle)
+                       'bestIteration': int(bestIterInd)}, fle)
 
-        print ('Finished Job # {}'.format(parInd + 1))
+        print(('Finished Job # {}'.format(parInd + 1)))
 
 
 if __name__ == '__main__':

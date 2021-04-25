@@ -1,4 +1,4 @@
-from SWCTransforms import SWCScale, SWCTranslate, ArgGenIterator, objFun
+from regmaxsn.core.SWCTransforms import SWCScale, SWCTranslate, ArgGenIterator, objFun
 import multiprocessing as mp
 import numpy as np
 import json
@@ -30,7 +30,7 @@ bestSol = [1.0, 1.0, 1.0]
 
 stepSizes = [max(minStepSize, min(2.0, (maxDist / (maxDist - g)))) for g in gridSizes]
 if debugging:
-    print(maxDist, [(maxDist / (maxDist - g)) for g in gridSizes])
+    print((maxDist, [(maxDist / (maxDist - g)) for g in gridSizes]))
 
 overestimationError = lambda d, g: (d + g) / d
 underestimationError = lambda d, g: ((d + 1.5 * g) * d) / ((d - 0.5 * g) * (d + g))
@@ -47,10 +47,11 @@ for gridInd, gridSize in enumerate(gridSizes):
                         for x, y in enumerate(boundsExponentsRoundedDown)]
     if debugging:
         print(stepSize)
-        print('Gridsize:' + str(gridSize))
+        print(('Gridsize:' + str(gridSize)))
         print(bounds)
-        print(map(len, possiblePts1D))
+        print([len(x) for x in possiblePts1D])
         print([bestSol[x] * (stepSize ** y) for x, y in enumerate(boundsExponentsRoundedDown)])
+
     possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[gridInd])
     funcVals = pool.map_async(objFun, argGen).get(1800)
@@ -85,8 +86,9 @@ if stepSizes[-1] > minStepSize:
     if debugging:
         print(stepSize)
         print(bounds)
-        print(map(len, possiblePts1D))
+        print([len(x) for x in possiblePts1D])
         print([bestSol[x] * (stepSize ** y) for x, y in enumerate(boundsExponentsRoundedDown)])
+
     possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[-1])
     funcVals = pool.map_async(objFun, argGen).get(1800)
@@ -95,14 +97,14 @@ if stepSizes[-1] > minStepSize:
     prevVals = [objFun((x, SWCDatas[-2])) for x in minimzers]
     bestSol = minimzers[np.argmin(prevVals)]
     if debugging:
-        print(bestSol, min(funcVals))
+        print((bestSol, min(funcVals)))
 
 bestVal = objFun((bestSol, SWCDatas[-1]))
 nochange = objFun(([1, 1, 1], SWCDatas[-1]))
 
 if debugging:
     bestVals = [objFun((bestSol, x)) for x in SWCDatas]
-    print(bestSol, nochange, bestVal)
+    print((bestSol, nochange, bestVal))
 
 done = False
 

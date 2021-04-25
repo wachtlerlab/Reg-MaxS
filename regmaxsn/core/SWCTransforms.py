@@ -1,7 +1,7 @@
 import os
 import numpy as np
-from transforms import compose_matrix
-from swcFuncs import readSWC_numpy, writeSWC_numpy
+from regmaxsn.core.transforms import compose_matrix
+from regmaxsn.core.swcFuncs import readSWC_numpy, writeSWC_numpy
 
 
 def three32BitInt2complexList(arr):
@@ -39,7 +39,7 @@ class BaseSWCTranform(object):
         elif type(refSWC) == np.ndarray:
             self.refSWCPts = refSWC[:, 2:5]
         else:
-            raise(ValueError('Unknown data in SWC2Align'))
+            raise ValueError('Unknown data in SWC2Align')
 
         self.refCenter = self.refSWCPts.mean(axis=0)
         refVox = np.array(np.round(self.refSWCPts / gridSize), np.int32)
@@ -53,7 +53,7 @@ class BaseSWCTranform(object):
             self.SWC2AlignFull = SWC2Align
             self.headr = ''
         else:
-            raise(ValueError('Unknown data in SWC2Align'))
+            raise ValueError('Unknown data in SWC2Align')
         self.SWC2AlignPts = self.SWC2AlignFull[:, 2:5]
         self.center = self.SWC2AlignPts.mean(axis=0)
 
@@ -111,7 +111,7 @@ class SWCScale(object):
         elif type(refSWC) == np.ndarray:
             self.refSWCPts = refSWC[:, 2:5]
         else:
-            raise(ValueError('Unknown data in SWC2Align'))
+            raise ValueError('Unknown data in SWC2Align')
 
         refCenter = self.refSWCPts.mean(axis=0)
         refSWCPtsCentered = self.refSWCPts - refCenter
@@ -125,7 +125,7 @@ class SWCScale(object):
             self.SWC2AlignFull = SWC2Align
             self.headr = ''
         else:
-            raise(ValueError('Unknown data in SWC2Align'))
+            raise ValueError('Unknown data in SWC2Align')
 
         self.SWC2AlignPts = self.SWC2AlignFull[:, 2:5].copy()
         self.center = self.SWC2AlignPts.mean(axis=0)
@@ -165,7 +165,7 @@ class ArgGenIterator:
         self.pointsDone = 0
         return self
 
-    def next(self):
+    def __next__(self):
 
         if self.pointsDone < len(self.arg1):
             toReturn = (self.arg1[self.pointsDone], self.arg2)

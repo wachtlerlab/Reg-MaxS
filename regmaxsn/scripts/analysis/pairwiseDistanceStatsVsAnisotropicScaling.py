@@ -26,7 +26,7 @@ def pairwiseDistanceStats(parFile, anisotropicScalingThresh):
         testName = resFile[:-4]
         thresh = par['gridSizes'][-1]
 
-        print('Doing ' + repr((refSWC, resFile)))
+        print(('Doing ' + repr((refSWC, resFile))))
 
         refPts = np.loadtxt(refSWC)[:, 2:5]
         testPtsFull = np.loadtxt(resFile)
@@ -35,7 +35,7 @@ def pairwiseDistanceStats(parFile, anisotropicScalingThresh):
 
         if refPts.shape[0] != testPts.shape[0]:
 
-            print('Number of points do not match for ' + refSWC + 'and' + resFile)
+            print(('Number of points do not match for ' + refSWC + 'and' + resFile))
             continue
 
         allSizes.append(refPts.shape[0])
@@ -49,7 +49,7 @@ def pairwiseDistanceStats(parFile, anisotropicScalingThresh):
                 pars = json.load(fle)
                 scales = np.array(pars['scale'])
         else:
-            raise (IOError('File not found: {}'.format(origJSON)))
+            raise IOError
 
         scalesOrdered = np.sort(scales)
         scalesRelative = np.mean([scalesOrdered[0] / scalesOrdered[1],
@@ -93,7 +93,7 @@ def pairwiseDistanceStats(parFile, anisotropicScalingThresh):
 
         for nodeInd, (node, nodeDistsDF) in enumerate(transErrsGBNodeID):
 
-            print("Doing node {}, {} of {}".format(node, nodeInd, len(transErrsGBNodeID.indices)))
+            print(("Doing node {}, {} of {}".format(node, nodeInd, len(transErrsGBNodeID.indices))))
             nodeDistsAll = nodeDistsDF['Pairwise Distance in $\mu$m'].astype(float)
             t, p = sign_test(nodeDistsAll, allThreshs[0])
             oneSidedP = 0.5 * p
@@ -128,26 +128,26 @@ def pairwiseDistanceStats(parFile, anisotropicScalingThresh):
         nodesCloserThanCountAniso = nodeWiseStatsDF["[AnisoFiltered] Pairwise distance significantly smaller than smallest voxel size"].sum()
         nodesNotFartherThanCountAniso = nodeWiseStatsDF["[AnisoFiltered] Pairwise distance not significantly larger than smallest voxel size"].sum()
 
-        print("[All] Nodes with pairwise distance "
+        print(("[All] Nodes with pairwise distance "
               "significantly smaller "
               "than lowest voxel size: {} out of {}, {}%".format(nodesCloserThanCount,
                                                             nodeWiseStatsDF.shape[0],
-                                                                 100 * nodesCloserThanCount / nodeWiseStatsDF.shape[0]))
-        print("[All] Nodes with pairwise distance "
+                                                                 100 * nodesCloserThanCount / nodeWiseStatsDF.shape[0])))
+        print(("[All] Nodes with pairwise distance "
               "not significantly larger "
               "than lowest voxel size: {} out of {}, {}%".format(nodesNotFartherThanCount,
                                                             nodeWiseStatsDF.shape[0],
-                                                            100 * nodesNotFartherThanCount / nodeWiseStatsDF.shape[0]))
-        print("[Aniso] Nodes with pairwise distance "
+                                                            100 * nodesNotFartherThanCount / nodeWiseStatsDF.shape[0])))
+        print(("[Aniso] Nodes with pairwise distance "
               "significantly smaller "
               "than lowest voxel size: {} out of {}, {}%".format(nodesCloserThanCountAniso,
                                                             nodeWiseStatsDF.shape[0],
-                                                                 100 * nodesCloserThanCountAniso / nodeWiseStatsDF.shape[0]))
-        print("[Aniso] Nodes with pairwise distance "
+                                                                 100 * nodesCloserThanCountAniso / nodeWiseStatsDF.shape[0])))
+        print(("[Aniso] Nodes with pairwise distance "
               "not significantly larger "
               "than lowest voxel size: {} out of {}, {}%".format(nodesNotFartherThanCountAniso,
                                                             nodeWiseStatsDF.shape[0],
-                                                            100 * nodesNotFartherThanCountAniso / nodeWiseStatsDF.shape[0]))
+                                                            100 * nodesNotFartherThanCountAniso / nodeWiseStatsDF.shape[0])))
 
         signStatsAniso = signStats.loc[signStats["Anisotropic Scaling Level"] > anisotropicScalingThresh, :]
         signCloserThanAniso = signStatsAniso["Pairwise distance significantly smaller than smallest voxel size"]
@@ -156,18 +156,18 @@ def pairwiseDistanceStats(parFile, anisotropicScalingThresh):
         notSignFartherAniso = signStatsAniso["Pairwise distance not significantly larger than smallest voxel size"]
         notSignFartherCountAniso = notSignFartherAniso.sum()
 
-        print("[Aniso Filtered] Jobs with "
+        print(("[Aniso Filtered] Jobs with "
               "pairwise distance "
               "significantly smaller "
               "than lowest voxel size: {} out of {}, {}%".format(signCloserThanCountAniso,
                                                             signStatsAniso.shape[0],
-                                                            100 * signCloserThanCountAniso / signStatsAniso.shape[0]))
-        print("[Aniso Filtered] Jobs with "
+                                                            100 * signCloserThanCountAniso / signStatsAniso.shape[0])))
+        print(("[Aniso Filtered] Jobs with "
               "pairwise distance "
               "not significantly larger "
               "than lowest voxel size: {} out of {}, {}%".format(notSignFartherCountAniso,
                                                             signStatsAniso.shape[0],
-                                                                 100 * notSignFartherCountAniso / signStatsAniso.shape[0]))
+                                                                 100 * notSignFartherCountAniso / signStatsAniso.shape[0])))
 
 
     signCloserThan = signStats["Pairwise distance significantly smaller than smallest voxel size"]
@@ -176,16 +176,16 @@ def pairwiseDistanceStats(parFile, anisotropicScalingThresh):
     notSignFarther = signStats["Pairwise distance not significantly larger than smallest voxel size"]
     notSignFartherCount = notSignFarther.sum()
 
-    print("[All] Jobs with "
+    print(("[All] Jobs with "
           "pairwise distance "
           "significantly smaller "
           "than lowest voxel size: {} out of {}, {}%".format(signCloserThanCount, len(parsList),
-                                                             100 * signCloserThanCount / len(parsList)))
-    print("[All] Jobs with "
+                                                             100 * signCloserThanCount / len(parsList))))
+    print(("[All] Jobs with "
           "pairwise distance "
           "not significantly larger "
           "than lowest voxel size: {} out of {}, {}%".format(notSignFartherCount, len(parsList),
-                                                             100 * notSignFartherCount / len(parsList)))
+                                                             100 * notSignFartherCount / len(parsList))))
 
 
 # ----------------------------------------------------------------------------------------------------------------------

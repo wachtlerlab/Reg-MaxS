@@ -5,6 +5,9 @@ from .SWCTransforms import SWCTranslate, objFun
 import shutil
 import json
 import subprocess
+from functools import reduce
+import pathlib as pl
+
 
 def transPreference(x, y):
     """
@@ -71,8 +74,6 @@ class IterativeRegistration(object):
         self.nCPU = nCPU
         self.allFuncs = {'trans': self.transOnce, 'rot': self.rotOnce, 'scale': self.scaleOnce}
 
-
-
     def rotOnce(self, SWC2Align, outFiles, ipParFile):
         """
         Runs exhaustive search to find the best rotation euler angles about XYZ axes that maximize the volume overlap
@@ -102,7 +103,7 @@ class IterativeRegistration(object):
             bestSol = out['bestSol']
             done = out['done']
             bestVal = out['bestVal']
-            print(bestSol, bestVal, done)
+            print((bestSol, bestVal, done))
 
         return bestSol, bestVal, done
 
@@ -135,7 +136,7 @@ class IterativeRegistration(object):
             bestSol = out['bestSol']
             done = out['done']
             bestVal = out['bestVal']
-            print(bestSol, bestVal, done)
+            print((bestSol, bestVal, done))
 
         return bestSol, bestVal, done
 
@@ -168,7 +169,7 @@ class IterativeRegistration(object):
             bestSol = out['bestSol']
             done = out['done']
             bestVal = out['bestVal']
-            print(bestSol, bestVal, done)
+            print((bestSol, bestVal, done))
 
         return bestSol, bestVal, done
 
@@ -204,8 +205,7 @@ class IterativeRegistration(object):
             elif g == 'trans':
                 bestSol, bestVal, done = self.transOnce(SWC2Align, tempOutFiles[g], ipParFile)
             else:
-                raise('Invalid transformation type ' + g)
-
+                raise ValueError(f'Invalid transformation type {g}')
 
             tempDones[g] = done
 
@@ -216,12 +216,7 @@ class IterativeRegistration(object):
                 presBestSol = bestSol
                 presBestDone = done
 
-
         return tempDones, presBestSol, presBestVal, presBestDone, presBestTrans
-
-
-
-
 
     def performReg(self, SWC2Align, resFile, scaleBounds,
                    inPartsDir=None, outPartsDir=None,
@@ -246,6 +241,7 @@ class IterativeRegistration(object):
         """
 
         resDir, expName = os.path.split(resFile[:-4])
+        pl.Path(resDir).mkdir(exist_ok=True)
 
         ipParFile = os.path.join(resDir, 'tmp.json')
         vals = ['trans', 'rot', 'scale']
@@ -280,8 +276,7 @@ class IterativeRegistration(object):
             totalTranslation = SWC2AlignMean
 
         else:
-            raise(ValueError('Unknown value for argument \'initGuessType\''))
-
+            raise ValueError('Unknown value for argument \'initGuessType\'')
 
         SWC2AlignT = SWC2AlignLocal
 
@@ -292,7 +287,6 @@ class IterativeRegistration(object):
 
             done = False
             srts = ['rot', 'trans']
-
 
             while not done:
 
@@ -313,7 +307,7 @@ class IterativeRegistration(object):
                     else:
                         totalTransform = np.dot(presTrans, totalTransform)
 
-                print(str(iterationNo) + g)
+                print((str(iterationNo) + g))
 
                 bestVals[bestVal] = {"outFile": outFile, "outFileSol": outFileSol,
                                      "totalTransform": totalTransform,
@@ -342,7 +336,7 @@ class IterativeRegistration(object):
                 presTrans = np.array(pars['transMat'])
                 totalTransform = np.dot(presTrans, totalTransform)
 
-            print(str(iterationNo) + 's')
+            print((str(iterationNo) + 's'))
 
             bestVals[bestVal] = {"outFile": outFile, "outFileSol": outFileSol,
                                  "totalTransform": totalTransform,
@@ -387,7 +381,7 @@ class IterativeRegistration(object):
                     else:
                         totalTransform = np.dot(presTrans, totalTransform)
 
-                print(str(iterationNo) + g)
+                print((str(iterationNo) + g))
 
                 bestVals[bestVal] = {"outFile": outFile, "outFileSol": outFileSol,
                                      "totalTransform": totalTransform,
@@ -404,7 +398,7 @@ class IterativeRegistration(object):
         totalTranslation = bestVals[championBestVal]["totalTranslation"]
         bestIterIndicator = bestVals[championBestVal]["iterationIndicator"]
 
-        print("bestIter: {}, bestVal: {}".format(bestIterIndicator, championBestVal))
+        print(("bestIter: {}, bestVal: {}".format(bestIterIndicator, championBestVal)))
 
         totalTransform[:3, 3] += totalTranslation
 
@@ -447,7 +441,7 @@ class IterativeRegistration(object):
                                            )
 
             else:
-                print('Specified partsDir {} not found'.format(inPartsDir))
+                print(('Specified partsDir {} not found'.format(inPartsDir)))
 
 
         return finalFile, finalSolFile
@@ -525,7 +519,7 @@ def writeFakeSWC(data, fName, extraCol=None):
         toWrite = np.empty((data.shape[0], 7))
 
     toWrite[:, 2:5] = data
-    toWrite[:, 0] = range(1, data.shape[0] + 1)
+    toWrite[:, 0] = list(range(1, data.shape[0] + 1))
     toWrite[:, 1] = 3
     toWrite[:, 5] = 1
     toWrite[:, 6] = -np.arange(1, data.shape[0] + 1)

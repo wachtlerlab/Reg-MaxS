@@ -28,7 +28,7 @@ def pairwiseDistanceStats(parFile):
         testName = resFile[:-4]
         thresh = par['gridSizes'][-1]
 
-        print('Doing ' + repr((refSWC, resFile)))
+        print(('Doing ' + repr((refSWC, resFile))))
 
         refPts = np.loadtxt(refSWC)[:, 2:5]
         testPtsFull = np.loadtxt(resFile)
@@ -37,7 +37,7 @@ def pairwiseDistanceStats(parFile):
 
         if refPts.shape[0] != testPts.shape[0]:
 
-            print('Number of points do not match for ' + refSWC + 'and' + resFile)
+            print(('Number of points do not match for ' + refSWC + 'and' + resFile))
             continue
 
         allSizes.append(refPts.shape[0])
@@ -50,7 +50,7 @@ def pairwiseDistanceStats(parFile):
                                      ignore_index=True)
 
         t, p = sign_test(ptDiff, thresh)
-        print(t, p)
+        print((t, p))
         oneSidedP = 0.5 * p
         signCloserThanSmallestVoxelSize = t < 0 and oneSidedP < 0.01
 
@@ -69,15 +69,15 @@ def pairwiseDistanceStats(parFile):
         signCloserThanSmalledVoxelSizeDF = signCloserThanSmalledVoxelSizeDF.append(tempDict,
                                                                                    ignore_index=True)
 
-    print("Jobs with "
+    print(("Jobs with "
           "pairwise distance "
           "significantly smaller "
-          "than lowest voxel size: {} out of {}".format(passCount, len(parsList)))
+          "than lowest voxel size: {} out of {}".format(passCount, len(parsList))))
 
-    print("Jobs with "
+    print(("Jobs with "
           "pairwise distance "
           "not significantly greater "
-          "than lowest voxel size: {} out of {}".format(passCountNGT, len(parsList)))
+          "than lowest voxel size: {} out of {}".format(passCountNGT, len(parsList))))
 
     allEqualSizeThresh = (allSizes.count(allSizes[0]) == len(allSizes)) and \
                          (allThreshs.count(allThreshs[0]) == len(allThreshs))
@@ -91,7 +91,7 @@ def pairwiseDistanceStats(parFile):
 
         for nodeInd, (node, nodeDistsDF) in enumerate(transErrsGBNodeID):
 
-            print("Doing node {}, {} of {}".format(node, nodeInd, len(transErrsGBNodeID.indices)))
+            print(("Doing node {}, {} of {}".format(node, nodeInd, len(transErrsGBNodeID.indices))))
             t, p = sign_test(nodeDistsDF['Pairwise Distance in $\mu$m'].astype(float), allThreshs[0])
             oneSidedP = 0.5 * p
             signCloserThanSmallestVoxelSize = t < 0 and oneSidedP < 0.01
@@ -99,20 +99,20 @@ def pairwiseDistanceStats(parFile):
             nodeWiseSignCloserThanSmallestVoxelSize.append(signCloserThanSmallestVoxelSize)
 
 
-        print("Jobs with "
+        print(("Jobs with "
               "pairwise distance "
               "significantly smaller "
-              "than lowest voxel size: {} out of {}".format(passCount, len(parsList)))
+              "than lowest voxel size: {} out of {}".format(passCount, len(parsList))))
 
-        print("Jobs with "
+        print(("Jobs with "
               "pairwise distance "
               "not significantly larger "
-              "than lowest voxel size: {} out of {}".format(sum(nodeWiseNotSignLargerThanSmallestVoxelSize), len(parsList)))
+              "than lowest voxel size: {} out of {}".format(sum(nodeWiseNotSignLargerThanSmallestVoxelSize), len(parsList))))
 
-        print("Nodes with pairwise distance "
+        print(("Nodes with pairwise distance "
           "significantly smaller "
           "than lowest voxel size: {} out of {}".format(sum(nodeWiseSignCloserThanSmallestVoxelSize),
-                                                        len(nodeWiseSignCloserThanSmallestVoxelSize)))
+                                                        len(nodeWiseSignCloserThanSmallestVoxelSize))))
 
 
 # ----------------------------------------------------------------------------------------------------------------------

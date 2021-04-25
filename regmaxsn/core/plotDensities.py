@@ -4,6 +4,7 @@ import os
 from scipy.ndimage import gaussian_filter
 import tifffile
 
+
 class DensityVizualizations(object):
 
     def __init__(self, swcSet, gridUnitSizes, resampleLen,
@@ -25,13 +26,13 @@ class DensityVizualizations(object):
         datas = {}
 
         for swcInd, swcFile in enumerate(swcSet):
-            print('Resamping ' + swcFile)
+            print(('Resamping ' + swcFile))
             totalLen, data = resampleSWC(swcFile, resampleLen, mask=masks[swcInd])
             dataT = np.dot(initTrans, data[:, :3].T).T
             datas[swcFile] = dataT
         self.transMat[:3, :3] = initTrans
 
-        allData = np.concatenate(tuple(datas.itervalues()), axis=0)
+        allData = np.concatenate(tuple(datas.values()), axis=0)
         self.allDataMean = allData.mean(axis=0)
 
         if pcaView == 'closestPCMatch':
@@ -42,7 +43,7 @@ class DensityVizualizations(object):
                 refEvecs, thrash = getPCADetails(refSWC, center=True)
                 fEvecs = np.empty_like(refEvecs)
                 coreff = np.dot(refEvecs.T, evecs)
-                possInds = range(refEvecs.shape[1])
+                possInds = list(range(refEvecs.shape[1]))
                 for rowInd in range(refEvecs.shape[1]):
                     bestCorrInd = np.argmax(np.abs(coreff[rowInd, possInds]))
                     fEvecs[:, rowInd] = np.sign(coreff[rowInd, possInds[bestCorrInd]]) * evecs[:, possInds[bestCorrInd]]
@@ -61,7 +62,7 @@ class DensityVizualizations(object):
                 mean2Use = np.loadtxt(refSWC)[:, 2:5].mean(axis=0)
 
             else:
-                raise(ValueError('RefSWC must be specified when pcaView == \'assumeRegistered\''))
+                raise ValueError('RefSWC must be specified when pcaView == \'assumeRegistered\'')
 
         else:
             fEvecs = np.eye(3)
@@ -69,8 +70,8 @@ class DensityVizualizations(object):
 
 
         self.digDatas = {}
-        for swcFile, data in datas.iteritems():
-            print('Digitizing ' + swcFile)
+        for swcFile, data in datas.items():
+            print(('Digitizing ' + swcFile))
             data -= mean2Use
             data = np.dot(fEvecs.T, data.T).T
             digData = digitizeSWCXYZ(data + mean2Use, gridUnitSizes)
@@ -106,13 +107,13 @@ class DensityVizualizations(object):
 
         for swcFile in swcFiles:
 
-            print('Calculating Density for ' + swcFile)
+            print(('Calculating Density for ' + swcFile))
             densityMat = np.zeros_like(densityMatSum)
-            print('Doing ' + os.path.split(swcFile)[1])
+            print(('Doing ' + os.path.split(swcFile)[1]))
             if swcFile in self.digDatas:
                 digDataTranslated = self.digDatas[swcFile][:, :3] - self.minXYZ
             else:
-                raise(ValueError(swcFile + ' not initialized in constructing DensityVizualizations object'))
+                raise ValueError(swcFile + ' not initialized in constructing DensityVizualizations object')
             densityMat[digDataTranslated[:, 0], digDataTranslated[:, 1], digDataTranslated[:, 2]] = 1
             densityMatSum += densityMat
             del densityMat

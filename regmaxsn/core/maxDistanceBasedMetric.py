@@ -43,8 +43,9 @@ def calcMaxDistances(swcList):
 
     unionWithDuplicates = np.concatenate(swcPointSets, axis=0)
     if any(np.abs(unionWithDuplicates).max(axis=0) == 0):
-        raise(ValueError("The list of SWCs all lie on a plane or on  a line and hence do not "
-                         "for a 3D point cloud. Such SWCs are not supported."))
+        raise ValueError(
+            "The list of SWCs all lie on a plane or on a line and hence do not "
+            "for a 3D point cloud. Such SWCs are not supported.")
 
     hull = ConvexHull(unionWithDuplicates)
 

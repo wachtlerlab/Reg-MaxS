@@ -125,7 +125,7 @@ def saveData(outXLFile):
         initRef = case["initRef"]
         expNameLambdas = case['expNameLambdas']
 
-        for (resDirLabel, resDir) in resDirs.iteritems():
+        for (resDirLabel, resDir) in resDirs.items():
 
             outFiles = []
             expNameLambda = expNameLambdas[resDirLabel]
@@ -136,11 +136,11 @@ def saveData(outXLFile):
                 if os.path.isfile(outFile):
                     outFiles.append(outFile)
                 else:
-                    print("{} not found. Ignoring it.".format(outFile))
+                    print(("{} not found. Ignoring it.".format(outFile)))
 
             if outFiles:
 
-                print("Collecting data for resDirLabel={}, initRef={}".format(resDirLabel, initRef))
+                print(("Collecting data for resDirLabel={}, initRef={}".format(resDirLabel, initRef)))
 
                 metric = occupancyEMD(outFiles, voxelSize)
 
@@ -177,7 +177,7 @@ def saveData(outXLFile):
                 # maxDistStatsDF = maxDistStatsDF.append(tempDF, ignore_index=True)
 
             else:
-                print("No usable SWCs found in {}".format(resDir))
+                print(("No usable SWCs found in {}".format(resDir)))
 
     metricsDF.to_excel(outXLFile)
 
@@ -228,5 +228,4 @@ if __name__ == "__main__":
     elif sys.argv[1] == "plot":
         fig = plotData(sys.argv[2])
     else:
-        raise(ValueError("Improper Usage! Please use as:\n"
-                         "python {fName} save <outFile> or python {fName} plot <inFile>".format(fName=sys.argv[0])))
+        raise ValueError

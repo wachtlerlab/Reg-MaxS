@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 from regmaxsn.core.matplotlibRCParams import mplPars
 import seaborn as sns
 import sys
+from functools import reduce
 
 
 def plotIOUTraj(parFile, parNames):
@@ -35,14 +36,14 @@ def plotIOUTraj(parFile, parNames):
         figs.append(fig)
 
         for gridInd, gridSize in enumerate(gridSizes):
-            print('Doing gridSize = {} of {}'.format(gridSize, gridSizes))
+            print(('Doing gridSize = {} of {}'.format(gridSize, gridSizes)))
             nInts = []
             nUnions = []
             nIOUs = []
 
             for iterInd in range(nIter + 1):
 
-                print('Doing {}/{}'.format(iterInd + 1, nIter + 1))
+                print(('Doing {}/{}'.format(iterInd + 1, nIter + 1)))
                 alignedSWCs = [os.path.join(resDir, '{}{}.swc'.format(expName, iterInd)) for expName in expNames]
 
                 indVoxs = []
@@ -66,17 +67,17 @@ def plotIOUTraj(parFile, parNames):
                 nIOUs.append(nIOU)
 
             with sns.axes_style('darkgrid'):
-                ax0.plot(range(nIter + 1), nInts, color=cols[gridInd], marker='o', ls='-', label=str(gridSize))
+                ax0.plot(list(range(nIter + 1)), nInts, color=cols[gridInd], marker='o', ls='-', label=str(gridSize))
                 ax0.set_xlim(-1, nIter + 2)
                 ax0.set_xlabel('Iteration Number')
                 ax0.set_ylabel('n(Intersection) (nI)')
 
-                ax1.plot(range(nIter + 1), nUnions, color=cols[gridInd], marker='o', ls='-', label=str(gridSize))
+                ax1.plot(list(range(nIter + 1)), nUnions, color=cols[gridInd], marker='o', ls='-', label=str(gridSize))
                 ax1.set_xlim(-1, nIter + 2)
                 ax1.set_xlabel('Iteration Number')
                 ax1.set_ylabel('n(Union) (nU)')
 
-                ax2.plot(range(nIter + 1), nIOUs, color=cols[gridInd], marker='o', ls='-', label=str(gridSize))
+                ax2.plot(list(range(nIter + 1)), nIOUs, color=cols[gridInd], marker='o', ls='-', label=str(gridSize))
                 ax2.set_xlim(-1, nIter + 2)
                 ax2.set_xlabel('Iteration Number')
                 ax2.set_ylabel('1 - nI / nU')
@@ -96,4 +97,4 @@ if __name__ == '__main__':
 
     parFile = sys.argv[1]
     figs = plotIOUTraj(parFile, RegMaxSNParNames)
-    raw_input('Press any key to close figures and quit:')
+    input('Press any key to close figures and quit:')

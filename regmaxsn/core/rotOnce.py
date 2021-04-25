@@ -1,4 +1,4 @@
-from SWCTransforms import SWCRotate, ArgGenIterator, objFun
+from regmaxsn.core.SWCTransforms import SWCRotate, ArgGenIterator, objFun
 import multiprocessing as mp
 import numpy as np
 import json
@@ -31,16 +31,16 @@ bestSol = [0, 0, 0]
 for gridInd, gridSize in enumerate(gridSizes):
 
     if debugging:
-        print('Gridsize:' + str(gridSize))
+        print(('Gridsize:' + str(gridSize)))
     stepSize = stepSizes[gridInd]
     if debugging:
-        print('Stepsize: ' + str(np.rad2deg(stepSize)))
+        print(('Stepsize: ' + str(np.rad2deg(stepSize))))
     bounds = (np.array(bounds).T - np.array(bestSol)).T
     boundsRoundedUp = np.sign(bounds) * np.ceil(np.abs(bounds) / stepSize) * stepSize
     possiblePts1D = [np.round(bestSol[ind] + np.arange(x[0], x[1] + stepSize, stepSize), 3).tolist()
                      for ind, x in enumerate(boundsRoundedUp)]
     if debugging:
-        print(np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)]))
+        print((np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)])))
     possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[gridInd])
     funcVals = pool.map_async(objFun, argGen).get(1800)
@@ -54,21 +54,21 @@ for gridInd, gridSize in enumerate(gridSizes):
 
         prevVals = [objFun((x, SWCDatas[gridInd - 1])) for x in minimzers]
         bestSol = minimzers[np.argmin(prevVals)]
-    bounds = map(lambda x: [x - np.sqrt(2) * stepSize, x + np.sqrt(2) * stepSize], bestSol)
+    bounds = [[x - np.sqrt(2) * stepSize, x + np.sqrt(2) * stepSize] for x in bestSol]
 
     if debugging:
         bestVal = objFun((bestSol, SWCDatas[gridInd]))
-        print(np.rad2deg(bestSol), bestVal)
+        print((np.rad2deg(bestSol), bestVal))
 
 
 if minRes < stepSizes[-1]:
 
     if debugging:
-        print('Stepsize: ' + str(np.rad2deg(minRes)))
+        print(('Stepsize: ' + str(np.rad2deg(minRes))))
     bounds = (np.array(bounds).T - np.array(bestSol)).T
     boundsRoundedUp = np.sign(bounds) * np.ceil(np.abs(bounds) / minRes) * minRes
     if debugging:
-        print(np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)]))
+        print((np.rad2deg([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)])))
     possiblePts1D = [np.round(bestSol[ind] + np.arange(x[0], x[1] + minRes, minRes), 3).tolist()
                      for ind, x in enumerate(boundsRoundedUp)]
     possiblePts3D = np.round(list(product(*possiblePts1D)), 6).tolist()
@@ -81,12 +81,12 @@ if minRes < stepSizes[-1]:
     bestSol = minimzers[np.argmin(prevVals)]
     if debugging:
         bestVal = objFun((bestSol, SWCDatas[-1]))
-        print(np.rad2deg(bestSol), bestVal)
+        print((np.rad2deg(bestSol), bestVal))
 
 bestVal = objFun((bestSol, SWCDatas[-1]))
 nochange = objFun(([0, 0, 0], SWCDatas[-1]))
 if debugging:
-    print(np.rad2deg(bestSol), bestVal, nochange)
+    print((np.rad2deg(bestSol), bestVal, nochange))
 
 
 done = False

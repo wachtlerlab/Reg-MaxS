@@ -19,17 +19,17 @@ from numpy import pi, deg2rad
 import os
 import json
 from regmaxsn.core.RegMaxSPars import RegMaxSParNames
+import pathlib as pl
 
 # obtaining the directory path containing the folder containing this file
 temp = os.path.split(os.path.abspath(__file__))[0]
 temp1 = os.path.split(temp)[0]
 
-
 # **********************************************************************************************************************
 
 # Default parameters
 # distances in um, angles in radians
-gridSizes = [80.0, 40.0, 20.0, 10.0]
+gridSizes = [40.0, 20.0, 10.0]
 transBounds = [[-30, 30], [-30, 30], [-30, 30]]
 transMinRes = 1
 rotBounds = [[-pi / 6, pi / 6], [-pi / 6, pi / 6], [-pi / 6, pi / 6]]
@@ -67,10 +67,10 @@ nCPU = 6
 #
 # -------------------------------------------
 # # Example 1
-# refSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNG.swc')
-# testSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNGRandTrans1.swc')
-# resFile = os.path.join(temp1, 'Results', 'Tests', 'HSN-fluoro01.CNGRandTrans1.swc')
-# parFile = os.path.join(temp1, 'ParFiles', 'Reg-MaxS', 'HSN-fluoro01.CNGRandTrans1.json')
+refSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNG.swc')
+testSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNGRandTrans1.swc')
+resFile = os.path.join(temp1, 'Results', 'Tests', 'HSN-fluoro01.CNGRandTrans1.swc')
+parFile = os.path.join(temp1, 'ParFiles', 'Reg-MaxS', 'HSN-fluoro01.CNGRandTrans1.json')
 # -------------------------------------------
 # # Example 2
 # refSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNG.swc')
@@ -79,10 +79,10 @@ nCPU = 6
 # parFile = os.path.join(temp1, 'ParFiles', 'Reg-MaxS', 'HSN-fluoro01.CNGRandRot0.json')
 # -------------------------------------------
 # # Example 3
-refSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNG.swc')
-testSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNGRandTranslate0.swc')
-resFile = os.path.join(temp1, 'Results', 'Tests', 'HSN-fluoro01.CNGRandTranslate0.swc')
-parFile = os.path.join(temp1, 'ParFiles', 'Reg-MaxS', 'HSN-fluoro01.CNGRandTranslate0.json')
+# refSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNG.swc')
+# testSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNGRandTranslate0.swc')
+# resFile = os.path.join(temp1, 'Results', 'Tests', 'HSN-fluoro01.CNGRandTranslate0.swc')
+# parFile = os.path.join(temp1, 'ParFiles', 'Reg-MaxS', 'HSN-fluoro01.CNGRandTranslate0.json')
 # -------------------------------------------
 # # Example 4
 # refSWC = os.path.join(temp1, 'TestFiles', 'HSN-fluoro01.CNG.swc')
@@ -93,13 +93,13 @@ parFile = os.path.join(temp1, 'ParFiles', 'Reg-MaxS', 'HSN-fluoro01.CNGRandTrans
 # Example 5
 # refSWC = os.path.join(temp1, 'TestFiles', 'LLC', 'Gad1-F-000062.CNG.swc')
 # testSWC = os.path.join(temp1, 'TestFiles', 'LLC', 'Cha-F-400051.CNG.swc')
-# resFile = os.path.join(temp1, 'Results', 'Tests', 'LLC', 'Cha-F-400051.CNG.swc')
+# resFile = os.path.join(temp1, 'Results', 'Reg-MaxS', 'LLC', 'Cha-F-400051.CNG.swc')
 # parFile = os.path.join(temp1, 'ParFiles', 'Reg-MaxS', 'LLC1.json')
 # inPartsDir = os.path.join(temp1, 'TestFiles', 'LLC', 'Cha-F-400051.CNG')
 # outPartsDir = os.path.join(temp1, 'Results', 'Tests', 'LLC', 'Cha-F-400051.CNG')
 #
 # -------------------------------------------
-# obtains the list of variables in the current work space
+# # obtains the list of variables in the current work space
 ns = vars()
 # forms the dictionary of parameters to be saved into the parameter file.
 pars = [{k: ns[k] for k in RegMaxSParNames}]
@@ -130,7 +130,6 @@ pars = [{k: ns[k] for k in RegMaxSParNames}]
 #             'HSN-fluoro01.CNGRandTrans7.swc',
 #             'HSN-fluoro01.CNGRandTrans8.swc',
 #             'HSN-fluoro01.CNGRandTrans9.swc',
-#
 #             # 'HSN-fluoro01.CNGNoiseStd1RandTrans.swc',
 #             # 'HSN-fluoro01.CNGNoiseStd2RandTrans.swc',
 #             # 'HSN-fluoro01.CNGNoiseStd3RandTrans.swc',
@@ -152,9 +151,10 @@ pars = [{k: ns[k] for k in RegMaxSParNames}]
 #     ns = vars()
 #     # forms the dictionary of parameters to be saved into the parameter file.
 #     pars.append({k: ns[k] for k in RegMaxSParNames})
-# -------------------------------------------
+# # -------------------------------------------
 # **********************************************************************************************************************
 
 # write the parameters into the parameter file.
+pl.Path(parFile).parent.mkdir(exist_ok=True)
 with open(parFile, 'w') as fle:
     json.dump(pars, fle)

@@ -19,7 +19,7 @@ The algorithms are written in  Python and at the moment work only with SWC files
 With Conda (Linux or Windows):
 
 1. Create a new environment: 
->conda create --name regmaxsn python=2.7 numpy scipy pillow matplotlib scikit-learn pandas seaborn openpyxl xlrd statsmodels
+>conda create --name regmaxsn python=3.7 numpy scipy pillow matplotlib scikit-learn pandas seaborn openpyxl xlrd statsmodels
 2. Activate environment: 
 >(on Linux) source activate regmaxsn 
 >(on Windows) activate regmaxsn

@@ -37,7 +37,7 @@ def regErrorVsAIScaling(parFile, colFunc=None):
         resFile = par['resFile']
         thresh = par['gridSizes'][-1]
 
-        print('Doing ' + repr((refSWC, resFile)))
+        print(('Doing ' + repr((refSWC, resFile))))
 
         origJSON = testSWC[:-4] + '.json'
 
@@ -46,7 +46,7 @@ def regErrorVsAIScaling(parFile, colFunc=None):
                 pars = json.load(fle)
                 scales = np.array(pars['scale'])
         else:
-            raise(IOError('File not found: {}'.format(origJSON)))
+            raise IOError
 
         scalesOrdered = np.sort(scales)
         scalesRelative = np.mean([scalesOrdered[0] / scalesOrdered[1],
@@ -58,7 +58,7 @@ def regErrorVsAIScaling(parFile, colFunc=None):
 
         if refPts.shape[0] != testPts.shape[0]:
 
-            print('Number of points do not match for ' + refSWC + 'and' + testSWC)
+            print(('Number of points do not match for ' + refSWC + 'and' + testSWC))
             continue
 
 
@@ -79,7 +79,7 @@ def regErrorVsAIScaling(parFile, colFunc=None):
 
                 ax.plot(vals[1], vals[0], color=col, marker='o', ls='None', ms=10)
             except Exception as e:
-                raise(Exception('Problem with plotting. There could be a problem with argument colFunc'))
+                raise Exception
 
     ax.set_xlabel('measure of anisotropic scaling')
     ax.set_ylabel('\% points closer than \nthe lowest grid size')
@@ -96,4 +96,4 @@ if __name__ == '__main__':
 
     parFile = sys.argv[1]
     fig = regErrorVsAIScaling(parFile, colFunc)
-    raw_input('Press any key to close figures and quit:')
+    input('Press any key to close figures and quit:')

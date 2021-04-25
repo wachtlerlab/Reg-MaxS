@@ -27,7 +27,7 @@ def plotMaxDistEMDVsIteration(parFile, parNames):
         expNames = [os.path.split(swc)[1][:-4] for swc in swcList]
 
         if os.path.isdir(resDir):
-            print('Current refSWC={}'.format(pars["initRefSWC"]))
+            print(('Current refSWC={}'.format(pars["initRefSWC"])))
 
             iters = sorted([int(fle[3:-4]) for fle in os.listdir(resDir) if fle.find('ref') == 0])
             nIter = max(iters)
@@ -35,14 +35,14 @@ def plotMaxDistEMDVsIteration(parFile, parNames):
             # distributionsDF = pd.DataFrame()
 
             for iterInd in range(nIter + 1):
-                print('Doing {}/{}'.format(iterInd + 1, nIter + 1))
+                print(('Doing {}/{}'.format(iterInd + 1, nIter + 1)))
                 iterSWCs = [os.path.join(resDir, '{}{}.swc'.format(expName, iterInd)) for expName in expNames]
 
                 for gridSize in gridSizes:
                     metric = occupancyEMD(iterSWCs, gridSize)
                     occupancyDist = calcOccupancyDistribution(iterSWCs, gridSize)
                     tempDict = {}
-                    for k, v in occupancyDist.iteritems():
+                    for k, v in occupancyDist.items():
                         tempDict["Occupancy"] = k
                         tempDict["Occupancy PMF"] = v
                         tempDict["gridSize"] = gridSize
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     parFile = sys.argv[1]
     figs = plotMaxDistEMDVsIteration(parFile, RegMaxSNParNames)
-    raw_input('Press any key to close figures and quit:')
+    input('Press any key to close figures and quit:')
 
 
 

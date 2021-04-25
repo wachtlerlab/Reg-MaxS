@@ -9,7 +9,7 @@ import sys
 
 def pca_based(parFile):
 
-    ch = raw_input('Using parameter File {}.\n Continue?(y/n)'.format(parFile))
+    ch = input('Using parameter File {}.\n Continue?(y/n)'.format(parFile))
 
     if ch != 'y':
         print('User Abort!')
@@ -21,8 +21,8 @@ def pca_based(parFile):
     for parInd, pars in enumerate(parsList):
 
         print('Current Parameters:')
-        for parN, parV in pars.iteritems():
-            print('{}: {}'.format(parN, parV))
+        for parN, parV in pars.items():
+            print(('{}: {}'.format(parN, parV)))
 
         refSWC = pars['refSWC']
         testSWC = pars['testSWC']
@@ -88,7 +88,7 @@ def pca_based(parFile):
                                            )
 
             else:
-                print('Specified partsDir {} not found'.format(inPartsDir))
+                print(('Specified partsDir {} not found'.format(inPartsDir)))
 
         with open(resSolFile, 'w') as fle:
             json.dump({'transMat': totalTransform.tolist(), 'bestVal': bestVal,

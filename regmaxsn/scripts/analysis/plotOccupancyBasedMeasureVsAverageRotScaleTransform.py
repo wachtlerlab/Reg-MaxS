@@ -34,7 +34,7 @@ figs = []
 def saveData():
     for suffixInd, suffix in enumerate(suffixes):
 
-        print("Doing {}".format(labels[suffixInd]))
+        print(("Doing {}".format(labels[suffixInd])))
 
         parSWCDict = {}
 
@@ -49,17 +49,17 @@ def saveData():
             jsonPars = transJSON[jsonKey]
             parSWCDict[jsonPars[1]] = outFile
 
-        allPars = parSWCDict.keys()
+        allPars = list(parSWCDict.keys())
         allParsSorted = np.sort(allPars)
 
         maxStepSize = int(np.floor(float(N) / float(swcSetSize)))
         baseSet = np.arange(0, swcSetSize)
         for stepSize in range(1, maxStepSize + 1):
-            print("Doing StepSize {}/{}".format(stepSize, maxStepSize))
+            print(("Doing StepSize {}/{}".format(stepSize, maxStepSize)))
             windowSlideSize = int(stepSize * swcSetSize / 2)
-            windowStarts = range(0, N - stepSize * swcSetSize + 1, windowSlideSize)
+            windowStarts = list(range(0, N - stepSize * swcSetSize + 1, windowSlideSize))
             for windowStart in windowStarts:
-                print("Doing Window start {}/{}".format(windowStart, windowStarts))
+                print(("Doing Window start {}/{}".format(windowStart, windowStarts)))
                 pars = allParsSorted[windowStart + stepSize * baseSet]
                 swcFiles = [parSWCDict[par] for par in pars]
                 metric = occupancyEMD(swcFiles, voxelSize)

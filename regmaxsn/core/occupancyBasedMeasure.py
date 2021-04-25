@@ -2,6 +2,7 @@ import numpy as np
 from collections import Counter
 from pyemd import emd
 
+
 def calcOccupancyDistribution(swcList, voxelSize):
     """
     Returns the distribution of the sum of voxel occupancies across swcs in swcList.
@@ -19,7 +20,7 @@ def calcOccupancyDistribution(swcList, voxelSize):
         voxels.extend(list(aVoxSet))
 
     voxelCounter = Counter(voxels)
-    counts = voxelCounter.values()
+    counts = list(voxelCounter.values())
 
     bins = np.arange(1, len(swcList) + 2) - 0.5
 
@@ -29,7 +30,7 @@ def calcOccupancyDistribution(swcList, voxelSize):
 
     histNormed = histWeighted / float(sum(histWeighted))
 
-    return dict(zip(np.arange(1, len(swcList) + 1), histNormed))
+    return {k + 1: v for k, v in enumerate(histNormed)}
 
 
 def occupancyEMD(swcList, voxelSize):

@@ -34,7 +34,7 @@ def getRegMaxSNIterVsMeasure(resDir, swcList, voxelSize):
 def correctRegMaxSNChoice(parFile, parNames):
     assert os.path.isfile(parFile), "{} not found".format(parFile)
 
-    ch = raw_input('Using parameter File {}.\n Continue?(y/n)'.format(parFile))
+    ch = input('Using parameter File {}.\n Continue?(y/n)'.format(parFile))
 
     if ch != 'y':
         print('User Abort!')

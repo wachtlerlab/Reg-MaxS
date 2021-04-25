@@ -1,6 +1,7 @@
 from regmaxsn.core.maxDistanceBasedMetric import calcMaxDistances, maxDistEMD, cdist_1d_centripetal
 import numpy as np
 
+
 def calcMaxDistances_test():
     """Testing the calculation of maximum distances"""
 
@@ -30,6 +31,7 @@ def cdist_1d_test():
     temp = cdist_1d_centripetal([1, 2, 3], [1, 2], center=2)
     assert np.allclose(temp,
                        np.array([[0, -1], [1, 0], [0, -1]]))
+
 
 if __name__ == "__main__":
     maxDistEMD_test()

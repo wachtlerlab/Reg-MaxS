@@ -40,7 +40,7 @@ for val in vals:
 
 for expInd, expName in enumerate(expNames):
     if refInd != expInd:
-        print('Doing ' + expName + ' Scale')
+        print(('Doing ' + expName + ' Scale'))
 
         SWC2Align = os.path.join(dirPath, expName + '.swc')
 

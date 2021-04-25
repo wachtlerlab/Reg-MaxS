@@ -1,4 +1,4 @@
-from SWCTransforms import SWCTranslate, ArgGenIterator, objFun
+from regmaxsn.core.SWCTransforms import SWCTranslate, ArgGenIterator, objFun
 import multiprocessing as mp
 import numpy as np
 import json
@@ -31,9 +31,9 @@ for gridInd, gridSize in enumerate(gridSizes):
 
     possiblePts3D = list(product(*possiblePts1D))
     if debugging:
-        print('Gridsize:' + str(gridSize))
+        print(('Gridsize:' + str(gridSize)))
         print(bounds)
-        print(map(len, possiblePts1D))
+        print([len(x) for x in possiblePts1D])
         print([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)])
 
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[gridInd])
@@ -48,10 +48,10 @@ for gridInd, gridSize in enumerate(gridSizes):
 
         prevVals = [objFun((x, SWCDatas[gridInd - 1])) for x in minimzers]
         bestSol = minimzers[np.argmin(prevVals)]
-    bounds = map(lambda x: [x - gridSize, x + gridSize], bestSol)
+    bounds = [[x - gridSize, x + gridSize] for x in bestSol]
     if debugging:
         bestVal = objFun((bestSol, SWCDatas[gridInd]))
-        print(bestSol, bestVal)
+        print((bestSol, bestVal))
 
 if minRes < gridSizes[-1]:
 
@@ -62,9 +62,9 @@ if minRes < gridSizes[-1]:
     possiblePts3D = list(product(*possiblePts1D))
 
     if debugging:
-        print('StepSize:' + str(minRes))
+        print(('StepSize:' + str(minRes)))
         print(bounds)
-        print(map(len, possiblePts1D))
+        print([len(x) for x in possiblePts1D])
         print([bestSol[ind] + x for ind, x in enumerate(boundsRoundedUp)])
 
     argGen = ArgGenIterator(possiblePts3D, SWCDatas[-1])
@@ -80,7 +80,7 @@ bestVal = objFun((bestSol, SWCDatas[-1]))
 nochange = objFun(([0, 0, 0], SWCDatas[-1]))
 if debugging:
     bestVals = [objFun((bestSol, x)) for x in SWCDatas]
-    print(bestSol, bestVals)
+    print((bestSol, bestVals))
 
 done = False
 
@@ -100,8 +100,6 @@ elif bestVal == nochange:
         done = True
         bestSol = [0, 0, 0]
         bestVal = nochange
-
-
 
 SWCDatas[-1].writeSolution(outFiles[0], bestSol)
 matrix = compose_matrix(translate=bestSol).tolist()

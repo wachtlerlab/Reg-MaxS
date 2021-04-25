@@ -26,7 +26,7 @@ expNames = [
               ]
 
 outPath = dirPath
-noiseStds = range(1, 6)
+noiseStds = list(range(1, 6))
 # ----------------------------------------------------------------------------------------------------------------------
 
 baseSWCs = [os.path.join(dirPath, expName + '.swc') for expName in expNames]

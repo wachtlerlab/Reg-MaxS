@@ -40,7 +40,7 @@ class DataSet(object):
         allMinDists = {}
         thrash, resamRefPts = resampleSWC(self.refSWC, minLen)
 
-        for testSWCSetName, testSWCSet in self.testSWCSets.iteritems():
+        for testSWCSetName, testSWCSet in self.testSWCSets.items():
 
             minDists = np.empty((resamRefPts.shape[0], len(testSWCSet)))
 
@@ -185,12 +185,12 @@ allMinDistStats = {}
 fig1, ax1 = plt.subplots(figsize=(14, 11.2))
 fig2, ax2 = plt.subplots(figsize=(14, 11.2))
 
-for dataSetName, dataSet in dataSets.iteritems():
+for dataSetName, dataSet in dataSets.items():
 
     temp = dataSet.calcMinDists(0.1)
     minDists[dataSetName] = temp
     dataSetMinDists = []
-    for methodName, testSetMinDists in temp.iteritems():
+    for methodName, testSetMinDists in temp.items():
         methodMinDistStats = pd.DataFrame(data=None,
                                           columns=['Mean of minimum distances(um)',
                                                    'Standard Deviation of \nminimum distances(um)',
@@ -204,7 +204,7 @@ for dataSetName, dataSet in dataSets.iteritems():
 
     allMinDistStats[dataSetName] = pd.concat(dataSetMinDists)
 
-minDistsStats1DF = pd.concat(allMinDistStats.itervalues())
+minDistsStats1DF = pd.concat(iter(allMinDistStats.values()))
 
 sns.boxplot(x='Group Name', y='Mean of minimum distances(um)', hue='Method', data=minDistsStats1DF,
             ax=ax1, whis='range')

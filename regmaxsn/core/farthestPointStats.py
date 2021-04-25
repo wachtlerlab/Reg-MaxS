@@ -25,7 +25,7 @@ def maxDistStats(swcFiles):
 
     for swcInd1, swcData1 in enumerate(swcDatas):
 
-        swcInds = range(len(swcFiles))
+        swcInds = list(range(len(swcFiles)))
         swcInds.remove(swcInd1)
         swcDataSeries1 = swcDataSeries[swcInd1]
 

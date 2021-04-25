@@ -37,7 +37,7 @@ def saveAverageDensity(regMaxSParFile, refSWC, outFile, gridUnitSize, sigma, ref
         for swcFile in swcFiles:
 
             data = np.loadtxt(swcFile)
-            mask = map(lambda ptInd: ptInd not in data[:, 6], data[:, 0])
+            mask = [ptInd not in data[:, 6] for ptInd in data[:, 0]]
             masks.append(mask)
 
         densityViz = DensityVizualizations(swcFiles, gridUnitSize, resampleLen, masks=masks,
@@ -85,7 +85,7 @@ def savePlotsTogether(densityDir, outDir):
 
         label = os.path.split(comFile)[1][:-4]
 
-        print("Doing {}".format(label))
+        print(("Doing {}".format(label)))
         compressedData = np.load(comFile)
         density = compressedData['density']
         bins = compressedData['bins']
@@ -238,11 +238,7 @@ if __name__ == "__main__":
         outDir = sys.argv[3]
         savePlotsTogether(densityDir, outDir)
     else:
-        raise(ValueError("Improper Usage! Please use as:\n"
-                         "python {fle} saveData <RegMaxSParFile> <outFile> "
-                         "<spatial discretization size> <Gaussian smoothing sigma>\n"
-                         "python {fle} savePlotsSingle <compressed Data file> <label> <output directory>\n"
-                         "python {fle} savePlotsTogether <density directory> <output directory>".format(fle=sys.argv[0])))
+        raise ValueError
 
 
 

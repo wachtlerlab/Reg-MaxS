@@ -29,7 +29,7 @@ def plotMaxDistEMDVsIteration(parFile, parNames):
         centroidAlignedSWCs = [os.path.join(resDir, '{}{}.swc'.format(expName, 0)) for expName in expNames]
 
         for iterInd in range(nIter + 1):
-            print('Doing {}/{}'.format(iterInd + 1, nIter + 1))
+            print(('Doing {}/{}'.format(iterInd + 1, nIter + 1)))
             iterSWCs = [os.path.join(resDir, '{}{}.swc'.format(expName, iterInd)) for expName in expNames]
 
             metric = maxDistEMD(iterSWCs, centroidAlignedSWCs)
@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     parFile = sys.argv[1]
     figs = plotMaxDistEMDVsIteration(parFile, RegMaxSNParNames)
-    raw_input('Press any key to close figures and quit:')
+    input('Press any key to close figures and quit:')
 
 
 

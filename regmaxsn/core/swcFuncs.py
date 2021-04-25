@@ -73,7 +73,7 @@ def transSWC(fName, A, b, destFle):
     elif data.shape[1] == 8:
         formatStr = '%d %d %0.3f %0.3f %0.3f %0.3f %d %d'
     else:
-        raise(TypeError('Data in the input file is of unknown format.'))
+        raise TypeError('Data in the input file is of unknown format.')
 
     np.savetxt(destFle, data, header=headr, fmt=formatStr)
 
@@ -111,7 +111,7 @@ def transSWC_rotAboutPoint(fName, A, b, destFle, point):
     elif data.shape[1] == 8:
         formatStr = '%d %d %0.3f %0.3f %0.3f %0.3f %d %d'
     else:
-        raise(TypeError('Data in the input file is of unknown format.'))
+        raise TypeError('Data in the input file is of unknown format.')
 
     np.savetxt(destFle, data, header=headr, fmt=formatStr)
 #***********************************************************************************************************************

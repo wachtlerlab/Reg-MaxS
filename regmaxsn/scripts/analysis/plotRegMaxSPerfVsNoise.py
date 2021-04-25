@@ -26,7 +26,7 @@ def regmaxsPerfVsNoise(parFile, anisoThresh):
         testSWC = par["testSWC"]
 
         if testSWC.find("NoiseStd") < 0:
-            print("{} has testSWC {} without noise.Ignoring it!".format(parFile, testSWC))
+            print(("{} has testSWC {} without noise.Ignoring it!".format(parFile, testSWC)))
         else:
 
             NoiseStdStrInd = testSWC.find("NoiseStd")
@@ -41,7 +41,7 @@ def regmaxsPerfVsNoise(parFile, anisoThresh):
                     pars = json.load(fle)
                     scales = np.array(pars['scale'])
             else:
-                raise (IOError('File not found: {}'.format(origJSON)))
+                raise IOError
 
             scalesOrdered = np.sort(scales)
             scalesRelative = np.mean([scalesOrdered[0] / scalesOrdered[1],
@@ -52,7 +52,7 @@ def regmaxsPerfVsNoise(parFile, anisoThresh):
             testName = resFile[:-4]
             thresh = par['gridSizes'][-1]
 
-            print('Doing ' + repr((refSWC, resFile)))
+            print(('Doing ' + repr((refSWC, resFile))))
 
             refPts = np.loadtxt(refSWC)[:, 2:5]
             testPtsFull = np.loadtxt(resFile)
@@ -61,7 +61,7 @@ def regmaxsPerfVsNoise(parFile, anisoThresh):
 
             if refPts.shape[0] != testPts.shape[0]:
 
-                print('Number of points do not match for ' + refSWC + 'and' + resFile)
+                print(('Number of points do not match for ' + refSWC + 'and' + resFile))
                 continue
 
 
@@ -121,4 +121,4 @@ if __name__ == '__main__':
     parFile = sys.argv[1]
     anisoThesh = float(sys.argv[2])
     fig = regmaxsPerfVsNoise(parFile, anisoThesh)
-    raw_input("Press any key to close the figure and exit....")
+    input("Press any key to close the figure and exit....")

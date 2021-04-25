@@ -9,9 +9,10 @@ try:
     import regmaxsn
     utilsDir = os.path.join(os.path.abspath(regmaxsn.__path__[0]), 'scripts', 'utils')
 except ImportError as e:
-    raise(ImportError('The package regmaxsn must be installed before this script can be used.'))
-whereToCreate = raw_input("Enter where the workspace must be created (using {} "
-                          "if nothing is specifed):".format(homeFolder))
+    raise ImportError('The package regmaxsn must be installed before this script can be used.')
+whereToCreate = input(
+    "Enter where the workspace must be created (using {} "
+    "if nothing is specifed):".format(homeFolder))
 if whereToCreate == "":
     whereToCreate = homeFolder
 assert os.path.exists(whereToCreate), "Specified path {} does not exist".format(whereToCreate)
@@ -26,14 +27,14 @@ assert os.path.isdir(pkgParFilesDir) and os.path.isdir(pkgTestFilesDir), "Folder
 workSpace = os.path.join(whereToCreate, 'RegMaxSN_WorkSpace')
 try:
     if os.path.exists(workSpace):
-        ch = raw_input('A RegMaxSN Workspace already exists. Delete it and all files in it and create new one?(y/n):')
+        ch = input('A RegMaxSN Workspace already exists. Delete it and all files in it and create new one?(y/n):')
         if ch == "y":
             shutil.rmtree(workSpace)
         else:
             sys.exit('User Abort')
     os.mkdir(workSpace)
 except IOError as e:
-    raise(IOError('Error writing into {}. Please make sure its writable'.format(workSpace)))
+    raise IOError('Error writing into {}. Please make sure its writable'.format(workSpace))
 
 parFilesDir = os.path.join(workSpace, "ParFiles")
 shutil.copytree(pkgParFilesDir, parFilesDir)
@@ -49,7 +50,7 @@ os.mkdir(os.path.join(resDir, "Reg-MaxS"))
 os.mkdir(os.path.join(resDir, "Reg-MaxS-N"))
 os.mkdir(os.path.join(resDir, "PCABased"))
 
-print("Succesfullly created Work Space at {}".format(workSpace))
+print(("Succesfullly created Work Space at {}".format(workSpace)))
 
 
 

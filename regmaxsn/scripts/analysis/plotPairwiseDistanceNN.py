@@ -39,7 +39,7 @@ def plotPairwiseDistancesNN(parFile):
         testName = resFile[:-4]
         thresh = par['gridSizes'][-1]
 
-        print('Doing ' + repr((refSWC, resFile)))
+        print(('Doing ' + repr((refSWC, resFile))))
 
         refPts = np.loadtxt(refSWC)[:, 2:5]
         testPts = np.loadtxt(resFile)[:, 2:5]
@@ -64,7 +64,7 @@ def plotPairwiseDistancesNN(parFile):
 
         sns.boxplot(x='Exp. Name', y='Pairwise Distance in $\mu$m',
                     ax=ax, data=transErrs, color=sns.color_palette()[0], whis='range')
-        ax1.plot(range(regErrs.size), regErrs['\% of points closer than\n lowest grid size'],
+        ax1.plot(list(range(regErrs.size)), regErrs['\% of points closer than\n lowest grid size'],
                  color=sns.color_palette()[0], marker='o', linestyle='-', ms=10)
 
     ax.set_xlim(-1, len(regErrs))
@@ -74,7 +74,7 @@ def plotPairwiseDistancesNN(parFile):
 
     ax1.set_xlim(-1, len(regErrs))
     ax1.set_ylim(-10, 110)
-    ax1.set_xticks(range(regErrs.size))
+    ax1.set_xticks(list(range(regErrs.size)))
     ax1.set_xticklabels(['job {}'.format(x) for x in range(len(parsList))], rotation=90)
     ax1.set_ylabel('\% of points closer than\n lowest grid size')
 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
     parFile = sys.argv[1]
     figs = plotPairwiseDistancesNN(parFile)
-    raw_input('Press any key to close figures and quit:')
+    input('Press any key to close figures and quit:')
 
 
 

@@ -21,10 +21,10 @@ from numpy import pi, deg2rad
 import os
 import json
 from regmaxsn.core.RegMaxSPars import RegMaxSNParNames
+import pathlib as pl
 
 temp = os.path.split(os.path.abspath(__file__))[0]
 temp1 = os.path.split(temp)[0]
-
 
 # **********************************************************************************************************************
 
@@ -171,5 +171,6 @@ pars = [{k: ns[k] for k in RegMaxSNParNames}]
 # **********************************************************************************************************************
 
 # write the parameters into the parameter file.
+pl.Path(parFile).parent.mkdir(exist_ok=True)
 with open(parFile, 'w') as fle:
     json.dump(pars, fle)

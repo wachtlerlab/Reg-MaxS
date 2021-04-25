@@ -18,5 +18,5 @@ setup(
                           "tifffile>=0.11.1",
                           "pyemd>=0.4.4",
                           "statsmodels>=0.8"],
-        python_requires=">=2.7",
+        python_requires=">=3.7",
     )

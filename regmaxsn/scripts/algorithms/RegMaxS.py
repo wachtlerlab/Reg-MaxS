@@ -2,6 +2,7 @@ import sys
 from regmaxsn.core.iterativeRegistration import IterativeRegistration
 from regmaxsn.core.misc import parFileCheck
 import os
+import pathlib as pl
 
 
 def runRegMaxS(parFile, parNames):
@@ -9,27 +10,26 @@ def runRegMaxS(parFile, parNames):
 
     for pars in parsList:
         print('Current Parameters:')
-        for parN, parV in pars.iteritems():
-            print('{}: {}'.format(parN, parV))
+        for parN, parV in pars.items():
+            print(('{}: {}'.format(parN, parV)))
 
         resFile = pars['resFile']
         refSWC = pars['refSWC']
         testSWC = pars['testSWC']
 
-        if os.path.isfile(resFile):
+        res_filepath = pl.Path(resFile)
+        if res_filepath.is_file():
 
-            ch = raw_input('File exists: ' + resFile + '\nDelete(y/n)?')
+            ch = input('File exists: ' + resFile + '\nDelete(y/n)?')
             if ch == 'y':
-                os.remove(resFile)
+                res_filepath.unlink()
             else:
                 quit()
 
-        resDir = os.path.split(resFile)[0]
-        if not os.path.exists(resDir):
-            raise(ValueError('Could not create result file in specified directory: {}'.format(resDir)))
+        res_filepath.parent.mkdir(exist_ok=True)
 
-        assert os.path.isfile(refSWC), 'Could  not find {}'.format(refSWC)
-        assert os.path.isfile(testSWC), 'Could  not find {}'.format(testSWC)
+        assert pl.Path(refSWC).is_file(), 'Could  not find {}'.format(refSWC)
+        assert pl.Path(testSWC).is_file(), 'Could  not find {}'.format(testSWC)
 
         iterReg = IterativeRegistration(refSWC=pars['refSWC'],
                                         gridSizes=pars['gridSizes'],

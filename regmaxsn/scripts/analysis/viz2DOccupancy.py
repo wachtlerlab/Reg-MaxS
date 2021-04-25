@@ -33,7 +33,7 @@ for swc in swcFiles:
 
 voxelCounter = Counter(voxels)
 df = pd.DataFrame()
-for voxel, count in voxelCounter.iteritems():
+for voxel, count in voxelCounter.items():
     tempDict = {"X": voxel[0], "Y": voxel[1], "count": count}
     df = df.append(tempDict, ignore_index=True)
 
